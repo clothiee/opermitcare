@@ -10,7 +10,10 @@
         "framework"
     ],
     "require": {
-        "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
+        "php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ^8.0",
+        "laminas/laminas-modulemanager": "^2.15",
+        "laminas/laminas-mvc": "^3.7",
+        "laminas/laminas-view": "^2.34"
     },
     "autoload": {
         "psr-4": {
@@ -37,10 +40,6 @@
         ],
         "post-install-cmd": "@clear-config-cache",
         "post-update-cmd": "@clear-config-cache",
-        "serve": [
-            "Composer\\Config::disableProcessTimeout",
-            "php -S 0.0.0.0:8080 -t public"
-        ],
         "test": "vendor/bin/phpunit",
         "static-analysis": "vendor/bin/psalm --shepherd --stats"
     },

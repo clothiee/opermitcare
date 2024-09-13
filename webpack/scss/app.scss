@@ -1,0 +1,18 @@
+@import "components/base.scss";
+@import "./home.scss";
+
+* {
+    box-sizing: border-box;
+  }
+
+html,
+body {
+  background: #329570 !important;
+  min-width: 320px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}

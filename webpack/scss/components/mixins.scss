@@ -1,0 +1,22 @@
+@mixin get-responsive($property, $handset: null, $tablet-small: null, $tablet-large: null, $desktop: null) {
+    @if ($handset != null) {
+      @include handset() {
+        #{$property}: #{$handset};
+      }
+    }
+    @if ($tablet-small != null) {
+      @include tablet-small() {
+        #{$property}: #{$tablet-small};
+      }
+    }
+    @if ($tablet-large != null) {
+      @include tablet-large() {
+        #{$property}: #{$tablet-large};
+      }
+    }
+    @if ($desktop != null) {
+      @include desktop() {
+        #{$property}: #{$desktop};
+      }
+    }
+  }
