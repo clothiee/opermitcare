@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use Laminas\ModuleManager\Listener\ListenerOptions;
 
 chdir(__DIR__ . '/../');

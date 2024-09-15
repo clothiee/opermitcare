@@ -1,3 +1,7 @@
 body {
     @include get-responsive(text-size-adjust, 100%, 100%, 100%, null);
 }
+
+.home {
+    min-height: 500px;
+}

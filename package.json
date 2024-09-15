@@ -20,6 +20,7 @@
     "css-mqpacker": "^7.0.0",
     "cssnano": "^6.0.5",
     "expose-loader": "^5.0.0",
+    "file-loader": "^6.2.0",
     "mini-css-extract-plugin": "^2.8.1",
     "node-sass": "^9.0.0",
     "postcss": "^8.4.35",

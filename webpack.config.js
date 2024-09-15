@@ -35,6 +35,7 @@ function config(mode) {
                         {
                             loader: 'css-loader',
                             options: {
+                                url: false,
                                 sourceMap: true
                             },
                         },
@@ -47,6 +48,7 @@ function config(mode) {
                         {
                             loader: "css-loader",
                             options: {
+                                url: false,
                                 sourceMap: true
                             }
                         },

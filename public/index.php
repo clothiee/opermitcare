@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use Laminas\Mvc\Application;
 
 /**
@@ -22,7 +20,7 @@ if (php_sapi_name() === 'cli-server') {
 // Composer autoloading
 include __DIR__ . '/../vendor/autoload.php';
 
-if (! class_exists(Application::class)) {
+if (!class_exists(Application::class)) {
     throw new RuntimeException(
         "Unable to load application.\n"
         . "- Type `composer install` if you are developing locally.\n"
@@ -33,4 +31,4 @@ if (! class_exists(Application::class)) {
 $container = require __DIR__ . '/../config/container.php';
 // Run the application!
 $container->get('Application')
-    ->run();
+          ->run();

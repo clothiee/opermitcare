@@ -1,9 +1,27 @@
-$handset-max-width: 599px;
-$tablet-small-min-width: 600px;
-$tablet-small-max-width: 1022px;
-$tablet-large-min-width: 1023px;
-$tablet-large-max-width: 1439px;
-$desktop-large-min-width: 1440px;
+:root {
+  --main-color: #078d44;
+  --gray-color: #dbdfe1;
+  --mid-gray: #a3cfb7;
+  --light-gray: #ddefe5;
 
-$font-family-directory: '/assets/fonts/';
-$image-directory: '/assets/images/';
+  --background-color: #ddefe5;
+
+  --menu-link-services-color: #000000;
+  --menu-link-info-color: #6a6a6a;
+  --menu-hover-color: #078d44;
+  --menu-link-divider: #e4e4e4;
+
+  --login-card: #ffffff;
+  --login-input-text-color: #000000;
+  --login-input-placeholder-color: #6a6a6a;
+  --login-input-border-bottom-color: #000000;
+  --login-input-border-bottom-hover-color: #078d44;
+  --login-link-default-color: #078d44;
+  --login-link-hover-color: #000000;
+  --login-button-color: #078d44;
+  --login-button-text-color: #ffffff;
+  --login-button-hover-color: #ffffff;
+  --login-button-hover-text-color: #078d44;
+
+  --footer-text-color: #ffffff;
+}

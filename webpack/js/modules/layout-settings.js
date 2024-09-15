@@ -4,7 +4,12 @@ export class LayoutSettingsModule {
     };
 
     initialize() {
-        alert('duh layout settings');
-        alert('hello fucking world');
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 300) {
+                return $('.navigation').addClass('navigation--sticky');
+            }
+
+            return $('.navigation').removeClass('navigation--sticky');
+        });
     }
 }
