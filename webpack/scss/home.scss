@@ -1,7 +1,66 @@
 body {
-    @include get-responsive(text-size-adjust, 100%, 100%, 100%, null);
+  @include get-responsive(text-size-adjust, 100%, 100%, 100%, null);
 }
 
 .home {
-    min-height: 500px;
+  min-height: 500px;
+
+  &__jumbotron {
+    background: {
+      image: url('/assets/images/banner.jpg');
+      position: center;
+      repeat: no-repeat;
+      size: cover;
+    }
+    width: 100%;
+    height: 700px;
+  }
+
+  &__box {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__box-card {
+    background-color: var(--login-card);
+    border-radius: 20px;
+    display: flex;
+    margin: {
+      bottom: 50px;
+      top: -40px;
+    }
+    max-width: 1200px;
+    overflow: hidden;
+    width: 100%;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+
+  &__box-item {
+    align-items: center;
+    display: inherit;
+    flex-wrap: nowrap;
+    padding: 20px;
+    width: 50%;
+  }
+
+  &__box-image {
+    background: {
+      position: center;
+      repeat: no-repeat;
+      size: contain;
+    }
+    height: 60px;
+    margin-right: 10px;
+    width: 60px;
+
+    &--our-home {
+      background-image: url('/assets/images/our-home.png');
+    }
+
+    &--our-support {
+      background-image: url('/assets/images/our-support.png');
+    }
+  }
 }

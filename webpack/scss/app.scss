@@ -13,6 +13,20 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+header {
+  position: relative;
+}
+
+section.content {
+  margin-top: -65px;
+}
+
+a {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 @import "./navigation";
 @import "./home";
 @import "./login";
