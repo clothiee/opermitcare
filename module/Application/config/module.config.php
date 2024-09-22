@@ -29,6 +29,16 @@ return [
                     ],
                 ],
             ],
+            'find-a-form' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/find-a-form',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action' => 'find-a-form',
+                    ],
+                ],
+            ],
             'application' => [
                 'type' => Segment::class,
                 'options' => [

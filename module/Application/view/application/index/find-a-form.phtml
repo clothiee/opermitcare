@@ -1,0 +1,33 @@
+<div class="find-a-form">
+    <div class="find-a-form__jumbotron">
+        <div class="find-a-form__wrapper">
+            <h1>Find a Form</h1>
+            <p>Download and fill up the form/s you need.</p>
+        </div>
+    </div>
+    <div class="find-a-form__section">
+        <div class="find-a-form__wrapper find-a-form__wrapper--section">
+            <div class="find-a-form__category">
+                <ul>
+                    <li class="active">Forms</li>
+                    <li>Lists</li>
+                </ul>
+            </div>
+            <div class="find-a-form__download">
+                <?php foreach ($this->formCollection as $fileTitle => $fileName) : ?>
+                    <div class="find-a-form__download-item">
+                        <div class="find-a-form__download-title"><?= $fileTitle ?></div>
+                        <div class="find-a-form__download-icon">
+                            <svg focusable="false" viewBox="0 0 48 48" aria-hidden="true">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <path d="M37.1205006,40.035 L11.2545006,40.035 C10.7025006,40.035 10.2545006,40.483 10.2545006,41.035 L10.2545006,43.035 C10.2545006,43.587 10.7025006,44.035 11.2545006,44.035 L37.1205006,44.035 C37.6725006,44.035 38.1205006,43.587 38.1205006,43.035 L38.1205006,41.035 C38.1205006,40.483 37.6725006,40.035 37.1205006,40.035 L37.1205006,40.035 Z M10.8805006,23.535 C9.70750064,22.364 9.70650064,20.465 10.8775006,19.292 L11.5845006,18.585 L22.1875006,29.176 L22.1875006,4 L26.1875006,4 L26.1875006,29.171 L36.7735006,18.586 L37.4805006,19.293 C38.6515006,20.464 38.6515006,22.364 37.4805006,23.535 L24.1885006,36.827 L10.8805006,23.535 Z"></path>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+</div>

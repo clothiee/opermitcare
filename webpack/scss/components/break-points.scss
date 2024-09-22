@@ -2,8 +2,8 @@ $handset-max-width: 599px;
 $tablet-small-min-width: 600px;
 $tablet-small-max-width: 1022px;
 $tablet-large-min-width: 1023px;
-$tablet-large-max-width: 1439px;
-$desktop-large-min-width: 1440px;
+$tablet-large-max-width: 1199px;
+$desktop-large-min-width: 1200px;
 
 @mixin handset {
     @media screen and (max-width: #{$handset-max-width}) {

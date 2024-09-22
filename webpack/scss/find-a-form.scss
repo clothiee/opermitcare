@@ -1,0 +1,104 @@
+.find-a-form {
+  &__jumbotron {
+    background-color: var(--article-jumbotron);
+    color: var(--article-header-color);
+    display: flex;
+    justify-content: center;
+    padding: {
+      bottom: 65px;
+      top: 65px;
+    }
+
+    h1 {
+      margin-top: 65px;
+      @include get-responsive(font-size, 28px, 32px, 40px, 40px);
+    }
+  }
+
+  &__wrapper {
+    max-width: $desktop-large-min-width;
+    width: 100%;
+
+    &--section {
+      display: flex;
+      margin: {
+        bottom: 65px;
+        top: 65px;
+      };
+      @include get-responsive(-webkit-flex-direction, column, row, row, row);
+      @include get-responsive(-ms-flex-direction, column, row, row, row);
+      @include get-responsive(flex-direction, column, row, row, row);
+    }
+  }
+
+  &__section {
+    background-color: var(--article-section-background-color);
+    display: flex;
+    justify-content: center;
+    @include get-responsive(padding, 0 20px, 0 20px, 0 20px);
+  }
+
+  &__category {
+    @include get-responsive(padding-right, null, 20px, 20px, 20px);
+    @include get-responsive(width, 100%, 250px, 400px, 400px);
+
+    ul {
+      list-style-type: none;
+      background-color: var(--mid-gray);
+      padding: 20px 0;
+      border-radius: 5px;
+    }
+
+    li {
+      font-weight: 600;
+      padding: 10px 20px;
+
+      &.active,
+      &:hover {
+        color: var(--main-color);
+        border-left: 5px solid var(--main-color);
+      }
+    }
+  }
+
+  &__details {
+    @include get-responsive(width, 100%, calc(100% - 250px), calc(100% - 400px), calc(100% - 400px));
+  }
+
+  &__download {
+    width: 100%;
+    @include get-responsive(margin-top, 20px);
+    @include get-responsive(padding-left, null, null, 120px, 120px);
+  }
+
+  &__download-item {
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    padding: 20px;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+
+    &:first-child {
+      border-top: 1px solid #e5e5e5;
+    }
+  }
+
+  &__download-title {
+    font-weight: 600;
+  }
+
+  &__download-icon {
+    cursor: pointer;
+    margin-left: auto;
+
+    svg {
+      height: 20px;
+      width: 20px;
+    }
+
+    path {
+      fill: var(--main-color);
+    }
+  }
+}

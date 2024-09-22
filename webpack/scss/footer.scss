@@ -15,7 +15,6 @@
   &__wrapper {
     max-width: $desktop-large-min-width;
     width: 100%;
-    @include get-responsive(padding, 0, 0, 0 20px, 0 20px);
   }
 
   h1, h2, p {

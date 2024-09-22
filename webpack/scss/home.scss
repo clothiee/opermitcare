@@ -14,27 +14,30 @@ body {
     }
     width: 100%;
     height: 700px;
+    @include get-responsive(height, 300px, 400px, 500px, 700px);
   }
 
   &__box {
     display: flex;
     justify-content: center;
+    @include get-responsive(padding, 0 20px);
   }
 
-  &__box-card {
-    background-color: var(--login-card);
+  &__wrapper {
+    background-color: var(--home-page-card);
     border-radius: 20px;
     display: flex;
     margin: {
       bottom: 50px;
       top: -40px;
     }
-    max-width: 1200px;
+    max-width: $desktop-large-min-width;
     overflow: hidden;
     width: 100%;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
+    @include get-responsive(padding, 0 20, 0 20, 0 20);
+    @include get-responsive(-webkit-flex-direction, column, row, row, row);
+    @include get-responsive(-ms-flex-direction, column, row, row, row);
+    @include get-responsive(flex-direction, column, row, row, row);
   }
 
   &__box-item {
@@ -42,7 +45,7 @@ body {
     display: inherit;
     flex-wrap: nowrap;
     padding: 20px;
-    width: 50%;
+    @include get-responsive(width, 100%, 50%, 50%, 50%);
   }
 
   &__box-image {
