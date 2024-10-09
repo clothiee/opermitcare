@@ -13,11 +13,15 @@
         "php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ^8.0",
         "laminas/laminas-modulemanager": "^2.15",
         "laminas/laminas-mvc": "^3.7",
-        "laminas/laminas-view": "^2.34"
+        "laminas/laminas-view": "^2.34",
+        "laminas/laminas-db": "^2.20",
+        "laminas/laminas-form": "^3.20",
+        "laminas/laminas-session": "^2.21"
     },
     "autoload": {
         "psr-4": {
-            "Application\\": "module/Application/src/"
+            "Application\\": "module/Application/src/",
+            "Utilities\\": "module/Utilities/src/"
         }
     },
     "autoload-dev": {

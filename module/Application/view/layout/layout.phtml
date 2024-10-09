@@ -3,12 +3,8 @@
  * @var Laminas\View\Renderer\PhpRenderer $this
  */
 
-// Set in new $this->layout()->setVariables(...
-// echo '<pre>';
-// print_r($this->layout()->getVariables());
-// echo '</pre>';
+$layoutVariables = $this->layout()->getVariable('layoutVariables');
 ?>
-
 <?= $this->doctype() ?>
 <html lang="en">
 <head>
@@ -32,7 +28,7 @@
 </head>
 <body>
 <header role="banner">
-    <?= $this->partial('partial/navigation') ?>
+    <?= $this->partial('partial/navigation', $layoutVariables) ?>
 </header>
 <section class="content">
     <?= $this->content ?>

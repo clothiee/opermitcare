@@ -1,0 +1,60 @@
+@import url("https://use.fontawesome.com/releases/v5.7.2/css/all.css");
+
+.alert {
+  border-radius: 3px;
+  display: flex;
+  font-size: 13px;
+  line-height: 18px;
+  margin: 20px 0;
+  padding: 15px;
+
+  &:before {
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-family: "Font Awesome 5 Free";
+    font-display: swap;
+    font-size: 18px;
+    font-weight: 900;
+    height: 18px;
+    margin-right: 5px;
+    text-align: center;
+    vertical-align: top;
+    width: 22px;
+  }
+
+  .button {
+    color: #fff;
+    border-radius: 3px;
+    display: inline-block;
+    font-size: 12px;
+    margin: -5px 0 -5px auto;
+    padding: 5px 8px;
+  }
+
+  @mixin alert-version($mainColor, $thinColor, $icon) {
+    background: $thinColor;
+    color: $mainColor;
+    &:before {
+      content: $icon;
+    }
+    .button {
+      background: $mainColor;
+    }
+  }
+
+  &.info {
+    @include alert-version(#757575, #F5F5F5, "\f05a");
+  }
+
+  &.warning {
+    @include alert-version(#F49A26, #FFF4C1, "\f071");
+  }
+
+  &.error {
+    @include alert-version(#FF4C10, #FCE8E6, "\f06a");
+  }
+
+  &.success {
+    @include alert-version(#00A69F, #DDF2F2, "\f06a");
+  }
+}

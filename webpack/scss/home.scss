@@ -42,10 +42,17 @@ body {
 
   &__box-item {
     align-items: center;
-    display: inherit;
-    flex-wrap: nowrap;
     padding: 20px;
     @include get-responsive(width, 100%, 50%, 50%, 50%);
+  }
+
+  &__box-image,
+  &__box-text {
+    float: left;
+  }
+
+  &__box-text {
+    width: calc(100% - 70px);
   }
 
   &__box-image {

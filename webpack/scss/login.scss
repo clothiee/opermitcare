@@ -27,7 +27,7 @@
   &__form {
     width: 500px;
     @include get-responsive(width, 100%, 100%, 500px, 500px);
-    @include get-responsive(padding, 20px, 20px, 30px, 30px);
+    @include get-responsive(padding, 20px, 20px, 25px, 25px);
   }
 
   &__banner {
@@ -96,6 +96,7 @@
     margin-top: 20px;
     width: 100%;
 
+    input[type="button"],
     button {
       background-color: var(--login-button-color);
       border: 0;

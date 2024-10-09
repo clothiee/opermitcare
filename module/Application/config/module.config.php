@@ -2,9 +2,11 @@
 
 namespace Application;
 
+use Application\Portal\Controller\PortalController;
+use Application\Portal\Controller\PortalControllerFactory;
+use Laminas\Db\Adapter\AdapterAbstractServiceFactory;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
@@ -14,18 +16,18 @@ return [
                 'options' => [
                     'route' => '/',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => PortalController::class,
                         'action' => 'index',
                     ],
                 ],
             ],
-            'login' => [
-                'type' => Literal::class,
+            'portal' => [
+                'type' => Segment::class,
                 'options' => [
-                    'route' => '/login',
+                    'route' => '/[:action]',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action' => 'login',
+                        'controller' => PortalController::class,
+                        'action' => 'index',
                     ],
                 ],
             ],
@@ -34,7 +36,7 @@ return [
                 'options' => [
                     'route' => '/find-a-form',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => PortalController::class,
                         'action' => 'find-a-form',
                     ],
                 ],
@@ -44,7 +46,7 @@ return [
                 'options' => [
                     'route' => '/application[/:action]',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => PortalController::class,
                         'action' => 'index',
                     ],
                 ],
@@ -53,7 +55,7 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            PortalController::class => PortalControllerFactory::class,
         ],
     ],
     'view_manager' => [
@@ -62,14 +64,21 @@ return [
         'doctype' => 'HTML5',
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
+        'template_path_stack' => [
+            'portal' => __DIR__ . '/../view',
+        ],
         'template_map' => [
             'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
-            'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml',
         ],
-        'template_path_stack' => [
-            __DIR__ . '/../view',
+        'strategies' => [
+            'ViewJsonStrategy',
+        ],
+    ],
+    'service_manager' => [
+        'factories' => [
+            'Application\Db\WriteAdapter' => AdapterAbstractServiceFactory::class,
         ],
     ],
 ];
