@@ -1,4 +1,5 @@
-.login {
+.login,
+.sign-up {
   display: flex;
   justify-content: center;
   padding-top: 65px;
@@ -32,13 +33,11 @@
 
   &__banner {
     background: {
-      image: url('/assets/images/login-banner.jpg');
       repeat: no-repeat;
       position: right bottom;
       size: cover;
     }
     flex-wrap: nowrap;
-    height: 400px;
     width: 100%;
     @include get-responsive(display, none, none);
   }
@@ -123,5 +122,17 @@
         color: var(--login-button-hover-text-color);
       }
     }
+  }
+}
+
+.login {
+   &__banner {
+     background-image: url('/assets/images/login-banner.jpg');
+   }
+ }
+
+.sign-up {
+  &__banner {
+    background-image: url('/assets/images/sign-up-banner.jpg');
   }
 }

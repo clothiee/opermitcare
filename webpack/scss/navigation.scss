@@ -84,7 +84,7 @@
       outline: 0;
     }
 
-    li {
+    > li {
       a {
         font-weight: 600;
         outline: 0;
@@ -102,6 +102,7 @@
       border: 0;
       border-radius: 5px;
       color: var(--login-button-text-color);
+      cursor: pointer;
       font-weight: 600;
       padding: 5px 10px;
       width: 100%;

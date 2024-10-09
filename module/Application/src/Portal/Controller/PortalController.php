@@ -87,7 +87,12 @@ class PortalController extends AbstractActionController
      */
     public function signUpAction()
     {
+        $sessionDetails = $this->sessionService->get();
         $viewOptions = [];
+
+        if (!empty($sessionDetails['profile'])) {
+            return $this->redirectTo('portal', 'dashboard');
+        }
 
         return $this->buildView($viewOptions);
     }
