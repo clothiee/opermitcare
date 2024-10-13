@@ -3,6 +3,7 @@
 namespace Application\Portal\Service;
 
 use Application\User\Model\UserTable;
+use Application\UserType\Model\UserTypeTable;
 use ArrayObject;
 use Laminas\Session\Container;
 use Laminas\View\Model\JsonModel;
@@ -16,19 +17,23 @@ class SessionService
 
     private $config;
     private $userTable;
+    private $userTypeTable;
 
     /**
-     * SessionService constructor.
+     * Session Service constructor.
      *
-     * @param ArrayObject $config
-     * @param UserTable   $userTable
+     * @param ArrayObject   $config
+     * @param UserTable     $userTable
+     * @param UserTypeTable $userTypeTable
      */
     public function __construct(
         $config,
-        UserTable $userTable
+        UserTable $userTable,
+        UserTypeTable $userTypeTable
     ) {
         $this->config = $config;
         $this->userTable = $userTable;
+        $this->userTypeTable = $userTypeTable;
     }
 
     /**
@@ -76,10 +81,11 @@ class SessionService
      */
     public function get()
     {
-        $session = new Container('User');
+        $session = new Container('Profile');
 
         return [
-            'profile' => $session->offsetGet('profile'),
+            'user' => $session->offsetGet('user'),
+            'userType' => $session->offsetGet('userType'),
         ];
     }
 
@@ -90,7 +96,7 @@ class SessionService
      */
     public function delete()
     {
-        $session = new Container('User');
+        $session = new Container('Profile');
         $session->getManager()->destroy();
 
         return true;
@@ -114,12 +120,15 @@ class SessionService
     /**
      * Set Session Profile
      *
-     * @param array|null $profile
+     * @param array|null $user
      */
-    private function setProfile(array $profile = null)
+    private function setProfile(array $user = null)
     {
-        $session = new Container('User');
-        $session->offsetSet('profile', $profile);
+        $userType = $this->userTypeTable->getUserTypeByUserTypeId($user['userTypeId']);
+
+        $session = new Container('Profile');
+        $session->offsetSet('user', $user);
+        $session->offsetSet('userType', $userType);
     }
 
     /**

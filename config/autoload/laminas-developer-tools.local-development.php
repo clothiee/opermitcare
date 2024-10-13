@@ -54,7 +54,7 @@ return [
              *
              * Example: 'matcher' => ['ip' => '127.0.0.1']
              * OR
-             * 'matcher' => ['url' => ['path' => '/admin']]
+             * 'matcher' => ['url' => ['path' => '/administrator']]
              * Note: The matcher is not implemented yet!
              */
             'matcher' => [],

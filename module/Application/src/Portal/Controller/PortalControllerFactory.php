@@ -2,6 +2,7 @@
 
 namespace Application\Portal\Controller;
 
+use Application\Portal\Service\DashboardService;
 use Application\Portal\Service\SessionService;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerExceptionInterface;
@@ -22,10 +23,12 @@ class PortalControllerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) {
         $config = $container->get('config');
         $sessionService = $container->get(SessionService::class);
+        $dashboardService = $container->get(DashboardService::class);
 
         return new PortalController(
             $config,
-            $sessionService
+            $sessionService,
+            $dashboardService
         );
     }
 }

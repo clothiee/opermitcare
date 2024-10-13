@@ -1,0 +1,117 @@
+.dashboard {
+  &__jumbotron {
+    background-color: var(--article-jumbotron);
+    color: var(--article-header-color);
+    display: flex;
+    justify-content: center;
+    padding: {
+      bottom: 65px;
+      top: 65px;
+    }
+
+    h1 {
+      margin-top: 65px;
+      @include get-responsive(font-size, 28px, 32px, 40px, 40px);
+    }
+  }
+
+  &__wrapper {
+    max-width: $desktop-large-min-width;
+    width: 100%;
+
+    &--section {
+      display: flex;
+      flex-wrap: wrap;
+      margin: {
+        bottom: 65px;
+        top: 65px;
+      };
+      @include get-responsive(-webkit-flex-direction, column, row, row, row);
+      @include get-responsive(-ms-flex-direction, column, row, row, row);
+      @include get-responsive(flex-direction, column, row, row, row);
+    }
+  }
+
+  &__section {
+    background-color: var(--dashboard-section-background-color);
+    display: flex;
+    justify-content: center;
+    @include get-responsive(padding, 0 20px, 0 20px, 0 20px);
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+    padding: 0 5px 0 12px;
+    position: relative;
+    @include get-responsive(width, 100%, 50%, calc(100% / 3), calc(100% / 3));
+
+    &:hover {
+      .dashboard__card-icon {
+        background-color: var(--main-color);
+        svg {
+          margin-top: 0;
+        }
+      }
+
+      .dashboard__card-arrow {
+        background-color: var(--main-color);
+
+        path {
+          fill: var(--light-gray);
+        }
+      }
+
+      h2 {
+        color: var(--main-color);
+      }
+    }
+  }
+
+  &__card-icon {
+    background-color: var(--dashboard-icon-background-color);
+    border: 9px solid var(--dashboard-section-background-color);
+    border-radius: 50%;
+    height: 60px;
+    overflow: hidden;
+    padding: 8px;
+    width: 60px;
+    z-index: 1;
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+
+    svg {
+      transition: all .1s ease-in;
+      margin-top: 60px;
+    }
+
+    circle, path {
+      stroke: var(--dashboard-icon-stroke-color);
+    }
+  }
+
+  &__card-content {
+    background-color: var(--dashboard-card-background-color);
+    border-radius: 15px;
+    width: 100%;
+    padding: 20px 50px 20px 60px;
+  }
+
+  &__card-arrow {
+    background-color: var(--light-gray);
+    border-radius: 5px;
+    bottom: 15px;
+    width: 30px;
+    height: 30px;
+    padding: 2px;
+    position: absolute;
+    right: 20px;
+    z-index: 1;
+
+    path {
+      fill: var(--main-color);
+    }
+  }
+}

@@ -1,9 +1,9 @@
 <?php
-$isProfileAvailable = empty($this->sessionDetails['profile']);
+$isProfileAvailable = $this->isProfileAvailable;
 $url = [
     'HOME' => $this->url('home'),
     'DASHBOARD' => $this->url('portal', ['action' => 'dashboard']),
-    'FIND_A_FORM' => $this->url('find-a-form'),
+    'FIND_A_FORM' => $this->url('portal', ['action' => 'find-a-form']),
     'LOGIN' => $this->url('portal', ['action' => 'login']),
     'LOGOUT' => $this->url('portal', ['action' => 'logout']),
 ];

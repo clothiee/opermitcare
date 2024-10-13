@@ -54,10 +54,10 @@ class UserTable
         }
 
         try {
-            $this->getUser($userId);
+            $this->getUserByColumns(['userId' => $userId]);
         } catch (RuntimeException $e) {
             throw new RuntimeException(sprintf(
-            'Cannot update album with identifier %d; does not exist',
+            'Cannot update user with identifier %d; does not exist',
                 $userId
             ));
         }
@@ -65,7 +65,7 @@ class UserTable
         $this->tableGateway->update($data, ['userId' => $userId]);
     }
 
-    public function deleteAlbum($userId)
+    public function deleteUser($userId)
     {
         $this->tableGateway->delete(['userId' => (int) $userId]);
     }

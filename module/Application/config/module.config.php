@@ -24,27 +24,21 @@ return [
             'portal' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[:action]',
+                    'route' => '/[:action][/:param1][/:param2][/]',
+                    'constraints' => [
+                        'param1' => '[a-zA-Z0-9][a-zA-Z0-9_-]*',
+                        'param2' => '[a-zA-Z0-9][a-zA-Z0-9_-]*',
+                    ],
                     'defaults' => [
                         'controller' => PortalController::class,
                         'action' => 'index',
                     ],
                 ],
             ],
-            'find-a-form' => [
-                'type' => Literal::class,
-                'options' => [
-                    'route' => '/find-a-form',
-                    'defaults' => [
-                        'controller' => PortalController::class,
-                        'action' => 'find-a-form',
-                    ],
-                ],
-            ],
             'application' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/application[/:action]',
+                    'route' => '/api[/:action]',
                     'defaults' => [
                         'controller' => PortalController::class,
                         'action' => 'index',

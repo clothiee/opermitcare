@@ -8,14 +8,14 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-class SessionServiceFactory
+class DashboardServiceFactory
 {
     /**
      * @param ContainerInterface $container
      * @param                    $requestedName
      * @param array|null         $options
      *
-     * @return SessionService
+     * @return DashboardService
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
@@ -24,11 +24,13 @@ class SessionServiceFactory
         $config = $container->get('config');
         $userTable = $container->get(UserTable::class);
         $userTypeTable = $container->get(UserTypeTable::class);
+        $sessionService = $container->get(SessionService::class);
 
-        return new SessionService(
+        return new DashboardService(
             $config,
             $userTable,
             $userTypeTable,
+            $sessionService
         );
     }
 }

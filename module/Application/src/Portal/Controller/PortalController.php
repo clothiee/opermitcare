@@ -2,6 +2,7 @@
 
 namespace Application\Portal\Controller;
 
+use Application\Portal\Service\DashboardService;
 use Application\Portal\Service\SessionService;
 use ArrayObject;
 use Laminas\Http\Response;
@@ -10,21 +11,27 @@ use Laminas\View\Model\ViewModel;
 
 class PortalController extends AbstractActionController
 {
+    use PortalTrait;
+
     private $config;
     private $sessionService;
+    private $dashboardService;
 
     /**
      * PortalController constructor.
      *
-     * @param ArrayObject  $config
-     * @param SessionService $sessionService
+     * @param ArrayObject      $config
+     * @param SessionService   $sessionService
+     * @param DashboardService $dashboardService
      */
     public function __construct(
         $config,
-        SessionService $sessionService
+        SessionService $sessionService,
+        DashboardService $dashboardService
     ) {
         $this->config = $config;
         $this->sessionService = $sessionService;
+        $this->dashboardService = $dashboardService;
     }
 
     /**
@@ -34,9 +41,7 @@ class PortalController extends AbstractActionController
      */
     public function indexAction()
     {
-        $viewOptions = [];
-
-        return $this->buildView($viewOptions);
+        return $this->buildView();
     }
 
     /**
@@ -46,26 +51,7 @@ class PortalController extends AbstractActionController
      */
     public function loginAction()
     {
-        $request = $this->getRequest();
-        $sessionDetails = $this->sessionService->get();
-        $viewOptions = [];
-
-        if (!empty($sessionDetails['profile'])) {
-            return $this->redirectTo('portal', 'dashboard');
-        }
-
-        if ($request->isPost()) {
-            $post = $this->getRequest()->getPost()->toArray();
-            $response = $this->sessionService->initialize($post);
-
-            if ($response['response']['message'] === SessionService::SUCCESS_MESSAGE) {
-                return $this->redirectTo('portal', 'dashboard');
-            }
-
-            $viewOptions['response'] = $response;
-        }
-
-        return $this->buildView($viewOptions);
+        return $this->buildView();
     }
 
     /**
@@ -75,26 +61,27 @@ class PortalController extends AbstractActionController
      */
     public function logoutAction()
     {
-        $this->sessionService->delete();
-
-        return $this->redirectTo('portal', 'login');
+        return $this->buildView();
     }
 
     /**
      * Sign Up Page
      *
-     * @return ViewModel
+     * @return Response|ViewModel
      */
     public function signUpAction()
     {
-        $sessionDetails = $this->sessionService->get();
-        $viewOptions = [];
+        return $this->buildView();
+    }
 
-        if (!empty($sessionDetails['profile'])) {
-            return $this->redirectTo('portal', 'dashboard');
-        }
-
-        return $this->buildView($viewOptions);
+    /**
+     * Dashboard Page
+     *
+     * @return ViewModel
+     */
+    public function dashboardAction()
+    {
+        return $this->buildView();
     }
 
     /**
@@ -103,6 +90,132 @@ class PortalController extends AbstractActionController
      * @return ViewModel
      */
     public function findAFormAction()
+    {
+        return $this->buildView();
+    }
+
+    /**
+     * Build View
+     *
+     * @return Response|ViewModel
+     */
+    private function buildView()
+    {
+        $action = $this->params()->fromRoute('action');
+        $sessionDetails = $this->sessionService->get();
+
+        $this->layout()->setVariable('layoutVariables', [
+            'pageName' => $action,
+            'isProfileAvailable' => empty($sessionDetails['user']) && empty($sessionDetails['userType']),
+        ]);
+
+        return $this->initialize($action);
+    }
+
+    /**
+     * Initialize Pages
+     *
+     * @param string $action
+     *
+     * @return Response|ViewModel
+     */
+    public function initialize(string $action)
+    {
+        switch ($action) {
+            case 'login':
+                return $this->login();
+            case 'logout':
+                return $this->logout();
+            case 'dashboard':
+                return $this->dashboard();
+            case 'find-a-form':
+                return $this->findAForm();
+            case 'sign-up':
+                return $this->signUp();
+            default:
+                return new ViewModel();
+        }
+    }
+
+    /**
+     * Login
+     *
+     * @return Response|ViewModel
+     */
+    private function login()
+    {
+        $request = $this->getRequest();
+        $sessionDetails = $this->sessionService->get();
+        $viewOptions = [];
+
+        if (!empty($sessionDetails['user'])) {
+            return $this->redirectTo('portal', 'dashboard');
+        }
+
+        if ($request->isPost()) {
+            $post = $request->getPost()->toArray();
+            $response = $this->sessionService->initialize($post);
+
+            if ($response['response']['message'] === SessionService::SUCCESS_MESSAGE) {
+                return $this->redirectTo('portal', 'dashboard');
+            }
+
+            $viewOptions['response'] = $response;
+        }
+
+        return new ViewModel($viewOptions);
+    }
+
+    /**
+     * Logout
+     *
+     * @return Response
+     */
+    private function logout()
+    {
+        $this->sessionService->delete();
+
+        return $this->redirectTo('portal', 'login');
+    }
+
+    /**
+     * Dashboard
+     *
+     * @return ViewModel
+     */
+    private function dashboard()
+    {
+        $viewOptions = $this->dashboardService->initialize();
+
+        $viewModel = new ViewModel();
+        $viewModel->setTemplate($this->getTemplate());
+        $viewModel->setVariables($viewOptions);
+
+        return $viewModel;
+    }
+
+    /**
+     * Sign Up
+     *
+     * @return Response|ViewModel
+     */
+    private function signUp()
+    {
+        $sessionDetails = $this->sessionService->get();
+
+        if (!empty($sessionDetails['user'])) {
+            return $this->redirectTo('portal', 'dashboard');
+        }
+
+        return new ViewModel();
+    }
+
+    /**
+     * Find A Form
+     *
+     * @return ViewModel
+     */
+    private function findAForm()
     {
         $list = [];
         $forms = [
@@ -113,60 +226,11 @@ class PortalController extends AbstractActionController
             'Amendment Form' => '',
         ];
 
-        return $this->buildView([
+        $viewOptions = [
             'formCollection' => $forms,
             'listCollection' => $list,
-        ]);
-    }
-
-    /**
-     * Dashboard Page
-     *
-     * @return ViewModel
-     */
-    public function dashboardAction()
-    {
-        $viewOptions = [];
-
-        return $this->buildView($viewOptions);
-    }
-
-    /**
-     * Redirect To
-     *
-     * @param string $route
-     * @param string $action
-     * @param bool   $query
-     *
-     * @return Response
-     */
-    private function redirectTo(string $route, string $action, $query = true)
-    {
-        return $this->redirect()->toRoute($route, ['action' => $action], $query);
-    }
-
-    /**
-     * Build View
-     *
-     * @param array $viewOptions
-     *
-     * @return ViewModel
-     */
-    private function buildView(array $viewOptions)
-    {
-        $action = $this->params()->fromRoute('action');
-        $sessionDetails = $this->sessionService->get();
-
-        $this->layout()->setVariable('layoutVariables', [
-            'pageName' => $action,
-            'sessionDetails' => $sessionDetails,
-        ]);
+        ];
 
         return new ViewModel($viewOptions);
-    }
-
-    public function getUserAction()
-    {
-        return $this->sessionService->getUserDetails();
     }
 }
