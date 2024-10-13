@@ -64,11 +64,14 @@ class UserTypeTable
         $this->tableGateway->delete(['userTypeId' => (int) $userTypeId]);
     }
 
-    public function getUserTypeByUserTypeId()
+    public function getUserTypeByUserTypeId($userTypeId)
     {
         $table = $this->tableGateway->getTable();
         $select = new Select($table);
-        $select->join('user', 'user.userTypeId = ' . $table . '.userTypeId', ['*'], $select::JOIN_LEFT);
+        $select->join('user', 'user.userTypeId = ' . $table . '.userTypeId', ['*'], $select::JOIN_LEFT)
+            ->where([
+                        $table . '.userTypeId' => $userTypeId,
+                    ]);
         $rowSet = $this->tableGateway->selectWith($select);
         $row = (array) $rowSet->current();
 

@@ -7,7 +7,7 @@ use Application\Portal\Service\SessionService;
 
 $response = $this->response;
 $isError = !empty($response['code']) && $response['code'] === SessionService::INVALID_CODE ? true : false;
-$alertMessage = !empty($response['response']['message']) ? $response['response']['message'] : '';
+$alertMessage = !empty($response['message']) ? $response['message'] : '';
 ?>
 
 <div class="login">

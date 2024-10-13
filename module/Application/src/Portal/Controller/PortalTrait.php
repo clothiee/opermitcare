@@ -39,4 +39,33 @@ trait PortalTrait
     {
         return $this->redirect()->toRoute($route, ['action' => $action], $query);
     }
+
+    /**
+     * Get Error Message
+     *
+     * @param string|array $errorMessage
+     *
+     * @return string
+     */
+    protected function getResponseMessage($errorMessage)
+    {
+        if (is_array($errorMessage)) {
+            foreach ($errorMessage as $errorKey => $errorItem) {
+                if ($errorItem['isEmpty']) {
+                    $errorMessage = 'Invalid Form! Please try again.';
+                    continue;
+                }
+            }
+        } else {
+            if (strpos($errorMessage,'EMAIL_UNIQUE') !== false) {
+                $errorMessage = 'Email already exists!';
+            }
+
+            if (strpos($errorMessage,'user.userName_UNIQUE') !== false) {
+                $errorMessage = 'Username already exists!';
+            }
+        }
+
+        return $errorMessage;
+    }
 }

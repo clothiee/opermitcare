@@ -4,6 +4,7 @@ namespace Application\Portal\Controller;
 
 use Application\Portal\Service\DashboardService;
 use Application\Portal\Service\SessionService;
+use Application\User\Form\UserForm;
 use ArrayObject;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\AbstractActionController;
@@ -156,7 +157,7 @@ class PortalController extends AbstractActionController
             $post = $request->getPost()->toArray();
             $response = $this->sessionService->initialize($post);
 
-            if ($response['response']['message'] === SessionService::SUCCESS_MESSAGE) {
+            if ($response['message'] === SessionService::SUCCESS_MESSAGE) {
                 return $this->redirectTo('portal', 'dashboard');
             }
 
@@ -207,7 +208,29 @@ class PortalController extends AbstractActionController
             return $this->redirectTo('portal', 'dashboard');
         }
 
-        return new ViewModel();
+        $request = $this->getRequest();
+        $viewOptions = [
+            'isDone' => false,
+        ];
+
+        if ($request->isPost()) {
+            $post = $request->getPost()->toArray();
+            $post['userTypeId'] = 4;
+            $form = new UserForm();
+            $form->setData($post);
+
+            if ($form->isValid()) {
+                $user = $this->sessionService->create($post);
+                $viewOptions['response']['code'] = $user['code'];
+                $viewOptions['response']['message'] = $this->getResponseMessage($user['message']);
+                $viewOptions['isDone'] = $user['code'] === SessionService::SUCCESS_CODE;
+            } else {
+                $viewOptions['response']['code'] = SessionService::INVALID_CODE;
+                $viewOptions['response']['message'] = $this->getResponseMessage($form->getMessages());
+            }
+        }
+
+        return new ViewModel($viewOptions);
     }
 
     /**

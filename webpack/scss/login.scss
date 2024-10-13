@@ -135,4 +135,22 @@
   &__banner {
     background-image: url('/assets/images/sign-up-banner.jpg');
   }
+  &__success {
+    text-align: center;
+    width: 100%;
+    @include get-responsive(padding, 20px, 20px, 30px, 30px);
+
+    .sign-up__action {
+      width: 100%;
+      max-width: 360px;
+      margin: 20px auto 0;
+    }
+  }
+
+  &__image {
+    margin-bottom: 20px;
+    svg {
+      max-width: 200px;
+    }
+  }
 }

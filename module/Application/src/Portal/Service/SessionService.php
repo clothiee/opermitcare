@@ -2,6 +2,7 @@
 
 namespace Application\Portal\Service;
 
+use Application\User\Model\User;
 use Application\User\Model\UserTable;
 use Application\UserType\Model\UserTypeTable;
 use ArrayObject;
@@ -60,16 +61,30 @@ class SessionService
 
             return [
                 'code' => $code,
-                'response' => [
-                    'message' => $message,
-                ]
+                'message' => $message,
             ];
         } catch (\Exception $exception) {
             return [
                 'code' => $exception->getCode(),
-                'response' => [
-                    'message' => $exception->getMessage(),
-                ],
+                'message' => $exception->getMessage(),
+            ];
+        }
+    }
+
+    public function create(array $post)
+    {
+        try {
+            $user = new User();
+            $user->exchangeArray($post);
+            $this->userTable->saveUser($user);
+            return [
+                'code' => self::SUCCESS_CODE,
+                'message' => 'Thanks for Signing Up!',
+            ];
+        } catch (\Exception $exception) {
+            return [
+                'code' => self::INVALID_CODE,
+                'message' => $exception->getMessage(),
             ];
         }
     }
@@ -97,6 +112,8 @@ class SessionService
     public function delete()
     {
         $session = new Container('Profile');
+        $session->offsetSet('user', '');
+        $session->offsetSet('userType', '');
         $session->getManager()->destroy();
 
         return true;

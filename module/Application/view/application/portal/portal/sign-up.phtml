@@ -6,8 +6,9 @@
 use Application\Portal\Service\SessionService;
 
 $response = $this->response;
+$isDone = $this->isDone;
 $isError = !empty($response['code']) && $response['code'] === SessionService::INVALID_CODE ? true : false;
-$alertMessage = !empty($response['response']['message']) ? $response['response']['message'] : '';
+$alertMessage = !empty($response['message']) ? $response['message'] : '';
 ?>
 
 <div class="sign-up">
@@ -18,39 +19,65 @@ $alertMessage = !empty($response['response']['message']) ? $response['response']
                 <a class="button">&times;</a>
             </div>
         <?php endif; ?>
-        <div class="sign-up__card">
-            <div class="sign-up__form">
-                <h1>Sign Up</h1>
-                <p>Create an account</p>
-                <form action="<?= $this->url('portal', ['action' => 'sign-up']) ?>" method="post">
-                    <div class="sign-up__input">
-                        <input type="text" name="username" placeholder="Username"/>
-                    </div>
-                    <div class="sign-up__input">
-                        <input type="text" name="email" placeholder="Email"/>
-                    </div>
-                    <div class="sign-up__input">
-                        <input type="text" name="firstName" placeholder="First Name"/>
-                    </div>
-                    <div class="sign-up__input">
-                        <input type="text" name="lastName" placeholder="Last Name"/>
-                    </div>
-                    <div class="sign-up__input">
-                        <input type="password" name="password" placeholder="Password"/>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M21.71 11.2535C20.9435 10.0884 17.2917 5 12.0002 5C6.36056 5 2.58388 10.7799 2.17695 11.4304L2.10436 11.556C1.95283 11.8611 1.96664 12.2246 2.14618 12.5195L2.29085 12.7465C3.05724 13.9116 6.70868 19 12.0002 19C17.6398 19 21.4169 13.2201 21.8235 12.5696L21.896 12.444C22.0475 12.1389 22.0338 11.7754 21.8547 11.4805L21.71 11.2535ZM4.00049 12C4.98699 10.6245 7.95149 7 11.793 7C15.4396 7 18.2962 10.2662 19.4204 11.7736L19.586 12C18.5995 13.3755 15.6345 17 11.793 17C8.14634 17 5.28978 13.7338 4.16603 12.2264L4.00049 12ZM16.0006 12C16.0006 9.7945 14.2061 8 12.0006 8C9.79512 8 8.00062 9.7945 8.00062 12C8.00062 14.2055 9.79512 16 12.0006 16C14.2061 16 16.0006 14.2055 16.0006 12ZM10.0006 12C10.0006 10.897 10.8976 10 12.0006 10C13.1036 10 14.0006 10.897 14.0006 12C14.0006 13.103 13.1036 14 12.0006 14C10.8976 14 10.0006 13.103 10.0006 12Z"></path>
+        <?php if (!$isDone) : ?>
+            <div class="sign-up__card">
+                <div class="sign-up__form">
+                    <h1>Sign Up</h1>
+                    <p>Create an account</p>
+                    <form action="<?= $this->url('portal', ['action' => 'sign-up']) ?>" method="post">
+                        <div class="sign-up__input">
+                            <input type="text" name="userName" placeholder="Username"/>
+                        </div>
+                        <div class="sign-up__input">
+                            <input type="text" name="email" placeholder="Email"/>
+                        </div>
+                        <div class="sign-up__input">
+                            <input type="text" name="firstName" placeholder="First Name"/>
+                        </div>
+                        <div class="sign-up__input">
+                            <input type="text" name="lastName" placeholder="Last Name"/>
+                        </div>
+                        <div class="sign-up__input">
+                            <input type="password" name="password" placeholder="Password"/>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M21.71 11.2535C20.9435 10.0884 17.2917 5 12.0002 5C6.36056 5 2.58388 10.7799 2.17695 11.4304L2.10436 11.556C1.95283 11.8611 1.96664 12.2246 2.14618 12.5195L2.29085 12.7465C3.05724 13.9116 6.70868 19 12.0002 19C17.6398 19 21.4169 13.2201 21.8235 12.5696L21.896 12.444C22.0475 12.1389 22.0338 11.7754 21.8547 11.4805L21.71 11.2535ZM4.00049 12C4.98699 10.6245 7.95149 7 11.793 7C15.4396 7 18.2962 10.2662 19.4204 11.7736L19.586 12C18.5995 13.3755 15.6345 17 11.793 17C8.14634 17 5.28978 13.7338 4.16603 12.2264L4.00049 12ZM16.0006 12C16.0006 9.7945 14.2061 8 12.0006 8C9.79512 8 8.00062 9.7945 8.00062 12C8.00062 14.2055 9.79512 16 12.0006 16C14.2061 16 16.0006 14.2055 16.0006 12ZM10.0006 12C10.0006 10.897 10.8976 10 12.0006 10C13.1036 10 14.0006 10.897 14.0006 12C14.0006 13.103 13.1036 14 12.0006 14C10.8976 14 10.0006 13.103 10.0006 12Z"></path>
+                            </svg>
+                        </div>
+                        <div class="login__label">
+                            By clicking Sign Up, you agree to our <a>Terms</a>, <a>Privacy Policy</a> and <a>Cookies Policy.</a>
+                        </div>
+                        <div class="sign-up__action">
+                            <button type="submit">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="sign-up__banner"></div>
+            </div>
+        <?php else: ?>
+            <div class="sign-up__card">
+                <div class="sign-up__success">
+                    <div class="sign-up__image">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" version="1.1">
+                            <g transform="translate(0 -1028.4)">
+                                <path d="m3 1036.4c-1.1046 0-2 0.9-2 2v3 2 2 2 3c0 1.1 0.8954 2 2 2h9 9c1.105 0 2-0.9 2-2v-7-2-3c0-1.1-0.895-2-2-2h-9-9z" fill="#7f8c8d"/>
+                                <path d="m3 1035.4c-1.1046 0-2 0.9-2 2v3 2 2 2 3c0 1.1 0.8954 2 2 2h9 9c1.105 0 2-0.9 2-2v-7-2-3c0-1.1-0.895-2-2-2h-9-9z" fill="#bdc3c7"/>
+                                <path d="m3 1035.4c-0.5523 0-1.0443 0.2-1.4062 0.6l10.406 10.4 10.406-10.4c-0.362-0.4-0.854-0.6-1.406-0.6h-18z" fill="#7f8c8d"/>
+                                <path d="m5 1028.4c-1.1046 0-2 0.9-2 2v5 2l9 9 9-9v-2-1l-6-6h-10z" fill="#a3cfb7"/>
+                                <path d="m21 1034.4-6-6v4c0 1.1 0.895 2 2 2h4z" fill="#078d44"/>
+                                <path d="m3 1036.4v1l9 9 9-9v-1l-9 9-9-9z" fill="#078d44"/>
+                                <path d="m10 14l-8.4062 8.406c0.3619 0.362 0.8539 0.594 1.4062 0.594h18c0.552 0 1.044-0.232 1.406-0.594l-8.406-8.406h-4z" transform="translate(0 1028.4)" fill="#95a5a6"/>
+                            </g>
                         </svg>
                     </div>
-                    <div class="login__label">
-                        By clicking Sign Up, you agree to our <a>Terms</a>, <a>Privacy Policy</a> and <a>Cookies Policy.</a>
-                    </div>
-                    <div class="sign-up__action">
-                        <button type="submit">Sign Up</button>
-                    </div>
-                </form>
+                    <h1><?= $response['message']; ?></h1>
+                    <a href="<?= $this->url('portal', ['action' => 'login']) ?>">
+                        <div class="sign-up__action">
+                            <button type="submit">Login here</button>
+                        </div>
+                    </a>
+                </div>
             </div>
-            <div class="sign-up__banner"></div>
-        </div>
+        <?php endif; ?>
     </div>
 </div>
