@@ -17,7 +17,8 @@
         "laminas/laminas-db": "^2.20",
         "laminas/laminas-form": "^3.20",
         "laminas/laminas-session": "^2.21",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+      "ext-json": "*"
     },
     "autoload": {
         "psr-4": {

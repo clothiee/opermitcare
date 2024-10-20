@@ -34,7 +34,7 @@ $layoutVariables = $this->layout()->getVariable('layoutVariables');
     <?= $this->content ?>
 </section>
 <footer role="group">
-    <?= $this->partial('partial/footer') ?>
+    <?= $this->partial('partial/footer', $layoutVariables) ?>
 </footer>
 <?= $this->inlineScript()
          ->prependFile($this->basePath('assets/js/app.js')); ?>

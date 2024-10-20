@@ -1,4 +1,8 @@
 .dashboard {
+  &--resident {
+    padding-top: 60px;
+  }
+
   &__jumbotron {
     background-color: var(--article-jumbotron);
     color: var(--article-header-color);
@@ -50,6 +54,7 @@
     &:hover {
       .dashboard__card-icon {
         background-color: var(--main-color);
+
         svg {
           margin-top: 0;
         }
@@ -112,6 +117,199 @@
 
     path {
       fill: var(--main-color);
+    }
+  }
+
+  &__side-bar {
+    background-color: var(--mid-gray);
+    width: 280px;
+
+    h1 {
+      padding: 20px;
+    }
+
+    ul {
+      list-style-type: none;
+      margin-bottom: 20px;
+    }
+
+    li {
+      border-left: 5px solid transparent;
+      cursor: pointer;
+      line-height: 25px;
+      padding: 20px;
+      vertical-align: middle;
+
+      &.active {
+        background-color: #ffffff;
+        border-left: 5px solid var(--main-color);
+
+        path, circle {
+          stroke: var(--dashboard-sidebar-li-active-color);
+        }
+
+        span {
+          color: var(--dashboard-sidebar-li-active-color);
+        }
+      }
+
+      svg {
+        max-width: 25px;
+        margin-right: 10px;
+      }
+
+      path, circle {
+        stroke: var(--dashboard-sidebar-li-default-color);
+      }
+
+      span {
+        color: var(--dashboard-sidebar-li-default-color);
+        font-weight: 600;
+      }
+    }
+
+    path, circle {
+      fill: none;
+    }
+  }
+
+  &__list-item {
+
+  }
+
+  &__content {
+    padding: 20px;
+    width: calc(100% - 280px);
+  }
+
+  &__create-ticket {
+    background: {
+      image: url('/assets/images/create-ticket.svg');
+      repeat: no-repeat;
+      size: 50px;
+      position: 15px center;
+    }
+    border: 2px solid var(--dashboard-item-border-color);
+    border-radius: 6px;
+    margin-bottom: 15px;
+    padding: 30px 20px 30px 80px;
+    width: 222px;
+    position: relative;
+
+    span {
+      color: var(--main-color);
+      font-weight: 600;
+
+      &:after {
+        content: ' ';
+        background: {
+          image: url('/assets/images/right-arrow.svg');
+          repeat: no-repeat;
+          size: contain;
+          position: center;
+        }
+        height: 20px;
+        width: 20px;
+        position: absolute;
+        right: 14px;
+      }
+    }
+  }
+
+  &__tab {
+    display: none;
+    &.active {
+      display: block;
+    }
+  }
+
+  &__tab-title {
+    float: left;
+    width: 100%;
+
+    h1, span {
+      display: inline-block;
+    }
+
+    span {
+      color: var(--main-color);
+      font-weight: 600;
+    }
+  }
+
+  &__tab-collection {
+    margin-top: 15px;
+    float: left;
+    width: 100%;
+  }
+
+  &__ticket {
+    border: 2px solid var(--dashboard-item-border-color);
+    border-radius: 6px;
+    float: left;
+    padding: 15px;
+    width: calc(100% / 3 - 10px);
+    margin-right: 10px;
+    margin-top: 15px;
+
+    &-status {
+      font-weight: 600;
+      padding: 5px 10px;
+      display: inline-block;
+      border-radius: 5px;
+
+      &--active {
+        background-color: #b2fedd;
+        color: #00A69F;
+      }
+
+      &--pending {
+        background-color: #f1ffa5;
+        color: #9b791b;
+      }
+
+      &--closed {
+        background-color: #fe9085;
+        color: #7a0100;
+      }
+    }
+
+    &-number {
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    &-date {
+      float: left;
+      padding: 8px 0;
+    }
+
+    &-view {
+      background-color: var(--main-color);
+      border-radius: 5px;
+      color: #ffffff;
+      cursor: pointer;
+      float: right;
+      font-weight: 600;
+      padding: 8px 20px;
+    }
+
+    &-divider {
+      border-bottom: 2px solid var(--dashboard-item-border-color);
+      float: left;
+      margin: 20px 0;
+      width: 100%;
+    }
+  }
+}
+
+.dashboard--resident .dashboard {
+  &__wrapper {
+    &--section {
+      background-color: var(--dashboard-card-background-color);
+      border-radius: 20px;
+      overflow: hidden;
+      min-height: 200px;
     }
   }
 }
