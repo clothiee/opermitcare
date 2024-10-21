@@ -223,6 +223,32 @@
     }
   }
 
+  &__tab-breadcrumbs {
+    color: var(--main-color);
+    font-weight: 600;
+    float: left;
+    margin-bottom: 15px;
+    width: 100%;
+    position: relative;
+    span {
+      padding-left: 25px;
+      &:before {
+        content: ' ';
+        background: {
+          image: url('/assets/images/right-arrow.svg');
+          repeat: no-repeat;
+          size: contain;
+          position: center;
+        }
+        height: 20px;
+        width: 20px;
+        position: absolute;
+        left: 0;
+        transform: scaleX(-1);
+      }
+    }
+  }
+
   &__tab-title {
     float: left;
     width: 100%;
@@ -234,6 +260,11 @@
     span {
       color: var(--main-color);
       font-weight: 600;
+    }
+
+    p {
+      margin-top: 30px;
+      text-align: justify;
     }
   }
 
@@ -267,7 +298,7 @@
         background-color: #f1ffa5;
         color: #9b791b;
       }
-
+t
       &--closed {
         background-color: #fe9085;
         color: #7a0100;
@@ -299,6 +330,66 @@
       float: left;
       margin: 20px 0;
       width: 100%;
+    }
+  }
+
+  &__input-group {
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+    position: relative;
+
+    label {
+      background-color: #ffffff;
+      font-size: 10px;
+      position: absolute;
+      left: 10px;
+      top: -5px;
+      padding: 0 6px;
+      font-weight: 600;
+    }
+  }
+
+  &__input {
+    input, textarea {
+      border: 1px solid var(--main-color);
+      border-radius: 5px;
+      height: 50px;
+      width: 100%;
+      padding: 5px;
+    }
+
+    textarea {
+      min-height: 150px;
+    }
+  }
+
+  &__actions {
+    float: left;
+    width: 100%;
+
+    input {
+      width: 160px;
+      height: 50px;
+      text-align: center;
+      border-radius: 5px;
+    }
+  }
+
+  &__button {
+    font-weight: 600;
+    float: left;
+
+    &--primary {
+      border: 2px solid var(--main-color);
+      background-color: var(--main-color);
+      color: #ffffff;
+    }
+    &--secondary {
+      border: 2px solid var(--main-color);
+      background-color: #ffffff;
+      color: var(--main-color);
+      margin-right: 10px;
     }
   }
 }

@@ -13,7 +13,7 @@ export class LayoutSettingsModule {
                 return $('.navigation').removeClass('navigation--sticky');
             });
 
-            $(document).on('click', '.dashboard__list-item, .js-see-tickets', function () {
+            $(document).on('click', '.dashboard__list-item, .js-see-tickets, .js-create-ticket', function () {
                 const targetTab = $(this).attr('data-tab');
 
                 $(`.dashboard__tab`).removeClass('active');

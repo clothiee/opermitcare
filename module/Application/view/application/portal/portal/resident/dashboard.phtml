@@ -16,8 +16,8 @@ $tabs = [
         'title' => 'My Masterlist Requests',
         'icon' => '<path d="M4 12V20H20V4H4V7M7 8H17M7 12H17M7 16H13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
     ],
-    'my-digital-user-id' => [
-        'title' => 'My Digital User Id',
+    'create-a-ticket' => [
+        'title' => 'Create a ticket',
         'icon' => '<path d="M3 9C3 7.11438 3 6.17157 3.58579 5.58579C4.17157 5 5.11438 5 7 5H12H17C18.8856 5 19.8284 5 20.4142 5.58579C21 6.17157 21 7.11438 21 9V12V15C21 16.8856 21 17.8284 20.4142 18.4142C19.8284 19 18.8856 19 17 19H12H7C5.11438 19 4.17157 19 3.58579 18.4142C3 17.8284 3 16.8856 3 15V12V9Z" stroke-width="2" stroke-linejoin="round"/><path d="M10 10.5C10 11.3284 9.32843 12 8.5 12C7.67157 12 7 11.3284 7 10.5C7 9.67157 7.67157 9 8.5 9C9.32843 9 10 9.67157 10 10.5Z" stroke-width="2"/><path d="M13 9H17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 12H17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 15L17 15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
     ],
 ];
@@ -42,7 +42,7 @@ $tabs = [
             </div>
             <div class="dashboard__content">
                 <div class="dashboard__tab active" data-tab="overview">
-                    <div class="dashboard__create-ticket">
+                    <div class="dashboard__create-ticket js-create-ticket" data-tab="create-a-ticket">
                         <span>Create a ticket</span>
                     </div>
                     <div class="dashboard__tab-title">
@@ -124,9 +124,48 @@ $tabs = [
                         <h1><?= $tabs['my-masterlist-requests']['title']; ?></h1>
                     </div>
                 </div>
-                <div class="dashboard__tab" data-tab="my-digital-user-id">
+                <div class="dashboard__tab" data-tab="create-a-ticket">
+                    <div class="dashboard__tab-breadcrumbs"><span class="js-see-tickets" data-tab="my-tickets">My Tickets</span></div>
                     <div class="dashboard__tab-title">
-                        <h1><?= $tabs['my-digital-user-id']['title']; ?></h1>
+                        <h1><?= $tabs['create-a-ticket']['title']; ?></h1>
+                        <p>
+                            After you submit your question, we will reply during working hours from 8:00am to 5:00pm.
+                            Please pay attention to the ticket message actively. If you have any doubts about our verification
+                            results, please reply to us again for verification. We will also give you a reply during work hours.
+                            If you problem needs technical personnel to verify the situation, it will take more time. We will
+                            inform you in the ticket reply. Please be patient.
+                        </p>
+                    </div>
+                    <div class="dashboard__form">
+                        <div class="dashboard__input-group">
+                            <label>Problem Type</label>
+                            <div class="dashboard__input dashboard__input--problem-type">
+                                <input type="text"/>
+                            </div>
+                        </div>
+                        <div class="dashboard__input-group">
+                            <label>Title</label>
+                            <div class="dashboard__input dashboard__input--title">
+                                <input type="text"/>
+                            </div>
+                        </div>
+                        <div class="dashboard__input-group">
+                            <label>Description</label>
+                            <div class="dashboard__input dashboard__input--description">
+                                <textarea></textarea>
+                            </div>
+                        </div>
+                        <div class="dashboard__input-group">
+                            <label>Attach your files</label>
+                            <div class="dashboard__input dashboard__input--attachment">
+                                <input type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard__ticket-divider"></div>
+                    <div class="dashboard__actions">
+                        <input class="dashboard__button--secondary" type="button" value="Cancel">
+                        <input class="dashboard__button--primary" type="button" value="Confirm">
                     </div>
                 </div>
 
