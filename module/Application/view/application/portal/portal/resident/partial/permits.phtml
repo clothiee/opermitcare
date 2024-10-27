@@ -1,0 +1,27 @@
+<?php
+$permits = $this->tickets ?: [];
+$countTickets = count($permits);
+?>
+    <div class="dashboard__panel-header">
+        <h1><?= $this->title; ?></h1>
+        <span><?= $countTickets ?> ticket (s) found.</span>
+    </div>
+<?php if ($countTickets) : ?>
+    <div class="dashboard__panel-collection">
+        <?php foreach ($permits as $ticketNo => $ticket) : ?>
+            <div class="dashboard__ticket">
+                <div class="dashboard__ticket-status dashboard__ticket-status--<?= $ticket['ticketStatusName'] ?>">
+                    <?= $ticket['ticketStatusName'] ?>
+                </div>
+                <div class="dashboard__ticket-number">Ticket no. <?= $ticketNo ?></div>
+                <div class="dashboard__divider"></div>
+                <div class="dashboard__ticket-date"><?= date("d M Y", strtotime($ticket['dateCreated'])) ?></div>
+                <div class="dashboard__ticket-view">View</div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php else : ?>
+    <?= $this->partial('partial/no-data', [
+        'panel' => 'apply-permit',
+    ]); ?>
+<?php endif; ?>

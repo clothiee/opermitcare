@@ -2,9 +2,15 @@
 
 namespace Application\Portal\Service;
 
+use Application\ProblemType\Model\ProblemTypeTable;
+use Application\Ticket\Form\TicketForm;
+use Application\Ticket\Model\Ticket;
+use Application\Ticket\Model\TicketTable;
+use Application\TicketStatus\Model\TicketStatusTable;
 use Application\User\Model\UserTable;
 use Application\UserType\Model\UserTypeTable;
 use ArrayObject;
+use Laminas\Validator\Date;
 
 class DashboardService
 {
@@ -14,27 +20,40 @@ class DashboardService
     const INVALID_MESSAGE = 'Invalid username or password';
 
     private $config;
+    private $sessionService;
     private $userTable;
     private $userTypeTable;
-    private $sessionService;
+    private $problemTypeTable;
+    private $ticketTable;
+    private $ticketStatusTable;
 
     /**
      * Dashboard Service constructor.
      *
-     * @param ArrayObject    $config
-     * @param UserTable      $userTable
-     * @param UserTypeTable  $userTypeTable
-     * @param SessionService $sessionService
+     * @param ArrayObject       $config
+     * @param SessionService    $sessionService
+     * @param UserTable         $userTable
+     * @param UserTypeTable     $userTypeTable
+     * @param ProblemTypeTable  $problemTypeTable
+     * @param TicketTable       $ticketTable
+     * @param TicketStatusTable $ticketStatusTable
      */
     public function __construct(
         $config,
+        SessionService $sessionService,
         UserTable $userTable,
         UserTypeTable $userTypeTable,
-        SessionService $sessionService
+        ProblemTypeTable $problemTypeTable,
+        TicketTable $ticketTable,
+        TicketStatusTable $ticketStatusTable
     ) {
         $this->config = $config;
-        $this->userTable = $userTable;
         $this->sessionService = $sessionService;
+        $this->userTable = $userTable;
+        $this->userTypeTable = $userTypeTable;
+        $this->problemTypeTable = $problemTypeTable;
+        $this->ticketTable = $ticketTable;
+        $this->ticketStatusTable = $ticketStatusTable;
     }
 
     /**
@@ -44,12 +63,27 @@ class DashboardService
      */
     public function initialize()
     {
-        $viewOptions = [
-            'sessionDetails' => $this->sessionService->get(),
-            'pages' => $this->getDashboardPages(),
-        ];
+        $sessionDetails = $this->sessionService->get();
 
-        return $viewOptions;
+        switch ($sessionDetails['userType']['userTypeName']) {
+            case 'Resident':
+                $viewOptions = [
+                    'problemType' => $this->getActiveProblemTypes(),
+                    'tickets' => $this->getTickets(),
+                    'activeTab' => 'overview',
+                ];
+                break;
+            default:
+                $viewOptions = [
+                    'pages' => $this->getDashboardPages(),
+                ];
+                break;
+        }
+
+        return array_merge($viewOptions, [
+            'sessionDetails' => $sessionDetails,
+
+        ]);
     }
 
     private function getDashboardPages()
@@ -100,6 +134,85 @@ class DashboardService
                 'description' => 'Generate and see all reports.',
                 'action' => 'report',
             ],
+        ];
+    }
+
+    private function getActiveProblemTypes()
+    {
+        $problemTypes = $this->problemTypeTable->getByColumns(['active' => 1]);
+        $collection = [];
+
+        foreach ($problemTypes as $problemType) {
+            $collection[] = [
+                'id' => $problemType->problemTypeId,
+                'name' => $problemType->problemTypeName,
+            ];
+        }
+
+        return $collection;
+    }
+
+    public function getTickets()
+    {
+        $sessionDetails = $this->sessionService->get();
+        $columns = [
+            'residentId' => $sessionDetails['user']['userId'],
+        ];
+        $ticketStatus = $this->ticketStatusTable->fetchAll();
+        $statusCollection = [];
+
+        foreach ($ticketStatus as $ticketStatus) {
+            $statusCollection[$ticketStatus->ticketStatusId] = $ticketStatus->ticketStatusName;
+        }
+
+        $tickets = $this->ticketTable->getByColumns($columns);
+        $collection = [];
+
+        foreach ($tickets as $ticket) {
+            $data = (array) $ticket;
+            $data['ticketStatusName'] = $statusCollection[$data['ticketStatusId']];
+            $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['ticketId']);
+            // date("d M Y", strtotime($data['dateCreated']));
+            $collection[$newId] = $data;
+        }
+
+        krsort($collection);
+
+        return $collection;
+    }
+
+    public function createTicket($post)
+    {
+        $sessionDetails = $this->sessionService->get();
+
+        $post['residentId'] = $sessionDetails['user']['userId'];
+        $post['ticketStatusId'] = 2;
+        $post['dateCreated'] = date('Y-m-d');
+
+        $form = new TicketForm();
+        $form->setData($post);
+
+        if ($form->isValid()) {
+            try {
+                $ticket = new Ticket();
+                $ticket->exchangeArray($post);
+                $this->ticketTable->save($ticket);
+            } catch (\Exception $exception) {
+                return [
+                    'code' => self::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+
+            return [
+                'code' => self::SUCCESS_CODE,
+                'message' => 'Your request was successfully submitted!',
+            ];
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => $form->getMessages(),
         ];
     }
 }

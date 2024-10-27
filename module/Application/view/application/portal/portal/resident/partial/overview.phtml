@@ -1,0 +1,53 @@
+<?php
+$tickets = $this->tickets ?: [];
+$permits = $this->permits ?: [];
+$countTickets = count($tickets);
+$countPermits = count($permits);
+$count = 0;
+?>
+    <div class="dashboard__panel-header">
+        <h1>My Recent Ticket (s)</h1>
+        <span class="js-see-panel" data-panel="my-ticket">See all (<?= $countTickets ?>)</span>
+    </div>
+<?php if ($countTickets) : ?>
+    <div class="dashboard__panel-collection">
+        <?php foreach ($tickets as $ticketNo => $ticket) :
+            $count++;
+            if ($count > 3) {
+                continue;
+            } ?>
+            <div class="dashboard__ticket">
+                <div class="dashboard__ticket-status dashboard__ticket-status--<?= $ticket['ticketStatusName'] ?>">
+                    <?= $ticket['ticketStatusName'] ?>
+                </div>
+                <div class="dashboard__ticket-number">Ticket no. <?= $ticketNo ?></div>
+                <div class="dashboard__divider"></div>
+                <div class="dashboard__ticket-date"><?= date("d M Y", strtotime($ticket['dateCreated'])) ?></div>
+                <div class="dashboard__ticket-view js-see-panel" data-panel="ticket">View</div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php else : ?>
+    <?= $this->partial('partial/no-data', [
+        'panel' => 'create-ticket',
+    ]); ?>
+<?php endif; ?>
+    <div class="dashboard__divider"></div>
+    <div class="dashboard__panel-header">
+        <h1>My Recent Special Permit (s)</h1>
+        <span class="js-see-panel" data-panel="my-permit">See all (<?= count($permits) ?>)</span>
+    </div>
+<?php if ($countPermits) : ?>
+    <div class="dashboard__panel-collection">
+        <?php foreach ($permits as $permitNo => $permit) :
+            $count++;
+            if ($count > 3) {
+                continue;
+            } ?>
+        <?php endforeach; ?>
+    </div>
+<?php else : ?>
+    <?= $this->partial('partial/no-data', [
+        'panel' => 'apply-permit',
+    ]); ?>
+<?php endif; ?>

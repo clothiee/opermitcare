@@ -1,11 +1,11 @@
 <?php
 
-namespace Application\User\Model;
+namespace Application\ProblemType\Model;
 
 use RuntimeException;
 use Laminas\Db\TableGateway\TableGatewayInterface;
 
-class UserTable
+class ProblemTypeTable
 {
     private $tableGateway;
 
@@ -38,40 +38,34 @@ class UserTable
         return $data;
     }
 
-    public function save(User $user)
+    public function save(ProblemType $problemType)
     {
         $data = [
-            'userName' => $user->userName,
-            'password' => $user->password,
-            'firstName' => $user->firstName,
-            'lastName' => $user->lastName,
-            'email' => $user->email,
-            'phoneNumber' => $user->phoneNumber,
-            'address' => $user->address,
-            'userTypeId' => $user->userTypeId,
+            'problemTypeName' => $problemType->problemTypeName,
+            'active' => $problemType->active,
         ];
 
-        $userId = (int) $user->userId;
+        $problemTypeId = (int) $problemType->problemTypeId;
 
-        if ($userId === 0) {
+        if ($problemTypeId === 0) {
             $this->tableGateway->insert($data);
             return;
         }
 
         try {
-            $this->getByColumns(['userId' => $userId]);
+            $this->getByColumns(['problemTypeId' => $problemTypeId]);
         } catch (RuntimeException $e) {
             throw new RuntimeException(sprintf(
-            'Cannot update user with identifier %d; does not exist',
-                $userId
-            ));
+                                           'Cannot update user with identifier %d; does not exist',
+                                           $problemTypeId
+                                       ));
         }
 
-        $this->tableGateway->update($data, ['userId' => $userId]);
+        $this->tableGateway->update($data, ['problemTypeId' => $problemTypeId]);
     }
 
-    public function delete($userId)
+    public function delete($problemTypeId)
     {
-        $this->tableGateway->delete(['userId' => (int) $userId]);
+        $this->tableGateway->delete(['problemTypeId' => (int) $problemTypeId]);
     }
 }

@@ -1,81 +1,74 @@
 <?php
 
-namespace Application\User\Form;
+namespace Application\Ticket\Form;
 
 use Laminas\Filter\StripTags;
 use Laminas\Filter\ToInt;
-use Laminas\Form\Element\Email;
 use Laminas\Form\Element\Hidden;
-use Laminas\Form\Element\Password;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
 use Laminas\InputFilter\InputFilterProviderInterface;
 
-class UserForm extends Form implements InputFilterProviderInterface
+class TicketForm extends Form implements InputFilterProviderInterface
 {
     /**
      * UserForm constructor.
      */
     public function __construct()
     {
-        parent::__construct('user');
+        parent::__construct('ticket');
     }
 
     public function init() : void
     {
-        $this->setName('userForm')
+        $this->setName('ticketForm')
              ->setAttribute('method', 'post')
              ->setAttribute('role', 'form')
              ->setAttribute('enctype', 'multipart/form-data');
         $this->add([
                        'type' => Hidden::class,
-                       'name' => 'userId',
-                   ]);
-        $this->add([
-                       'type' => Text::class,
-                       'name' => 'userName',
-                       'options' => [
-                           'label' => 'Username',
-                       ],
-                   ]);
-        $this->add([
-                       'type' => Password::class,
-                       'name' => 'password',
-                       'options' => [
-                           'label' => 'Password',
-                       ],
-                   ]);
-        $this->add([
-                       'type' => Text::class,
-                       'name' => 'firstName',
-                       'options' => [
-                           'label' => 'First Name',
-                       ],
-                   ]);
-        $this->add([
-                       'type' => Text::class,
-                       'name' => 'lastName',
-                       'options' => [
-                           'label' => 'Last name',
-                       ],
-                   ]);
-        $this->add([
-                       'type' => Email::class,
-                       'name' => 'email',
-                       'options' => [
-                           'label' => 'Email',
-                       ],
+                       'name' => 'ticketId',
                    ]);
         $this->add([
                        'type' => Hidden::class,
-                       'name' => 'userTypeId',
+                       'name' => 'ticketStatusId',
+                   ]);
+        $this->add([
+                       'type' => Hidden::class,
+                       'name' => 'problemTypeId',
+                   ]);
+        $this->add([
+                       'type' => Hidden::class,
+                       'name' => 'residentId',
+                   ]);
+        $this->add([
+                       'type' => Hidden::class,
+                       'name' => 'repliesId',
+                   ]);
+        $this->add([
+                       'type' => Hidden::class,
+                       'name' => 'dateCreated',
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'title',
+                       'options' => [
+                           'label' => 'Title',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'description',
+                       'options' => [
+                           'label' => 'Description',
+                       ],
                    ]);
         $this->add([
                        'name' => 'submit',
                        'type' => Submit::class,
                        'attributes' => [
-                           'value' => 'Sign Up',
+                           'value' => 'Confirm',
                        ],
                    ]);
     }
@@ -84,45 +77,38 @@ class UserForm extends Form implements InputFilterProviderInterface
     {
         return [
             [
-                'name' => 'userName',
-                'required' => true,
-                'filters' => [
-                    ['name' => StripTags::class],
-                ],
-            ],
-            [
-                'name' => 'password',
-                'required' => true,
-                'filters' => [
-                    ['name' => StripTags::class],
-                ],
-            ],
-            [
-                'name' => 'firstName',
-                'required' => true,
-                'filters' => [
-                    ['name' => StripTags::class],
-                ],
-            ],
-            [
-                'name' => 'lastName',
-                'required' => true,
-                'filters' => [
-                    ['name' => StripTags::class],
-                ],
-            ],
-            [
-                'name' => 'email',
-                'required' => true,
-                'filters' => [
-                    ['name' => StripTags::class],
-                ],
-            ],
-            [
-                'name' => 'userTypeId',
+                'name' => 'ticketStatusId',
                 'required' => true,
                 'filters' => [
                     ['name' => ToInt::class],
+                ],
+            ],
+            [
+                'name' => 'problemTypeId',
+                'required' => true,
+                'filters' => [
+                    ['name' => ToInt::class],
+                ],
+            ],
+            [
+                'name' => 'residentId',
+                'required' => true,
+                'filters' => [
+                    ['name' => ToInt::class],
+                ],
+            ],
+            [
+                'name' => 'title',
+                'required' => true,
+                'filters' => [
+                    ['name' => StripTags::class],
+                ],
+            ],
+            [
+                'name' => 'description',
+                'required' => true,
+                'filters' => [
+                    ['name' => StripTags::class],
                 ],
             ],
         ];

@@ -1,0 +1,56 @@
+<div class="dashboard__panel-breadcrumbs">
+    <span class="js-see-panel" data-panel="my-ticket">My Ticket (s)</span>
+</div>
+<?php if ($this->alertMessage) : ?>
+    <div class="alert<?= $this->alertClass ?>">
+        <?= $this->alertMessage ?>
+        <a class="button">&times;</a>
+    </div>
+<?php endif; ?>
+<div class="dashboard__panel-header">
+    <h1><?= $this->title ?></h1>
+    <p>
+        After you submit your question, we will reply during working hours from 8:00am to 5:00pm.
+        Please pay attention to the ticket message actively. If you have any doubts about our verification
+        results, please reply to us again for verification. We will also give you a reply during work hours.
+        If you problem needs technical personnel to verify the situation, it will take more time. We will
+        inform you in the ticket reply. Please be patient.
+    </p>
+</div>
+<form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" method="post">
+    <div class="dashboard__form">
+        <div class="dashboard__input-group">
+            <label class="dashboard__dropdown">
+                <div class="dashboard__dropdown-button">
+                    <div class="dashboard__input-field dashboard__input-field--text"><span></span></div>
+                </div>
+                <input class="dashboard__dropdown-input" type="checkbox"/>
+                <ul class="dashboard__dropdown-menu">
+                    <?php foreach ($this->problemType as $problemType) : ?>
+                        <li data-id="<?= $problemType['id'] ?>"><?= $problemType['name']; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </label>
+            <input class="dashboard__input-field" type="hidden" name="problemTypeId"/>
+            <label class="dashboard__input-label">Problem Type</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text" name="title"/>
+            <label class="dashboard__input-label">Title</label>
+        </div>
+        <div class="dashboard__input-group">
+            <textarea class="dashboard__input-field dashboard__input-field--textarea" name="description"></textarea>
+            <label class="dashboard__input-label">Description</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"/>
+            <label class="dashboard__input-label">Attach your files</label>
+        </div>
+    </div>
+    <div class="dashboard__divider"></div>
+    <div class="dashboard__actions">
+        <input type="hidden" name="process" value="create-ticket"/>
+        <input class="dashboard__button dashboard__button--secondary" type="button" value="Reset"/>
+        <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
+    </div>
+</form>

@@ -37,7 +37,6 @@
   }
 
   &__section {
-    background-color: var(--dashboard-section-background-color);
     display: flex;
     justify-content: center;
     @include get-responsive(padding, 0 20px, 0 20px, 0 20px);
@@ -72,60 +71,62 @@
         color: var(--main-color);
       }
     }
-  }
 
-  &__card-icon {
-    background-color: var(--dashboard-icon-background-color);
-    border: 9px solid var(--dashboard-section-background-color);
-    border-radius: 50%;
-    height: 60px;
-    overflow: hidden;
-    padding: 8px;
-    width: 60px;
-    z-index: 1;
-    position: absolute;
-    bottom: -1px;
-    left: 0;
+    &-icon {
+      background-color: var(--dashboard-icon-background-color);
+      border: 9px solid var(--dashboard-section-background-color);
+      border-radius: 50%;
+      height: 60px;
+      overflow: hidden;
+      padding: 8px;
+      width: 60px;
+      z-index: 1;
+      position: absolute;
+      bottom: -1px;
+      left: 0;
 
-    svg {
-      transition: all .1s ease-in;
-      margin-top: 60px;
+      svg {
+        transition: all .1s ease-in;
+        margin-top: 60px;
+      }
+
+      circle, path {
+        stroke: var(--dashboard-icon-stroke-color);
+      }
     }
 
-    circle, path {
-      stroke: var(--dashboard-icon-stroke-color);
+    &-content {
+      background-color: var(--dashboard-card-background-color);
+      border-radius: 15px;
+      width: 100%;
+      padding: 20px 50px 20px 60px;
     }
-  }
 
-  &__card-content {
-    background-color: var(--dashboard-card-background-color);
-    border-radius: 15px;
-    width: 100%;
-    padding: 20px 50px 20px 60px;
-  }
+    &-arrow {
+      background-color: var(--light-gray);
+      border-radius: 5px;
+      bottom: 15px;
+      width: 30px;
+      height: 30px;
+      padding: 2px;
+      position: absolute;
+      right: 20px;
+      z-index: 1;
 
-  &__card-arrow {
-    background-color: var(--light-gray);
-    border-radius: 5px;
-    bottom: 15px;
-    width: 30px;
-    height: 30px;
-    padding: 2px;
-    position: absolute;
-    right: 20px;
-    z-index: 1;
-
-    path {
-      fill: var(--main-color);
+      path {
+        fill: var(--main-color);
+      }
     }
   }
 
   &__side-bar {
     background-color: var(--mid-gray);
-    width: 280px;
+    @include get-responsive(width, 100%, 100%, 280px, 280px);
 
     h1 {
-      padding: 20px;
+      @include get-responsive(font-size, 14px, 14px);
+      @include get-responsive(padding, 10px 20px 0, 10px 20px 0, 20px, 20px);
+      @include get-responsive(text-align, center, center);
     }
 
     ul {
@@ -134,15 +135,18 @@
     }
 
     li {
-      border-left: 5px solid transparent;
       cursor: pointer;
       line-height: 25px;
-      padding: 20px;
       vertical-align: middle;
+      @include get-responsive(border-left, null, null, 5px solid transparent, 5px solid transparent);
+      @include get-responsive(float, left, left);
+      @include get-responsive(padding, 10px, 10px, 20px, 20px);
+      @include get-responsive(text-align, center, center);
+      @include get-responsive(width, calc(100% / 6), calc(100% / 6));
 
       &.active {
-        background-color: #ffffff;
-        border-left: 5px solid var(--main-color);
+        @include get-responsive(background-color, null, null, #ffffff, #ffffff);
+        @include get-responsive(border-left, null, null, 5px solid var(--main-color), 5px solid var(--main-color));
 
         path, circle {
           stroke: var(--dashboard-sidebar-li-active-color);
@@ -155,7 +159,7 @@
 
       svg {
         max-width: 25px;
-        margin-right: 10px;
+        @include get-responsive(margin-right, null, null 10px, 10px);
       }
 
       path, circle {
@@ -165,6 +169,7 @@
       span {
         color: var(--dashboard-sidebar-li-default-color);
         font-weight: 600;
+        @include get-responsive(display, none, none);
       }
     }
 
@@ -173,16 +178,140 @@
     }
   }
 
-  &__list-item {
-
-  }
-
   &__content {
     padding: 20px;
-    width: calc(100% - 280px);
+    @include get-responsive(width, 100%, 100%, calc(100% - 280px), calc(100% - 280px));
   }
 
-  &__create-ticket {
+  &__divider {
+    border-bottom: 2px solid var(--dashboard-item-border-color);
+    float: left;
+    margin: 20px 0;
+    width: 100%;
+  }
+
+  &__no-data {
+    float: left;
+    width: 100%;
+    text-align: center;
+
+    svg {
+      cursor: pointer;
+      margin: 100px 0;
+      max-height: 100px;
+    }
+
+    path {
+      fill: var(--light-gray);
+    }
+  }
+
+  &__panel {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+
+    &-breadcrumbs {
+      color: var(--main-color);
+      font-weight: 600;
+      float: left;
+      margin-bottom: 15px;
+      width: 100%;
+      position: relative;
+
+      span {
+        padding-left: 25px;
+
+        &:before {
+          content: ' ';
+          background: {
+            image: url('/assets/images/right-arrow.svg');
+            repeat: no-repeat;
+            size: contain;
+            position: center;
+          }
+          height: 20px;
+          width: 20px;
+          position: absolute;
+          left: 0;
+          transform: scaleX(-1);
+        }
+      }
+    }
+
+    &-header {
+      float: left;
+      width: 100%;
+
+      h1, span {
+        display: inline-block;
+        line-height: 20px;
+        vertical-align: middle;
+      }
+
+      h1 {
+        min-width: 100px;
+        @include get-responsive(font-size, 14px, 14px);
+      }
+
+      h4 {
+        color: var(--dashboard-tab-gray-color);
+        font-weight: 600;
+        margin-top: 10px;
+        @include get-responsive(font-size, 12px, 12px);
+      }
+
+      span {
+        color: var(--main-color);
+        float: right;
+        font-weight: 600;
+      }
+
+      p {
+        margin-top: 30px;
+        text-align: justify;
+      }
+    }
+
+    &-collection {
+      margin-top: 15px;
+      float: left;
+      width: 100%;
+    }
+  }
+
+  &__tab {
+    margin-bottom: -1px;
+    padding: 12px;
+    text-align: center;
+    @include get-responsive(width, 50%, 50%, 160px, 160px);
+
+    &.active {
+      border-bottom: 4px solid var(--main-color);
+    }
+
+    &-action {
+      border-bottom: 2px solid var(--light-gray);
+      display: flex;
+      flex-direction: row;
+      float: left;
+      margin-top: 20px;
+      width: 100%;
+    }
+    &-content {
+      display: none;
+      float: left;
+      margin-top: 20px;
+      width: 100%;
+      &.active {
+        display: block;
+      }
+    }
+  }
+
+  &__create {
     background: {
       image: url('/assets/images/create-ticket.svg');
       repeat: no-repeat;
@@ -193,8 +322,8 @@
     border-radius: 6px;
     margin-bottom: 15px;
     padding: 30px 20px 30px 80px;
-    width: 222px;
     position: relative;
+    @include get-responsive(width, 100%, 100%, 280px, 280px);
 
     span {
       color: var(--main-color);
@@ -216,78 +345,22 @@
     }
   }
 
-  &__tab {
-    display: none;
-    &.active {
-      display: block;
-    }
-  }
-
-  &__tab-breadcrumbs {
-    color: var(--main-color);
-    font-weight: 600;
-    float: left;
-    margin-bottom: 15px;
-    width: 100%;
-    position: relative;
-    span {
-      padding-left: 25px;
-      &:before {
-        content: ' ';
-        background: {
-          image: url('/assets/images/right-arrow.svg');
-          repeat: no-repeat;
-          size: contain;
-          position: center;
-        }
-        height: 20px;
-        width: 20px;
-        position: absolute;
-        left: 0;
-        transform: scaleX(-1);
-      }
-    }
-  }
-
-  &__tab-title {
-    float: left;
-    width: 100%;
-
-    h1, span {
-      display: inline-block;
-    }
-
-    span {
-      color: var(--main-color);
-      font-weight: 600;
-    }
-
-    p {
-      margin-top: 30px;
-      text-align: justify;
-    }
-  }
-
-  &__tab-collection {
-    margin-top: 15px;
-    float: left;
-    width: 100%;
-  }
-
   &__ticket {
     border: 2px solid var(--dashboard-item-border-color);
     border-radius: 6px;
     float: left;
     padding: 15px;
-    width: calc(100% / 3 - 10px);
     margin-right: 10px;
     margin-top: 15px;
+    @include get-responsive(width, 100%, 100%, calc(100% / 3 - 10px), calc(100% / 3 - 10px));
 
     &-status {
       font-weight: 600;
+      font-size: 10px;
       padding: 5px 10px;
       display: inline-block;
       border-radius: 5px;
+      text-transform: capitalize;
 
       &--active {
         background-color: #b2fedd;
@@ -298,7 +371,7 @@
         background-color: #f1ffa5;
         color: #9b791b;
       }
-t
+
       &--closed {
         background-color: #fe9085;
         color: #7a0100;
@@ -325,71 +398,263 @@ t
       padding: 8px 20px;
     }
 
-    &-divider {
-      border-bottom: 2px solid var(--dashboard-item-border-color);
+    &-details {
+      background-color: var(--light-gray);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
       float: left;
-      margin: 20px 0;
+      padding: 20px;
+      @include get-responsive(width, 100%, calc(100% - 150px), calc(100% - 200px), calc(100% - 200px));
+
+      h1 {
+        svg {
+          width: 15px;
+        }
+      }
+    }
+
+    &-detail {
+      float: left;
+      margin-top: 15px;
+      overflow: hidden;
+      text-align: justify;
+      word-wrap: normal;
+
+      &--label {
+        color: var(--dashboard-tab-gray-color);
+        font-weight: 600;
+        float: left;
+        width: 100px;
+      }
+
+      &--value{
+        float: left;
+        width: calc(100% - 100px);
+      }
+    }
+
+    &-date-created {
+      float: left;
+      @include get-responsive(margin-top, 15px);
+      @include get-responsive(padding, 0, 0 20px, 0 20px, 0 20px);
+      @include get-responsive(width, 100%, 150px, 200px, 200px);
+
+      h4 {
+        color: var(--dashboard-tab-gray-color);
+        font-weight: 600;
+      }
+    }
+
+    &-agent {
+      float: left;
+      margin-top: 15px;
       width: 100%;
+
+      &--name, &-email {
+        display: block;
+      }
+
+      &--email {
+        color: var(--dashboard-tab-gray-color);
+        font-size: 12px;
+      }
+
+      h4 {
+        color: var(--dashboard-tab-gray-color);
+        font-weight: 600;
+      }
     }
   }
 
-  &__input-group {
-    float: left;
-    width: 100%;
-    margin-top: 20px;
-    position: relative;
+  &__input {
+    &-group {
+      float: left;
+      width: 100%;
+      margin-top: 20px;
+      position: relative;
+    }
 
-    label {
+    &-field {
+      border: 2px solid var(--dashboard-input-default-border-color);
+      border-radius: 5px;
+      width: 100%;
+      padding: 5px 20px;
+      outline: 0;
+      overflow: hidden;
+      transition: all .1s ease-in;
+
+      &:focus {
+        border: 2px solid var(--dashboard-input-active-border-color);
+      }
+
+      &:focus ~ .dashboard__input-label {
+        color: var(--main-color);
+      }
+
+      &--text {
+        height: 50px;
+      }
+
+      &--textarea {
+        min-height: 150px;
+      }
+
+      span {
+        line-height: 40px;
+        vertical-align: middle;
+      }
+    }
+
+    &-label {
       background-color: #ffffff;
       font-size: 10px;
       position: absolute;
-      left: 10px;
+      left: 15px;
       top: -5px;
       padding: 0 6px;
       font-weight: 600;
     }
   }
 
-  &__input {
-    input, textarea {
-      border: 1px solid var(--main-color);
-      border-radius: 5px;
-      height: 50px;
+  &__dropdown {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+
+    &-button {
+      display: inline-block;
+      cursor: pointer;
+      white-space: nowrap;
       width: 100%;
-      padding: 5px;
+      outline: 0;
+      overflow: hidden;
+      transition: all .1s ease-in;
+
+      &:focus {
+        border: 2px solid var(--dashboard-input-active-border-color);
+      }
+
+      &:focus ~ .dashboard__input-label {
+        color: var(--main-color);
+      }
+
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid var(--main-color);
+      }
     }
 
-    textarea {
-      min-height: 150px;
+    &-input {
+      display: none;
+    }
+
+    &-menu {
+      position: absolute;
+      top: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 0;
+      margin: 2px 0 0 0;
+      box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
+      list-style-type: none;
+      width: 100%;
+      z-index: 1;
+
+      li {
+        padding: 10px 20px;
+        cursor: pointer;
+        white-space: nowrap;
+
+        &:hover {
+          background-color: #f6f6f6;
+        }
+      }
+    }
+
+    &-input + .dashboard__dropdown-menu {
+      display: none;
+    }
+
+    &-input:checked + .dashboard__dropdown-menu {
+      display: block;
     }
   }
 
   &__actions {
     float: left;
     width: 100%;
-
-    input {
-      width: 160px;
-      height: 50px;
-      text-align: center;
-      border-radius: 5px;
-    }
   }
 
   &__button {
+    border-radius: 5px;
+    background-position: 100% 0;
+    background-size: 200% 100%;
+    cursor: pointer;
     font-weight: 600;
     float: left;
+    height: 50px;
+    text-align: center;
+    transition: all .25s ease-in;
+    @include get-responsive(margin-bottom, 10px, 10px);
+    @include get-responsive(width, 100%, 100%, 16px, 160px);
+
+    &:hover {
+      background-position: 0 0;
+      -webkit-box-shadow: 0 0 3px 1px rgba(181, 181, 181, 0.5);
+      -moz-box-shadow: 0 0 3px 1px rgba(181, 181, 181, 0.5);
+      box-shadow: 0 0 3px 1px rgba(181, 181, 181, 0.5);
+    }
 
     &--primary {
-      border: 2px solid var(--main-color);
       background-color: var(--main-color);
-      color: #ffffff;
-    }
-    &--secondary {
       border: 2px solid var(--main-color);
+      background-image: linear-gradient(to left,
+              transparent,
+              transparent 50%,
+              var(--main-color) 50%,
+              var(--main-color));
+      color: #ffffff;
+
+      &:hover {
+        background-image: linear-gradient(to left,
+                transparent,
+                transparent 50%,
+                #ffffff 50%,
+                #ffffff);
+        color: var(--main-color);
+      }
+    }
+
+    &--secondary {
       background-color: #ffffff;
+      border: 2px solid var(--main-color);
+      background-image: linear-gradient(to left,
+              transparent,
+              transparent 50%,
+              #ffffff 50%,
+              #ffffff);
       color: var(--main-color);
       margin-right: 10px;
+
+      &:hover {
+        background-image: linear-gradient(to left,
+                transparent,
+                transparent 50%,
+                var(--main-color) 50%,
+                var(--main-color));
+        color: #ffffff;
+      }
     }
   }
 }

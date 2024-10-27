@@ -76,7 +76,7 @@ class SessionService
         try {
             $user = new User();
             $user->exchangeArray($post);
-            $this->userTable->saveUser($user);
+            $this->userTable->save($user);
             return [
                 'code' => self::SUCCESS_CODE,
                 'message' => 'Thanks for Signing Up!',
@@ -128,10 +128,12 @@ class SessionService
      */
     private function getUser(array $post)
     {
-        return $this->userTable->getUserByColumns([
-                                                      'username' => $post['username'],
-                                                      'password' => $post['password']
-                                                  ]);
+        $rowSet = $this->userTable->getByColumns([
+                                                     'username' => $post['username'],
+                                                     'password' => $post['password'],
+                                                 ]);
+
+        return count($rowSet) ? (array) $rowSet[0] : [];
     }
 
     /**
@@ -141,7 +143,7 @@ class SessionService
      */
     private function setProfile(array $user = null)
     {
-        $userType = $this->userTypeTable->getUserTypeByUserTypeId($user['userTypeId']);
+        $userType = $this->userTypeTable->getByUserTypeId($user['userTypeId']);
 
         $session = new Container('Profile');
         $session->offsetSet('user', $user);
@@ -163,7 +165,7 @@ class SessionService
     /**
      * Build Response
      *
-     * @param int    $code
+     * @param int   $code
      * @param array $response
      *
      * @return JsonModel
@@ -171,8 +173,8 @@ class SessionService
     private function buildResponse(int $code, array $response)
     {
         return new JsonModel([
-            'code' => $code,
-            'response' => $response,
-        ]);
+                                 'code' => $code,
+                                 'response' => $response,
+                             ]);
     }
 }

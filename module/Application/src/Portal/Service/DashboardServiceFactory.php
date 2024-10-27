@@ -2,6 +2,9 @@
 
 namespace Application\Portal\Service;
 
+use Application\ProblemType\Model\ProblemTypeTable;
+use Application\Ticket\Model\TicketTable;
+use Application\TicketStatus\Model\TicketStatusTable;
 use Application\User\Model\UserTable;
 use Application\UserType\Model\UserTypeTable;
 use Psr\Container\ContainerExceptionInterface;
@@ -22,15 +25,21 @@ class DashboardServiceFactory
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
+        $sessionService = $container->get(SessionService::class);
         $userTable = $container->get(UserTable::class);
         $userTypeTable = $container->get(UserTypeTable::class);
-        $sessionService = $container->get(SessionService::class);
+        $problemTypeTable = $container->get(ProblemTypeTable::class);
+        $ticketTable = $container->get(TicketTable::class);
+        $ticketStatusTable = $container->get(TicketStatusTable::class);
 
         return new DashboardService(
             $config,
+            $sessionService,
             $userTable,
             $userTypeTable,
-            $sessionService
+            $problemTypeTable,
+            $ticketTable,
+            $ticketStatusTable
         );
     }
 }

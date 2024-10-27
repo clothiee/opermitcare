@@ -1,0 +1,15 @@
+<div class="dashboard__panel-breadcrumbs">
+    <span class="js-see-panel" data-panel="my-permit">My Permit (s)</span>
+</div>
+<?php if ($this->alertMessage) : ?>
+    <div class="alert<?= $this->alertClass ?>">
+        <?= $this->alertMessage ?>
+        <a class="button">&times;</a>
+    </div>
+<?php endif; ?>
+<div class="dashboard__panel-header">
+    <h1><?= $this->title ?></h1>
+    <p>
+        Test Description
+    </p>
+</div>

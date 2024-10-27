@@ -14,6 +14,8 @@ class PortalController extends AbstractActionController
 {
     use PortalTrait;
 
+    private $action;
+    private $param1;
     private $config;
     private $sessionService;
     private $dashboardService;
@@ -102,27 +104,26 @@ class PortalController extends AbstractActionController
      */
     private function buildView()
     {
-        $action = $this->params()->fromRoute('action');
+        $this->action = $this->params()->fromRoute('action', null);
+        $this->param1 = $this->params()->fromRoute('param1', null);
         $sessionDetails = $this->sessionService->get();
 
         $this->layout()->setVariable('layoutVariables', [
-            'pageName' => $action,
+            'pageName' => $this->action,
             'isProfileAvailable' => empty($sessionDetails['user']) && empty($sessionDetails['userType']),
         ]);
 
-        return $this->initialize($action);
+        return $this->initialize();
     }
 
     /**
      * Initialize Pages
      *
-     * @param string $action
-     *
      * @return Response|ViewModel
      */
-    public function initialize(string $action)
+    public function initialize()
     {
-        switch ($action) {
+        switch ($this->action) {
             case 'login':
                 return $this->login();
             case 'logout':
@@ -187,6 +188,20 @@ class PortalController extends AbstractActionController
     private function dashboard()
     {
         $viewOptions = $this->dashboardService->initialize();
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $post = $request->getPost()->toArray();
+
+            switch ($post['process']) {
+                case 'create-ticket':
+                    $create = $this->dashboardService->createTicket($post);
+                    $viewOptions['response']['code'] = $create['code'];
+                    $viewOptions['response']['message'] = $this->getResponseMessage($create['message']);
+                    $viewOptions['activeTab'] = $post['process'];
+                    break;
+            }
+        }
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate($this->getTemplate());

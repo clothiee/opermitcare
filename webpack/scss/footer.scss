@@ -42,6 +42,7 @@
     padding: 20px;
     transition: all .25s ease-in;
     @include get-responsive(width, 100%, 100%, calc((100% / 2) - 10px), calc((100% / 2) - 10px));
+    @include get-responsive(margin-bottom, 10px, 10px);
 
     h2, p {
       color: var(--main-color);
