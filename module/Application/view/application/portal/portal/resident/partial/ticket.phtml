@@ -1,46 +1,56 @@
-<div class="dashboard__panel-breadcrumbs">
-    <span class="js-see-panel" data-panel="my-ticket">My Ticket (s)</span>
-</div>
-<div class="dashboard__panel-header">
-    <h1>Ticket</h1>
-    <div class="dashboard__ticket-status dashboard__ticket-status--pending">
-        pending
-    </div>
-    <h4>Ticket no. 20000000000000</h4>
-</div>
-<div class="dashboard__tab-action">
-    <div class="dashboard__tab active" data-tab="ticket-overview">Overview</div>
-    <div class="dashboard__tab" data-tab="ticket-replies">Replies</div>
-</div>
-<div class="dashboard__tab-content active" data-tab="ticket-overview">
-    <div class="dashboard__ticket-details">
-        <h1>
-            <svg viewBox="5.5 3 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M15.5 5H10.5C8.29086 5 6.5 6.79086 6.5 9V15C6.5 17.2091 8.29086 19 10.5 19H15.5C17.7091 19 19.5 17.2091 19.5 15V9C19.5 6.79086 17.7091 5 15.5 5Z" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path>
-                <path d="M16 9.75C16.4142 9.75 16.75 9.41421 16.75 9C16.75 8.58579 16.4142 8.25 16 8.25V9.75ZM10 8.25C9.58579 8.25 9.25 8.58579 9.25 9C9.25 9.41421 9.58579 9.75 10 9.75V8.25ZM16 12.75C16.4142 12.75 16.75 12.4142 16.75 12C16.75 11.5858 16.4142 11.25 16 11.25V12.75ZM10 11.25C9.58579 11.25 9.25 11.5858 9.25 12C9.25 12.4142 9.58579 12.75 10 12.75V11.25ZM13 15.75C13.4142 15.75 13.75 15.4142 13.75 15C13.75 14.5858 13.4142 14.25 13 14.25V15.75ZM10 14.25C9.58579 14.25 9.25 14.5858 9.25 15C9.25 15.4142 9.58579 15.75 10 15.75V14.25ZM16 8.25H10V9.75H16V8.25ZM16 11.25H10V12.75H16V11.25ZM13 14.25H10V15.75H13V14.25Z" fill="#000000"></path>
-            </svg>
-            <span>Problem Type Name</span>
-        </h1>
-        <div class="dashboard__ticket-detail">
-            <div class="dashboard__ticket-detail--label">Title</div>
-            <div class="dashboard__ticket-detail--value">Lorem ipsum dolor sit amet</div>
+<?php
+$tickets = $this->tickets ?: [];
+$countTickets = count($tickets);
+$problemTypeKey = array_search(2, array_column($this->problemType, 'id'));
+$problemType = $this->problemType[$problemTypeKey];
+?>
+
+<?php if ($countTickets) : ?>
+    <?php foreach ($tickets as $ticketNo => $ticket) : ?>
+        <div class="dashboard__panel" data-panel="ticket-<?= $ticket['ticketId'] ?>">
+            <div class="dashboard__panel-breadcrumbs">
+                <span class="js-see-panel" data-panel="my-ticket">My Ticket (s)</span>
+            </div>
+            <div class="dashboard__panel-header">
+                <h1>Ticket</h1>
+                <div class="dashboard__ticket-status dashboard__ticket-status--<?= $ticket['ticketStatusName'] ?>">
+                    <?= $ticket['ticketStatusName'] ?>
+                </div>
+                <h4>Ticket no. <?= $ticketNo ?></h4>
+            </div>
+            <div class="dashboard__tab-action">
+                <div class="dashboard__tab active" data-tab="ticket-overview">Overview</div>
+                <div class="dashboard__tab" data-tab="ticket-replies">Replies</div>
+            </div>
+            <div class="dashboard__tab-content active" data-tab="ticket-overview">
+                <div class="dashboard__ticket-details">
+                    <h1>
+                        <svg viewBox="5.5 3 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.5 5H10.5C8.29086 5 6.5 6.79086 6.5 9V15C6.5 17.2091 8.29086 19 10.5 19H15.5C17.7091 19 19.5 17.2091 19.5 15V9C19.5 6.79086 17.7091 5 15.5 5Z" stroke="#000000" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M16 9.75C16.4142 9.75 16.75 9.41421 16.75 9C16.75 8.58579 16.4142 8.25 16 8.25V9.75ZM10 8.25C9.58579 8.25 9.25 8.58579 9.25 9C9.25 9.41421 9.58579 9.75 10 9.75V8.25ZM16 12.75C16.4142 12.75 16.75 12.4142 16.75 12C16.75 11.5858 16.4142 11.25 16 11.25V12.75ZM10 11.25C9.58579 11.25 9.25 11.5858 9.25 12C9.25 12.4142 9.58579 12.75 10 12.75V11.25ZM13 15.75C13.4142 15.75 13.75 15.4142 13.75 15C13.75 14.5858 13.4142 14.25 13 14.25V15.75ZM10 14.25C9.58579 14.25 9.25 14.5858 9.25 15C9.25 15.4142 9.58579 15.75 10 15.75V14.25ZM16 8.25H10V9.75H16V8.25ZM16 11.25H10V12.75H16V11.25ZM13 14.25H10V15.75H13V14.25Z" fill="#000000"></path>
+                        </svg>
+                        <span><?= $problemType['name']; ?></span>
+                    </h1>
+                    <div class="dashboard__ticket-detail">
+                        <div class="dashboard__ticket-detail--label">Title</div>
+                        <div class="dashboard__ticket-detail--value"><?= $ticket['title'] ?></div>
+                    </div>
+                    <div class="dashboard__ticket-detail">
+                        <div class="dashboard__ticket-detail--label">Description</div>
+                        <div class="dashboard__ticket-detail--value"><?= $ticket['description'] ?></div>
+                    </div>
+                </div>
+                <div class="dashboard__ticket-date-created">
+                    <h4>Created</h4>
+                    <span><?= date("d M Y", strtotime($ticket['dateCreated'])) ?></span>
+                </div>
+                <div class="dashboard__ticket-agent">
+                    <h4>Recent Agent</h4>
+                    <span class="dashboard__ticket-agent--name">Lorem ipsum dolor sit amet</span>
+                    <span class="dashboard__ticket-agent--email">agent@opermitcare.com</span>
+                </div>
+            </div>
+            <div class="dashboard__tab-content" data-tab="ticket-replies">No replies yet</div>
         </div>
-        <div class="dashboard__ticket-detail">
-            <div class="dashboard__ticket-detail--label">Description</div>
-            <div class="dashboard__ticket-detail--value">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
-        </div>
-    </div>
-    <div class="dashboard__ticket-date-created">
-        <h4>Created</h4>
-        <span>24 Oct 2024</span>
-    </div>
-    <div class="dashboard__ticket-agent">
-        <h4>Recent Agent</h4>
-        <span class="dashboard__ticket-agent--name">Lorem ipsum dolor sit amet</span>
-        <span class="dashboard__ticket-agent--email">agent@opermitcare.com</span>
-    </div>
-</div>
-<div class="dashboard__tab-content" data-tab="ticket-replies">No replies yet</div>
+    <?php endforeach; ?>
+<?php endif; ?>

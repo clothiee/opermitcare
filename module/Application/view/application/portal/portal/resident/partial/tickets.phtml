@@ -16,7 +16,7 @@ $countTickets = count($tickets);
                 <div class="dashboard__ticket-number">Ticket no. <?= $ticketNo ?></div>
                 <div class="dashboard__divider"></div>
                 <div class="dashboard__ticket-date"><?= date("d M Y", strtotime($ticket['dateCreated'])) ?></div>
-                <div class="dashboard__ticket-view js-see-panel" data-panel="ticket">View</div>
+                <div class="dashboard__ticket-view js-see-panel" data-panel="ticket-<?= $ticket['ticketId'] ?>">View</div>
             </div>
         <?php endforeach; ?>
     </div>

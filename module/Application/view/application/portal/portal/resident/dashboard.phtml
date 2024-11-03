@@ -95,12 +95,10 @@ $panels = [
                         'title' => $panels['apply-permit']['title'],
                     ]); ?>
                 </div>
-                <div class="dashboard__panel" data-panel="ticket">
-                    <?= $this->partial('partial/ticket', [
-                        'alertClass' => $alertClass,
-                        'alertMessage' => $alertMessage,
-                    ]); ?>
-                </div>
+                <?= $this->partial('partial/ticket', [
+                    'tickets' => $this->tickets,
+                    'problemType' => $this->problemType,
+                ]); ?>
             </div>
         </div>
     </div>
