@@ -1,11 +1,12 @@
 <?php
 
-namespace Application\Ticket\Model;
+namespace Application\Reply\Model;
 
+use Laminas\Db\Sql\Select;
 use RuntimeException;
 use Laminas\Db\TableGateway\TableGatewayInterface;
 
-class TicketTable
+class ReplyTable
 {
     private $tableGateway;
 
@@ -38,39 +39,37 @@ class TicketTable
         return $data;
     }
 
-    public function save(Ticket $ticket)
+    public function save(Reply $reply)
     {
         $data = [
-            'ticketId' => $ticket->ticketId,
-            'ticketStatusId' => $ticket->ticketStatusId,
-            'problemTypeId' => $ticket->problemTypeId,
-            'title' => $ticket->title,
-            'description' => $ticket->description,
-            'dateCreated' => $ticket->dateCreated,
-            'residentId' => $ticket->residentId,
+            'replyId' => $reply->replyId,
+            'ticketId' => $reply->ticketId,
+            'senderId' => $reply->senderId,
+            'message' => $reply->message,
+            'dateCreated' => $reply->dateCreated,
         ];
 
-        $ticketId = (int) $ticket->ticketId;
+        $replyId = (int) $reply->replyId;
 
-        if ($ticketId === 0) {
+        if ($replyId === 0) {
             $this->tableGateway->insert($data);
             return;
         }
 
         try {
-            $this->getByColumns(['ticketId' => $ticketId]);
+            $this->getByColumns(['replyId' => $replyId]);
         } catch (RuntimeException $e) {
             throw new RuntimeException(sprintf(
                                            'Cannot update user with identifier %d; does not exist',
-                                           $ticketId
+                                           $replyId
                                        ));
         }
 
-        $this->tableGateway->update($data, ['ticketId' => $ticketId]);
+        $this->tableGateway->update($data, ['replyId' => $replyId]);
     }
 
-    public function delete($ticketId)
+    public function delete($replyId)
     {
-        $this->tableGateway->delete(['ticketId' => (int) $ticketId]);
+        $this->tableGateway->delete(['replyId' => (int) $replyId]);
     }
 }

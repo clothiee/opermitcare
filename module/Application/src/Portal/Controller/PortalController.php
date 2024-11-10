@@ -193,12 +193,20 @@ class PortalController extends AbstractActionController
         if ($request->isPost()) {
             $post = $request->getPost()->toArray();
 
+            $viewOptions['activeTab'] = $post['process'];
+
             switch ($post['process']) {
                 case 'create-ticket':
-                    $create = $this->dashboardService->createTicket($post);
-                    $viewOptions['response']['code'] = $create['code'];
-                    $viewOptions['response']['message'] = $this->getResponseMessage($create['message']);
-                    $viewOptions['activeTab'] = $post['process'];
+                    $process = $this->dashboardService->createTicket($post);
+                    $viewOptions['response']['code'] = $process['code'];
+                    $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                    break;
+                case 'update-password':
+                    $process= $this->dashboardService->updatePassword($post);
+                    $viewOptions['response']['code'] = $process['code'];
+                    $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                    $viewOptions['response']['data'] = $process['data'];
+                    $viewOptions['activeTab'] = 'my-profile';
                     break;
             }
         }

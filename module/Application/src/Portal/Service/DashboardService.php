@@ -3,10 +3,13 @@
 namespace Application\Portal\Service;
 
 use Application\ProblemType\Model\ProblemTypeTable;
+use Application\Reply\Model\ReplyTable;
 use Application\Ticket\Form\TicketForm;
 use Application\Ticket\Model\Ticket;
 use Application\Ticket\Model\TicketTable;
 use Application\TicketStatus\Model\TicketStatusTable;
+use Application\User\Form\UserForm;
+use Application\User\Model\User;
 use Application\User\Model\UserTable;
 use Application\UserType\Model\UserTypeTable;
 use ArrayObject;
@@ -26,6 +29,7 @@ class DashboardService
     private $problemTypeTable;
     private $ticketTable;
     private $ticketStatusTable;
+    private $replyTable;
 
     /**
      * Dashboard Service constructor.
@@ -37,6 +41,7 @@ class DashboardService
      * @param ProblemTypeTable  $problemTypeTable
      * @param TicketTable       $ticketTable
      * @param TicketStatusTable $ticketStatusTable
+     * @param ReplyTable        $replyTable
      */
     public function __construct(
         $config,
@@ -45,7 +50,8 @@ class DashboardService
         UserTypeTable $userTypeTable,
         ProblemTypeTable $problemTypeTable,
         TicketTable $ticketTable,
-        TicketStatusTable $ticketStatusTable
+        TicketStatusTable $ticketStatusTable,
+        ReplyTable $replyTable
     ) {
         $this->config = $config;
         $this->sessionService = $sessionService;
@@ -54,6 +60,7 @@ class DashboardService
         $this->problemTypeTable = $problemTypeTable;
         $this->ticketTable = $ticketTable;
         $this->ticketStatusTable = $ticketStatusTable;
+        $this->replyTable = $replyTable;
     }
 
     /**
@@ -155,9 +162,6 @@ class DashboardService
     public function getTickets()
     {
         $sessionDetails = $this->sessionService->get();
-        $columns = [
-            'residentId' => $sessionDetails['user']['userId'],
-        ];
         $ticketStatus = $this->ticketStatusTable->fetchAll();
         $statusCollection = [];
 
@@ -165,14 +169,39 @@ class DashboardService
             $statusCollection[$ticketStatus->ticketStatusId] = $ticketStatus->ticketStatusName;
         }
 
-        $tickets = $this->ticketTable->getByColumns($columns);
+        $tickets = $this->ticketTable->getByColumns([
+                                                        'residentId' => $sessionDetails['user']['userId'],
+                                                    ]);
         $collection = [];
 
         foreach ($tickets as $ticket) {
             $data = (array) $ticket;
             $data['ticketStatusName'] = $statusCollection[$data['ticketStatusId']];
+            $replies = $this->replyTable->getByColumns([
+                                                           'ticketId' => $data['ticketId'],
+                                                       ]);
+            $replyCollection = [];
+
+            foreach ($replies as $replyKey => $replyItem) {
+                $reply = (array) $replyItem;
+                $sender = (array) $this->userTable->getByColumns([
+                                                                     'userId' => $reply['senderId'],
+                                                                 ])[0];
+                $replyCollection[$replyKey] = $reply;
+                $replyCollection[$replyKey]['sender'] = [
+                    'userId' => $sender['userId'],
+                    'userName' => $sender['userName'],
+                    'firstName' => $sender['firstName'],
+                    'lastName' => $sender['lastName'],
+                    'email' => $sender['email'],
+                    'userTypeId' => $sender['userTypeId'],
+                ];
+                $replyCollection[$replyKey]['userTypeId'] = $this->userTypeTable->getByUserTypeId($sender['userTypeId']);
+            }
+
+            $data['replies'] = $replyCollection;
+
             $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['ticketId']);
-            // date("d M Y", strtotime($data['dateCreated']));
             $collection[$newId] = $data;
         }
 
@@ -187,7 +216,7 @@ class DashboardService
 
         $post['residentId'] = $sessionDetails['user']['userId'];
         $post['ticketStatusId'] = 2;
-        $post['dateCreated'] = date('Y-m-d');
+        $post['dateCreated'] = date('Y-m-d H:i:s');
 
         $form = new TicketForm();
         $form->setData($post);
@@ -214,5 +243,87 @@ class DashboardService
             'code' => self::INVALID_CODE,
             'message' => $form->getMessages(),
         ];
+    }
+
+    public function updatePassword($post)
+    {
+        $sessionDetails = $this->sessionService->get();
+        $userData = $sessionDetails['user'];
+
+        $validatePassword = $this->validatePassword(
+            $userData['password'],
+            trim($post['currentPassword']),
+            trim($post['newPassword']),
+            trim($post['confirmNewPassword'])
+        );
+
+        if (!empty($validatePassword)) {
+            return [
+                'code' => self::INVALID_CODE,
+                'message' => !is_array($validatePassword) ? $validatePassword : 'Invalid Password! Please try again.',
+                'data' => is_array($validatePassword) ? $validatePassword : [],
+            ];
+        }
+
+        $userData['password'] = $post['newPassword'];
+
+        $form = new UserForm();
+        $form->setData($userData);
+
+        if ($form->isValid() && !count($validatePassword)) {
+            try {
+                $user = new User();
+                $user->exchangeArray($userData);
+                $this->userTable->save($user);
+            } catch (\Exception $exception) {
+                return [
+                    'code' => self::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+
+            return [
+                'code' => self::SUCCESS_CODE,
+                'message' => 'Your profile has been updated!',
+            ];
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => $form->getMessages(),
+        ];
+    }
+
+    protected function validatePassword($password, $currentPassword, $newPassword, $confirmPassword)
+    {
+        $errors = [];
+
+        if ($password !== $currentPassword) {
+            $errors = 'Invalid current password.';
+            return $errors;
+        }
+
+        if ($newPassword !== $confirmPassword) {
+            $errors = 'New password and confirm password doesn\'t match.';
+            return $errors;
+        }
+
+        if (!preg_match("/\d/", $newPassword)) {
+            $errors[] = 'INVALID_ONE_DIGIT';
+        }
+
+        if (!preg_match("/[A-Z]/", $newPassword)) {
+            $errors[] = 'INVALID_ONE_UPPER';
+        }
+
+        if (!preg_match("/[a-z]/", $newPassword)) {
+            $errors[] = 'INVALID_ONE_LOWER';
+        }
+
+        if (strlen($newPassword) < 6 || strlen($newPassword) > 10) {
+            $errors[] = 'INVALID_LENGTH';
+        }
+
+        return $errors;
     }
 }

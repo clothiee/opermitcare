@@ -74,6 +74,12 @@
       display: inline;
       fill: var(--login-input-placeholder-color);
     }
+
+    &--show {
+      svg {
+        fill: var(--main-color);
+      }
+    }
   }
 
   &__label {

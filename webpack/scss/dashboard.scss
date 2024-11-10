@@ -131,7 +131,8 @@
 
     ul {
       list-style-type: none;
-      margin-bottom: 20px;
+      overflow: hidden;
+      @include get-responsive(margin-bottom, null, 20px, 20px, 20px);
     }
 
     li {
@@ -400,7 +401,7 @@
 
     &-details {
       background-color: var(--light-gray);
-      border-radius: 20px;
+      border-radius: 10px;
       display: flex;
       flex-direction: column;
       float: left;
@@ -468,26 +469,57 @@
     }
   }
 
+  &__form {
+    &--my-profile {
+      .dashboard__input-field {
+        max-width: calc(100% - 40px);
+      }
+    }
+    &-col {
+      float: left;
+      &--fields {
+        @include get-responsive(width, 100%, 330px, 330px, 330px);
+      }
+      &--validation {
+        @include get-responsive(padding-left, null, 20px, 20px, 20px);
+        @include get-responsive(width, 100%, calc(100% - 330px), calc(100% - 330px), calc(100% - 330px));
+      }
+    }
+  }
+
   &__input {
     &-group {
       float: left;
       width: 100%;
       margin-top: 20px;
       position: relative;
+      border: 2px solid var(--dashboard-input-default-border-color);
+      border-radius: 5px;
+      padding: 1px;
+      transition: all .1s ease-in;
+
+      &:focus-within, &:hover {
+        border: 2px solid var(--dashboard-input-active-border-color);
+      }
+
+      svg {
+        fill: var(--dashboard-input-default-border-color);
+      }
+
+      &--show {
+        svg {
+          fill: var(--dashboard-input-active-border-color);
+        }
+      }
     }
 
     &-field {
-      border: 2px solid var(--dashboard-input-default-border-color);
-      border-radius: 5px;
+      border: 0;
       width: 100%;
-      padding: 5px 20px;
+      padding: 4px 19px;
       outline: 0;
       overflow: hidden;
       transition: all .1s ease-in;
-
-      &:focus {
-        border: 2px solid var(--dashboard-input-active-border-color);
-      }
 
       &:focus ~ .dashboard__input-label {
         color: var(--main-color);
@@ -515,6 +547,36 @@
       top: -5px;
       padding: 0 6px;
       font-weight: 600;
+    }
+
+    &-validation {
+      background-color: #f3f3f3;
+      border-radius: 5px;
+      margin-top: 20px;
+      padding: 10px;
+      @include get-responsive(max-width, null, 330px, 330px, 330px);
+
+      ul {
+        list-style-type: none;
+        margin-top: 20px;
+
+        svg {
+          stroke: var(--mid-gray);
+          max-width: 30px;
+        }
+
+        li.error {
+          svg {
+            stroke: #ff0000;
+          }
+        }
+
+        li.valid {
+          svg {
+            stroke: var(--main-color);
+          }
+        }
+      }
     }
   }
 
@@ -607,8 +669,8 @@
     height: 50px;
     text-align: center;
     transition: all .25s ease-in;
-    @include get-responsive(margin-bottom, 10px, 10px);
-    @include get-responsive(width, 100%, 100%, 16px, 160px);
+    @include get-responsive(margin-bottom, 10px);
+    @include get-responsive(width, 100%, 160px, 160px, 160px);
 
     &:hover {
       background-position: 0 0;
@@ -658,6 +720,62 @@
       }
     }
   }
+
+  &__reply {
+    float: left;
+    width: 100%;
+    margin-bottom: 20px;
+    &-collection {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 300px;
+    }
+    &-empty {
+      font-weight: 600;
+      color: var(--main-color);
+    }
+    &-bubble {
+      border-radius: 6px;
+      padding: 10px 20px;
+      position: relative;
+      @include get-responsive(max-width, 90%, 80%, 70%, 70%);
+      @include get-responsive(width, 90%, 80%, auto, auto);
+    }
+    &--left {
+      .dashboard__reply-bubble {
+        background-color: var(--light-gray);
+        float: left;
+        &:before {
+          content: ' ';
+          position: absolute;
+          width: 0;
+          height: 0;
+          left: 0;
+          bottom: -8px;
+          border: 8px solid;
+          border-color: transparent transparent transparent var(--light-gray);
+        }
+      }
+    }
+    &--right {
+      .dashboard__reply-bubble {
+        background-color: var(--main-color);
+        color: #ffffff;
+        float: right;
+        &:after {
+          content: ' ';
+          position: absolute;
+          width: 0;
+          height: 0;
+          right: 0;
+          bottom: -8px;
+          border: 8px solid;
+          border-color: var(--main-color) var(--main-color) transparent transparent;
+        }
+      }
+    }
+  }
 }
 
 .dashboard--resident .dashboard {
@@ -666,7 +784,6 @@
       background-color: var(--dashboard-card-background-color);
       border-radius: 20px;
       overflow: hidden;
-      min-height: 200px;
     }
   }
 }

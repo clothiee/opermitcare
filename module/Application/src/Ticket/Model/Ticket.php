@@ -18,8 +18,6 @@ class Ticket
     public $dateCreated;
     /** @var int $residentId */
     public $residentId;
-    /** @var int $repliesId */
-    public $repliesId;
 
     public function exchangeArray($data)
     {
@@ -30,6 +28,5 @@ class Ticket
         $this->description = !empty($data['description']) ? $data['description'] : null;
         $this->dateCreated = !empty($data['dateCreated']) ? $data['dateCreated'] : null;
         $this->residentId = !empty($data['residentId']) ? $data['residentId'] : null;
-        $this->repliesId = !empty($data['repliesId']) ? $data['repliesId'] : null;
     }
 }

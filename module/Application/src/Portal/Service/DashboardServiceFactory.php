@@ -3,6 +3,7 @@
 namespace Application\Portal\Service;
 
 use Application\ProblemType\Model\ProblemTypeTable;
+use Application\Reply\Model\ReplyTable;
 use Application\Ticket\Model\TicketTable;
 use Application\TicketStatus\Model\TicketStatusTable;
 use Application\User\Model\UserTable;
@@ -31,6 +32,7 @@ class DashboardServiceFactory
         $problemTypeTable = $container->get(ProblemTypeTable::class);
         $ticketTable = $container->get(TicketTable::class);
         $ticketStatusTable = $container->get(TicketStatusTable::class);
+        $replyTable = $container->get(ReplyTable::class);
 
         return new DashboardService(
             $config,
@@ -39,7 +41,8 @@ class DashboardServiceFactory
             $userTypeTable,
             $problemTypeTable,
             $ticketTable,
-            $ticketStatusTable
+            $ticketStatusTable,
+            $replyTable
         );
     }
 }

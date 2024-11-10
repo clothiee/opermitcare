@@ -8,6 +8,8 @@ use Application\Portal\Service\SessionService;
 use Application\Portal\Service\SessionServiceFactory;
 use Application\ProblemType\Model\ProblemTypeTable;
 use Application\ProblemType\Model\ProblemTypeTableFactory;
+use Application\Reply\Model\ReplyTable;
+use Application\Reply\Model\ReplyTableFactory;
 use Application\Ticket\Model\TicketTable;
 use Application\Ticket\Model\TicketTableFactory;
 use Application\TicketStatus\Model\TicketStatusTable;
@@ -23,6 +25,7 @@ $table = [
     ProblemTypeTable::class => ProblemTypeTableFactory::class,
     TicketTable::class => TicketTableFactory::class,
     TicketStatusTable::class => TicketStatusTableFactory::class,
+    ReplyTable::class => ReplyTableFactory::class,
 ];
 
 $service = [

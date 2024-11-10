@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Ticket\Form;
+namespace Application\Reply\Form;
 
 use Laminas\Filter\StripTags;
 use Laminas\Filter\ToInt;
@@ -10,98 +10,73 @@ use Laminas\Form\Element\Text;
 use Laminas\Form\Form;
 use Laminas\InputFilter\InputFilterProviderInterface;
 
-class TicketForm extends Form implements InputFilterProviderInterface
+class ReplyForm extends Form implements InputFilterProviderInterface
 {
     /**
      * UserForm constructor.
      */
     public function __construct()
     {
-        parent::__construct('ticket');
+        parent::__construct('reply');
     }
 
     public function init() : void
     {
-        $this->setName('ticketForm')
+        $this->setName('replyForm')
              ->setAttribute('method', 'post')
              ->setAttribute('role', 'form')
              ->setAttribute('enctype', 'multipart/form-data');
+        $this->add([
+                       'type' => Hidden::class,
+                       'name' => 'replyId',
+                   ]);
         $this->add([
                        'type' => Hidden::class,
                        'name' => 'ticketId',
                    ]);
         $this->add([
                        'type' => Hidden::class,
-                       'name' => 'ticketStatusId',
+                       'name' => 'senderId',
                    ]);
         $this->add([
-                       'type' => Hidden::class,
-                       'name' => 'problemTypeId',
-                   ]);
-        $this->add([
-                       'type' => Hidden::class,
-                       'name' => 'residentId',
+                       'type' => Text::class,
+                       'name' => 'message',
+                       'options' => [
+                           'label' => 'Message',
+                       ],
                    ]);
         $this->add([
                        'type' => Hidden::class,
                        'name' => 'dateCreated',
                    ]);
         $this->add([
-                       'type' => Text::class,
-                       'name' => 'title',
-                       'options' => [
-                           'label' => 'Title',
-                       ],
-                   ]);
-        $this->add([
-                       'type' => Text::class,
-                       'name' => 'description',
-                       'options' => [
-                           'label' => 'Description',
-                       ],
-                   ]);
-        $this->add([
                        'name' => 'submit',
                        'type' => Submit::class,
                        'attributes' => [
-                           'value' => 'Confirm',
+                           'value' => 'Send',
                        ],
                    ]);
     }
 
-    public function getInputFilterSpecification(): array
+    public function getInputFilterSpecification() : array
     {
         return [
             [
-                'name' => 'ticketStatusId',
+                'name' => 'ticketId',
                 'required' => true,
                 'filters' => [
                     ['name' => ToInt::class],
                 ],
             ],
             [
-                'name' => 'problemTypeId',
+                'name' => 'senderId',
                 'required' => true,
                 'filters' => [
                     ['name' => ToInt::class],
                 ],
             ],
             [
-                'name' => 'residentId',
-                'required' => true,
-                'filters' => [
-                    ['name' => ToInt::class],
-                ],
-            ],
-            [
-                'name' => 'title',
-                'required' => true,
-                'filters' => [
-                    ['name' => StripTags::class],
-                ],
-            ],
-            [
-                'name' => 'description',
+                'name' => 'message',
                 'required' => true,
                 'filters' => [
                     ['name' => StripTags::class],

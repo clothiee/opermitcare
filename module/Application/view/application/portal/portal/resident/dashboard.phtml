@@ -5,6 +5,7 @@ use Application\Portal\Service\DashboardService;
 $response = $this->response;
 $alertClass = '';
 $alertMessage = !empty($response['message']) ? $response['message'] : false;
+$responseData = !empty($response['data']) ? $response['data'] : [];
 
 if (!empty($response['message'])) {
     $isError = !empty($response['code']) && $response['code'] === DashboardService::INVALID_CODE ? true : false;
@@ -15,6 +16,10 @@ $panels = [
     'overview' => [
         'title' => 'Overview',
         'icon' => '<path d="M19 9L19 17C19 18.8856 19 19.8284 18.4142 20.4142C17.8284 21 16.8856 21 15 21L14 21L10 21L9 21C7.11438 21 6.17157 21 5.58579 20.4142C5 19.8284 5 18.8856 5 17L5 9" stroke-width="2" stroke-linejoin="round"/><path d="M3 11L7.5 7L10.6713 4.18109C11.429 3.50752 12.571 3.50752 13.3287 4.18109L16.5 7L21 11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 21V17C10 15.8954 10.8954 15 12 15V15C13.1046 15 14 15.8954 14 17V21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+    ],
+    'my-profile' => [
+        'title' => 'My Profile',
+        'icon' => '<g><path d="M20,21V19a4,4,0,0,0-4-4H8a4,4,0,0,0-4,4v2" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><circle cx="12" cy="7" fill="none" r="4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></g>',
     ],
     'create-ticket' => [
         'title' => 'Create a ticket',
@@ -32,10 +37,6 @@ $panels = [
         'title' => 'My Special Permit (s)',
         'icon' => '<path d="M4 12V20H20V4H4V7M7 8H17M7 12H17M7 16H13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
     ],
-    'my-profile' => [
-        'title' => 'My Profile',
-        'icon' => '<g><path d="M20,21V19a4,4,0,0,0-4-4H8a4,4,0,0,0-4,4v2" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><circle cx="12" cy="7" fill="none" r="4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></g>',
-    ],
 ];
 ?>
 
@@ -47,7 +48,10 @@ $panels = [
                 <ul>
                     <?php foreach ($panels as $tabKey => $tabItem) :
                         $isActive = $this->activeTab === $tabKey ? ' active' : '';
-                        $panels[$tabKey]['class'] = $isActive; ?>
+                        $panels[$tabKey]['class'] = $isActive;
+                        $panels[$tabKey]['alertClass'] = $isActive ? $alertClass : '';
+                        $panels[$tabKey]['alertMessage'] = $isActive ? $alertMessage : '';
+                        ?>
                         <li class="dashboard__list-item<?= $isActive ?>" data-panel="<?= $tabKey ?>">
                             <svg viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <?= $tabItem['icon'] ?>
@@ -64,14 +68,18 @@ $panels = [
                     ]); ?>
                 </div>
                 <div class="dashboard__panel<?= $panels['my-profile']['class'] ?>" data-panel="my-profile">
-                    <div class="dashboard__tab-header">
-                        <h1><?= $panels['my-profile']['title']; ?></h1>
-                    </div>
+                    <?= $this->partial('partial/my-profile', [
+                        'alertClass' => $panels['my-profile']['alertClass'],
+                        'alertMessage' => $panels['my-profile']['alertMessage'],
+                        'responseData' => $responseData,
+                        'title' => $panels['my-profile']['title'],
+                        'sessionDetails' => $this->sessionDetails,
+                    ]); ?>
                 </div>
                 <div class="dashboard__panel<?= $panels['create-ticket']['class'] ?>" data-panel="create-ticket">
                     <?= $this->partial('partial/create-ticket', [
-                        'alertClass' => $alertClass,
-                        'alertMessage' => $alertMessage,
+                        'alertClass' => $panels['create-ticket']['alertClass'],
+                        'alertMessage' => $panels['create-ticket']['alertMessage'],
                         'problemType' => $this->problemType,
                         'title' => $panels['create-ticket']['title'],
                     ]); ?>
@@ -90,14 +98,15 @@ $panels = [
                 </div>
                 <div class="dashboard__panel<?= $panels['my-permit']['class'] ?>" data-panel="apply-permit">
                     <?= $this->partial('partial/apply-permit', [
-                        'alertClass' => $alertClass,
-                        'alertMessage' => $alertMessage,
+                        'alertClass' => $panels['apply-permit']['alertClass'],
+                        'alertMessage' => $panels['apply-permit']['alertMessage'],
                         'title' => $panels['apply-permit']['title'],
                     ]); ?>
                 </div>
                 <?= $this->partial('partial/ticket', [
                     'tickets' => $this->tickets,
                     'problemType' => $this->problemType,
+                    'sessionDetails' => $this->sessionDetails,
                 ]); ?>
             </div>
         </div>
