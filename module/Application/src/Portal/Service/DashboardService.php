@@ -3,6 +3,8 @@
 namespace Application\Portal\Service;
 
 use Application\ProblemType\Model\ProblemTypeTable;
+use Application\Reply\Form\ReplyForm;
+use Application\Reply\Model\Reply;
 use Application\Reply\Model\ReplyTable;
 use Application\Ticket\Form\TicketForm;
 use Application\Ticket\Model\Ticket;
@@ -13,14 +15,13 @@ use Application\User\Model\User;
 use Application\User\Model\UserTable;
 use Application\UserType\Model\UserTypeTable;
 use ArrayObject;
-use Laminas\Validator\Date;
 
 class DashboardService
 {
     const SUCCESS_CODE = 200;
     const SUCCESS_MESSAGE = 'Success';
     const INVALID_CODE = 401;
-    const INVALID_MESSAGE = 'Invalid username or password';
+    const INVALID_MESSAGE = 'Invalid request';
 
     private $config;
     private $sessionService;
@@ -325,5 +326,39 @@ class DashboardService
         }
 
         return $errors;
+    }
+
+    public function replyTicket($post)
+    {
+        $sessionDetails = $this->sessionService->get();
+
+        $post['senderId'] = $sessionDetails['user']['userId'];
+        $post['dateCreated'] = date('Y-m-d H:i:s');
+
+        $form = new ReplyForm();
+        $form->setData($post);
+
+        if ($form->isValid()) {
+            try {
+                $reply = new Reply();
+                $reply->exchangeArray($post);
+                $this->replyTable->save($reply);
+            } catch (\Exception $exception) {
+                return [
+                    'code' => self::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+
+            return [
+                'code' => self::SUCCESS_CODE,
+                'message' => 'Message sent successfully!',
+            ];
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => $form->getMessages(),
+        ];
     }
 }

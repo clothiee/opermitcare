@@ -1,11 +1,11 @@
 <?php
 
-namespace Application\Reply\Model;
+namespace Application\PermitStatus\Model;
 
 use RuntimeException;
 use Laminas\Db\TableGateway\TableGatewayInterface;
 
-class ReplyTable
+class PermitStatusTable
 {
     private $tableGateway;
 
@@ -38,37 +38,34 @@ class ReplyTable
         return $data;
     }
 
-    public function save(Reply $reply)
+    public function save(PermitStatus $permitStatus)
     {
         $data = [
-            'replyId' => $reply->replyId,
-            'ticketId' => $reply->ticketId,
-            'senderId' => $reply->senderId,
-            'message' => $reply->message,
-            'dateCreated' => $reply->dateCreated,
+            'problemTypeName' => $permitStatus->permitStatusName,
+            'active' => $permitStatus->active,
         ];
 
-        $replyId = (int) $reply->replyId;
+        $permitStatusId = (int) $permitStatus->permitStatusId;
 
-        if ($replyId === 0) {
+        if ($permitStatusId === 0) {
             $this->tableGateway->insert($data);
             return;
         }
 
         try {
-            $this->getByColumns(['replyId' => $replyId]);
+            $this->getByColumns(['permitStatusId' => $permitStatusId]);
         } catch (RuntimeException $e) {
             throw new RuntimeException(sprintf(
                                            'Cannot update user with identifier %d; does not exist',
-                                           $replyId
+                                           $permitStatusId
                                        ));
         }
 
-        $this->tableGateway->update($data, ['replyId' => $replyId]);
+        $this->tableGateway->update($data, ['permitStatusId' => $permitStatusId]);
     }
 
-    public function delete($replyId)
+    public function delete($permitStatusId)
     {
-        $this->tableGateway->delete(['replyId' => (int) $replyId]);
+        $this->tableGateway->delete(['permitStatusId' => (int) $permitStatusId]);
     }
 }

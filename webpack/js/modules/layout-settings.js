@@ -15,6 +15,8 @@ export class LayoutSettingsModule {
                 }
 
                 return $('.navigation').removeClass('navigation--sticky');
+                return $('.navigation').removeClass('navigation--sticky');
+                return $('.navigation').removeClass('navigation--sticky');
             });
 
             $(document).on('click', '.login__input svg', function () {
@@ -64,11 +66,24 @@ export class LayoutSettingsModule {
                 $(this).addClass('active');
             });
 
-            $(document).on('click', '.dashboard__dropdown-menu li', function () {
+            $(document).on('click', '.js-dropdown-id li', function () {
+                const inputName = $(this).closest('.dashboard__dropdown-menu').attr('data-name');
                 const parent = $(this).closest('.dashboard__input-group');
 
                 parent.find('.dashboard__input-field--text span').text($(this).text());
-                parent.find('[name="problemTypeId"]').val($(this).data('id'));
+                parent.find('[name="'+ inputName+ '"]').val($(this).data('id'));
+            });
+
+            $(document).on('click', '.js-dropdown-type li', function () {
+                const inputName = $(this).closest('.dashboard__dropdown-menu').attr('data-name');
+                const parent = $(this).closest('.dashboard__input-group');
+                const form = parent.closest('form');
+
+                parent.find('.dashboard__input-field--text span').text($(this).text());
+                parent.find('[name="'+ inputName+ '"]').val($(this).text());
+                form.find('.dashboard__input-row--active').removeClass('dashboard__input-row--active');
+                form.find('.dashboard__input-row[data-type="' + $(this).data('type-id') + '"]')
+                    .addClass('dashboard__input-row--active');
             });
 
             $(document).on('click', '.alert a.button', function () {
@@ -79,8 +94,36 @@ export class LayoutSettingsModule {
                 const form = $(this).closest('form');
 
                 form.find('.dashboard__input-field--text span').text('');
-                form.find('[name="problemTypeId"]').val('');
+                form.find('.dashboard__input-field[type="hidden"]').val('');
+                form.find('.dashboard__input-row--active').removeClass('dashboard__input-row--active');
                 form[0].reset();
+            });
+
+            $(document).on('click', '[value="Reply"]', function () {
+                const panel = $(this).closest('.dashboard__panel');
+                const replyCollection = panel.find('.dashboard__reply-collection');
+                const ticketId = panel.data('ticket-id');
+                const message = panel.find('.dashboard__reply-input').val();
+
+                return $.ajax({
+                    url: configuration.ajax.replyTicket,
+                    type: 'POST',
+                    data: {
+                        ticketId: ticketId,
+                        message: message
+                    },
+                    success: function (data) {
+                        let bubble = data.code === 200
+                            ? `<div class="dashboard__reply-bubble">${message}</div>`
+                            : `<div class="dashboard__reply-error">${data.response.message}</div>`;
+                        let replyHtml = `<div class="dashboard__reply dashboard__reply--right">${bubble}</div>`;
+
+                        $(replyHtml).appendTo(replyCollection);
+                    },
+                    error: function (jqXHR, textStatus, error) {
+                        console.log(textStatus + ': ' + error + "\n" + jqXHR.responseText);
+                    }
+                });
             });
         };
 

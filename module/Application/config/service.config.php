@@ -2,6 +2,10 @@
 
 namespace Application;
 
+use Application\Permit\Model\PermitTable;
+use Application\Permit\Model\PermitTableFactory;
+use Application\PermitStatus\Model\PermitStatusTable;
+use Application\PermitStatus\Model\PermitStatusTableFactory;
 use Application\Portal\Service\DashboardService;
 use Application\Portal\Service\DashboardServiceFactory;
 use Application\Portal\Service\SessionService;
@@ -20,11 +24,13 @@ use Application\UserType\Model\UserTypeTable;
 use Application\UserType\Model\UserTypeTableFactory;
 
 $table = [
-    UserTable::class => UserTableFactory::class,
-    UserTypeTable::class => UserTypeTableFactory::class,
+    PermitTable::class => PermitTableFactory::class,
+    PermitStatusTable::class => PermitStatusTableFactory::class,
     ProblemTypeTable::class => ProblemTypeTableFactory::class,
     TicketTable::class => TicketTableFactory::class,
     TicketStatusTable::class => TicketStatusTableFactory::class,
+    UserTable::class => UserTableFactory::class,
+    UserTypeTable::class => UserTypeTableFactory::class,
     ReplyTable::class => ReplyTableFactory::class,
 ];
 

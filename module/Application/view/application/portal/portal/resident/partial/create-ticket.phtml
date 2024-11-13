@@ -25,7 +25,7 @@
                     <div class="dashboard__input-field dashboard__input-field--text"><span></span></div>
                 </div>
                 <input class="dashboard__dropdown-input" type="checkbox"/>
-                <ul class="dashboard__dropdown-menu">
+                <ul class="dashboard__dropdown-menu js-dropdown-id" data-name="problemTypeId">
                     <?php foreach ($this->problemType as $problemType) : ?>
                         <li data-id="<?= $problemType['id'] ?>"><?= $problemType['name']; ?></li>
                     <?php endforeach; ?>

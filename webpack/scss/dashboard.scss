@@ -488,6 +488,14 @@
   }
 
   &__input {
+    &-row {
+      float: left;
+      width: 100%;
+      display: none;
+      &--active {
+        display: unset !important;
+      }
+    }
     &-group {
       float: left;
       width: 100%;
@@ -511,12 +519,24 @@
           fill: var(--dashboard-input-active-border-color);
         }
       }
+
+      &--last-name,
+      &--first-name,
+      &--area,
+      &--capital {
+        @include get-responsive(margin-right, null, 10px, 10px, 10px);
+        @include get-responsive(width, 100%, calc(100%/3), calc(100%/3), calc(100%/3));
+      }
+      &--middle-name,
+      &--monthly-rent {
+        @include get-responsive(width, 100%, calc((100%/3) - 20px), calc((100%/3) - 20px), calc((100%/3) - 20px));
+      }
     }
 
     &-field {
       border: 0;
       width: 100%;
-      padding: 4px 19px;
+      padding: 8px 19px;
       outline: 0;
       overflow: hidden;
       transition: all .1s ease-in;
@@ -526,7 +546,7 @@
       }
 
       &--text {
-        height: 50px;
+        height: 40px;
       }
 
       &--textarea {
@@ -534,7 +554,6 @@
       }
 
       span {
-        line-height: 40px;
         vertical-align: middle;
       }
     }
@@ -558,7 +577,7 @@
 
       ul {
         list-style-type: none;
-        margin-top: 20px;
+        margin-top: 15px;
 
         svg {
           stroke: var(--mid-gray);
@@ -581,12 +600,10 @@
   }
 
   &__dropdown {
-    display: inline-block;
     position: relative;
     width: 100%;
 
     &-button {
-      display: inline-block;
       cursor: pointer;
       white-space: nowrap;
       width: 100%;
@@ -666,7 +683,7 @@
     cursor: pointer;
     font-weight: 600;
     float: left;
-    height: 50px;
+    height: 45.2px;
     text-align: center;
     transition: all .25s ease-in;
     @include get-responsive(margin-bottom, 10px);
@@ -724,12 +741,17 @@
   &__reply {
     float: left;
     width: 100%;
-    margin-bottom: 20px;
+    margin-top: 20px;
     &-collection {
       display: flex !important;
       flex-direction: column;
-      justify-content: flex-end;
       min-height: 300px;
+      max-height: 500px;
+      overflow-y: auto;
+      padding-left: 30px;
+      padding-right: 20px;
+      scrollbar-color: var(--mid-gray) transparent;
+      scrollbar-width: thin;
     }
     &-empty {
       font-weight: 600;
@@ -741,6 +763,21 @@
       position: relative;
       @include get-responsive(max-width, 90%, 80%, 70%, 70%);
       @include get-responsive(width, 90%, 80%, auto, auto);
+    }
+    &-error {
+      color: #ff0000;
+      float: right;
+    }
+    &-input {
+      border: 2px solid var(--main-color);
+      border-radius: 5px;
+      float: left;
+      height: 45.2px;
+      outline: 0;
+      padding: 0 20px;
+      @include get-responsive(width, 100%, calc(100% - 165px), calc(100% - 165px), calc(100% - 165px));
+      @include get-responsive(margin-right, null, 5px, 5px, 5px);
+      @include get-responsive(margin-bottom, 10px);
     }
     &--left {
       .dashboard__reply-bubble {

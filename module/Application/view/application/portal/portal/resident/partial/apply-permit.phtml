@@ -9,7 +9,79 @@
 <?php endif; ?>
 <div class="dashboard__panel-header">
     <h1><?= $this->title ?></h1>
-    <p>
-        Test Description
-    </p>
+    <p>Put N/A if not applicable</p>
 </div>
+<form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" method="post">
+    <div class="dashboard__form">
+        <div class="dashboard__input-group">
+            <label class="dashboard__dropdown">
+                <div class="dashboard__dropdown-button">
+                    <div class="dashboard__input-field dashboard__input-field--text"><span></span></div>
+                </div>
+                <input class="dashboard__dropdown-input" type="checkbox"/>
+                <ul class="dashboard__dropdown-menu js-dropdown-type" data-name="businessEntityType">
+                    <li data-type-id="1">Sole Proprietorship</li>
+                    <li data-type-id="2">Corporation</li>
+                    <li data-type-id="2">Partnership</li>
+                    <li data-type-id="2">One-Person Corporation</li>
+                </ul>
+            </label>
+            <input class="dashboard__input-field" type="hidden" name="businessEntityType"/>
+            <label class="dashboard__input-label">Type of Business Entity</label>
+        </div>
+        <div class="dashboard__input-row" data-type="1">
+            <div class="dashboard__input-group dashboard__input-group--last-name">
+                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="lastName"/>
+                <label class="dashboard__input-label">Last Name</label>
+            </div>
+            <div class="dashboard__input-group dashboard__input-group--first-name">
+                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="firstName"/>
+                <label class="dashboard__input-label">First Name</label>
+            </div>
+            <div class="dashboard__input-group dashboard__input-group--middle-name">
+                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="MiddleName"/>
+                <label class="dashboard__input-label">Middle Name</label>
+            </div>
+            <div class="dashboard__input-group">
+                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="principalAddress"/>
+                <label class="dashboard__input-label">Principal Address</label>
+            </div>
+        </div>
+        <div class="dashboard__input-row" data-type="2">
+            <div class="dashboard__input-group">
+                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="corporateName"/>
+                <label class="dashboard__input-label">Corporate Name</label>
+            </div>
+            <div class="dashboard__input-group">
+                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="tradeName"/>
+                <label class="dashboard__input-label">Trade Name</label>
+            </div>
+            <div class="dashboard__input-group">
+                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="businessAddress"/>
+                <label class="dashboard__input-label">Business Address</label>
+            </div>
+            <div class="dashboard__input-group">
+                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="natureOfBusiness"/>
+                <label class="dashboard__input-label">Nature Of Business</label>
+            </div>
+            <div class="dashboard__input-group dashboard__input-group--area">
+                <input class="dashboard__input-field dashboard__input-field--text" type="number" min="1" name="area"/>
+                <label class="dashboard__input-label">Area (sqm)</label>
+            </div>
+            <div class="dashboard__input-group dashboard__input-group--capital">
+                <input class="dashboard__input-field dashboard__input-field--text" type="number" min="1" name="capital"/>
+                <label class="dashboard__input-label">Capital</label>
+            </div>
+            <div class="dashboard__input-group dashboard__input-group--monthly-rent">
+                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="monthlyRent"/>
+                <label class="dashboard__input-label">Monthly Rent</label>
+            </div>
+        </div>
+    </div>
+    <div class="dashboard__divider"></div>
+    <div class="dashboard__actions">
+        <input type="hidden" name="process" value="apply-permit"/>
+        <input class="dashboard__button dashboard__button--secondary" type="button" value="Reset"/>
+        <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
+    </div>
+</form>

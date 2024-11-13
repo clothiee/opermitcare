@@ -11,7 +11,7 @@ $countTickets = count($tickets);
     <?php foreach ($tickets as $ticketNo => $ticket) :
         $countReplies = count($ticket['replies']);
         ?>
-        <div class="dashboard__panel" data-panel="ticket-<?= $ticket['ticketId'] ?>">
+        <div class="dashboard__panel" data-panel="ticket-<?= $ticket['ticketId'] ?>" data-ticket-id="<?= $ticket['ticketId'] ?>">
             <div class="dashboard__panel-breadcrumbs">
                 <span class="js-see-panel" data-panel="my-ticket">My Ticket (s)</span>
             </div>
@@ -71,6 +71,11 @@ $countTickets = count($tickets);
                 <?php else: ?>
                     <div class="dashboard__reply-empty">No replies yet</div>
                 <?php endif; ?>
+                <div class="dashboard__divider"></div>
+                <div class="dashboard__reply-submit">
+                    <input class="dashboard__reply-input" type="text"/>
+                    <input class="dashboard__button dashboard__button--primary" type="button" value="Reply"/>
+                </div>
             </div>
         </div>
     <?php endforeach; ?>

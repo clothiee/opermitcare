@@ -64,5 +64,8 @@
 <script>
     var configuration = <?php echo json_encode([
         'pageName' => $this->pageName,
+        'ajax' => [
+            'replyTicket' => $this->url('application', ['action' => 'dashboard', 'param1' => 'reply-ticket']),
+        ],
     ]); ?>;
 </script>

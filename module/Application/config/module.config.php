@@ -2,6 +2,8 @@
 
 namespace Application;
 
+use Application\Portal\Controller\PortalApiController;
+use Application\Portal\Controller\PortalApiControllerFactory;
 use Application\Portal\Controller\PortalController;
 use Application\Portal\Controller\PortalControllerFactory;
 use Laminas\Db\Adapter\AdapterAbstractServiceFactory;
@@ -38,9 +40,12 @@ return [
             'application' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/api[/:action]',
+                    'route' => '/api[/:action][/:param1][/]',
+                    'constraints' => [
+                        'param1' => '[a-zA-Z0-9][a-zA-Z0-9_-]*',
+                    ],
                     'defaults' => [
-                        'controller' => PortalController::class,
+                        'controller' => PortalApiController::class,
                         'action' => 'index',
                     ],
                 ],
@@ -50,6 +55,7 @@ return [
     'controllers' => [
         'factories' => [
             PortalController::class => PortalControllerFactory::class,
+            PortalApiController::class => PortalApiControllerFactory::class,
         ],
     ],
     'view_manager' => [
