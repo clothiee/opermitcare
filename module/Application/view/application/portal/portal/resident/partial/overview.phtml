@@ -3,7 +3,8 @@ $tickets = $this->tickets ?: [];
 $permits = $this->permits ?: [];
 $countTickets = count($tickets);
 $countPermits = count($permits);
-$count = 0;
+$countTicket = 0;
+$countPermit = 0;
 ?>
     <div class="dashboard__panel-header">
         <h1>My Recent Ticket (s)</h1>
@@ -12,12 +13,12 @@ $count = 0;
 <?php if ($countTickets) : ?>
     <div class="dashboard__panel-collection">
         <?php foreach ($tickets as $ticketNo => $ticket) :
-            $count++;
-            if ($count > 3) {
+            $countTicket++;
+            if ($countTicket > 3) {
                 continue;
             } ?>
             <div class="dashboard__ticket">
-                <div class="dashboard__ticket-status dashboard__ticket-status--<?= $ticket['ticketStatusName'] ?>">
+                <div class="dashboard__ticket-status dashboard__ticket-status--<?= strtolower($ticket['ticketStatusName']) ?>">
                     <?= $ticket['ticketStatusName'] ?>
                 </div>
                 <div class="dashboard__ticket-number">Ticket no. <?= $ticketNo ?></div>
@@ -40,10 +41,19 @@ $count = 0;
 <?php if ($countPermits) : ?>
     <div class="dashboard__panel-collection">
         <?php foreach ($permits as $permitNo => $permit) :
-            $count++;
-            if ($count > 3) {
+            $countPermit++;
+            if ($countPermit > 3) {
                 continue;
             } ?>
+            <div class="dashboard__permit">
+                <div class="dashboard__permit-status dashboard__permit-status--<?= strtolower($permit['permitStatusName']) ?>">
+                    <?= $permit['permitStatusName'] ?>
+                </div>
+                <div class="dashboard__permit-number">Ticket no. <?= $permitNo ?></div>
+                <div class="dashboard__divider"></div>
+                <div class="dashboard__permit-date"><?= date("d M Y", strtotime($permit['dateCreated'])) ?></div>
+                <div class="dashboard__permit-view js-see-panel" data-panel="permit-<?= $permit['ticketId'] ?>">View</div>
+            </div>
         <?php endforeach; ?>
     </div>
 <?php else : ?>

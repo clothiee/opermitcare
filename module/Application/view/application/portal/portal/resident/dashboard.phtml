@@ -65,6 +65,7 @@ $panels = [
                 <div class="dashboard__panel<?= $panels['overview']['class'] ?>" data-panel="overview">
                     <?= $this->partial('partial/overview', [
                         'tickets' => $this->tickets,
+                        'permits' => $this->permits,
                     ]); ?>
                 </div>
                 <div class="dashboard__panel<?= $panels['my-profile']['class'] ?>" data-panel="my-profile">

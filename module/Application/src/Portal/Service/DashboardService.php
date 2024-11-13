@@ -91,6 +91,7 @@ class DashboardService
                     'problemType' => $this->getActiveProblemTypes(),
                     'permitStatus' => $this->getActivePermitStatuses(),
                     'tickets' => $this->getTickets(),
+                    'permits' => $this->getPermits(),
                     'activeTab' => 'overview',
                 ];
                 break;
@@ -107,83 +108,29 @@ class DashboardService
         ]);
     }
 
-    private function getDashboardPages()
+    public function getPermits()
     {
-        return [
-            [
-                'title' => 'Settings',
-                'description' => 'Add, delete and update Website pages.',
-                'action' => 'setting',
-            ],
-            [
-                'title' => 'Users',
-                'description' => 'Add, delete and update Users, Residents and Employees.',
-                'action' => 'user',
-            ],
-            [
-                'title' => 'Employees',
-                'description' => 'View Employees performances.',
-                'action' => 'employee',
-            ],
-            [
-                'title' => 'FAQs',
-                'description' => 'Add, delete and update Frequently Asked Questions.',
-                'action' => 'faq',
-            ],
-            [
-                'title' => 'Problem Types',
-                'description' => 'Add, delete and update Problem Types.',
-                'action' => 'problem-type',
-            ],
-            [
-                'title' => 'Tickets',
-                'description' => 'Add, delete and update Tickets.',
-                'action' => 'ticket',
-            ],
-            [
-                'title' => 'Forms and List',
-                'description' => 'Add, delete and update Downloadable Forms and Lists.',
-                'action' => 'forms-and-list',
-            ],
-            [
-                'title' => 'Press Release',
-                'description' => 'Add, delete and update Press Release or Latest News.',
-                'action' => 'press-release',
-            ],
-            [
-                'title' => 'Reports',
-                'description' => 'Generate and see all reports.',
-                'action' => 'report',
-            ],
-        ];
-    }
-
-    private function getActiveProblemTypes()
-    {
-        $problemTypes = $this->problemTypeTable->getByColumns(['active' => 1]);
-        $collection = [];
-
-        foreach ($problemTypes as $problemType) {
-            $collection[] = [
-                'id' => $problemType->problemTypeId,
-                'name' => $problemType->problemTypeName,
-            ];
-        }
-
-        return $collection;
-    }
-
-    private function getActivePermitStatuses()
-    {
-        $permitStatuses = $this->permitStatusTable->getByColumns(['active' => 1]);
-        $collection = [];
+        $sessionDetails = $this->sessionService->get();
+        $permitStatuses = $this->permitStatusTable->fetchAll();
+        $statusCollection = [];
 
         foreach ($permitStatuses as $permitStatus) {
-            $collection[] = [
-                'id' => $permitStatus->permitStatusId,
-                'name' => $permitStatus->permitStatusName,
-            ];
+            $statusCollection[$permitStatus->permitStatusId] = $permitStatus->permitStatusName;
         }
+
+        $permits = $this->permitTable->getByColumns([
+                                                        'residentId' => $sessionDetails['user']['userId'],
+                                                    ]);
+        $collection = [];
+
+        foreach ($permits as $permit) {
+            $data = (array) $permit;
+            $data['permitStatusName'] = $statusCollection[$data['permitStatusId']];
+            $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['permitId']);
+            $collection[$newId] = $data;
+        }
+
+        krsort($collection);
 
         return $collection;
     }
@@ -239,36 +186,22 @@ class DashboardService
         return $collection;
     }
 
-    public function updatePassword($post)
+    public function applyPermit($post)
     {
         $sessionDetails = $this->sessionService->get();
-        $userData = $sessionDetails['user'];
 
-        $validatePassword = $this->validatePassword(
-            $userData['password'],
-            trim($post['currentPassword']),
-            trim($post['newPassword']),
-            trim($post['confirmNewPassword'])
-        );
+        $post['residentId'] = $sessionDetails['user']['userId'];
+        $post['permitStatusId'] = 1;
+        $post['dateCreated'] = date('Y-m-d H:i:s');
 
-        if (!empty($validatePassword)) {
-            return [
-                'code' => self::INVALID_CODE,
-                'message' => !is_array($validatePassword) ? $validatePassword : 'Invalid Password! Please try again.',
-                'data' => is_array($validatePassword) ? $validatePassword : [],
-            ];
-        }
+        $form = new PermitForm();
+        $form->setData($post);
 
-        $userData['password'] = $post['newPassword'];
-
-        $form = new UserForm();
-        $form->setData($userData);
-
-        if ($form->isValid() && !count($validatePassword)) {
+        if ($form->isValid()) {
             try {
-                $user = new User();
-                $user->exchangeArray($userData);
-                $this->userTable->save($user);
+                $permit = new Permit();
+                $permit->exchangeArray($post);
+                $this->permitTable->save($permit);
             } catch (\Exception $exception) {
                 return [
                     'code' => self::INVALID_CODE,
@@ -278,7 +211,7 @@ class DashboardService
 
             return [
                 'code' => self::SUCCESS_CODE,
-                'message' => 'Your profile has been updated!',
+                'message' => 'Your request was successfully submitted!',
             ];
         }
 
@@ -286,39 +219,6 @@ class DashboardService
             'code' => self::INVALID_CODE,
             'message' => $form->getMessages(),
         ];
-    }
-
-    protected function validatePassword($password, $currentPassword, $newPassword, $confirmPassword)
-    {
-        $errors = [];
-
-        if ($password !== $currentPassword) {
-            $errors = 'Invalid current password.';
-            return $errors;
-        }
-
-        if ($newPassword !== $confirmPassword) {
-            $errors = 'New password and confirm password doesn\'t match.';
-            return $errors;
-        }
-
-        if (!preg_match("/\d/", $newPassword)) {
-            $errors[] = 'INVALID_ONE_DIGIT';
-        }
-
-        if (!preg_match("/[A-Z]/", $newPassword)) {
-            $errors[] = 'INVALID_ONE_UPPER';
-        }
-
-        if (!preg_match("/[a-z]/", $newPassword)) {
-            $errors[] = 'INVALID_ONE_LOWER';
-        }
-
-        if (strlen($newPassword) < 6 || strlen($newPassword) > 10) {
-            $errors[] = 'INVALID_LENGTH';
-        }
-
-        return $errors;
     }
 
     public function createTicket($post)
@@ -390,22 +290,36 @@ class DashboardService
         ];
     }
 
-    public function applyPermit($post)
+    public function updatePassword($post)
     {
         $sessionDetails = $this->sessionService->get();
+        $userData = $sessionDetails['user'];
 
-        $post['residentId'] = $sessionDetails['user']['userId'];
-        $post['permitStatusId'] = 1;
-        $post['dateCreated'] = date('Y-m-d H:i:s');
+        $validatePassword = $this->validatePassword(
+            $userData['password'],
+            trim($post['currentPassword']),
+            trim($post['newPassword']),
+            trim($post['confirmNewPassword'])
+        );
 
-        $form = new PermitForm();
-        $form->setData($post);
+        if (!empty($validatePassword)) {
+            return [
+                'code' => self::INVALID_CODE,
+                'message' => !is_array($validatePassword) ? $validatePassword : 'Invalid Password! Please try again.',
+                'data' => is_array($validatePassword) ? $validatePassword : [],
+            ];
+        }
 
-        if ($form->isValid()) {
+        $userData['password'] = $post['newPassword'];
+
+        $form = new UserForm();
+        $form->setData($userData);
+
+        if ($form->isValid() && !count($validatePassword)) {
             try {
-                $permit = new Permit();
-                $permit->exchangeArray($post);
-                $this->permitTable->save($permit);
+                $user = new User();
+                $user->exchangeArray($userData);
+                $this->userTable->save($user);
             } catch (\Exception $exception) {
                 return [
                     'code' => self::INVALID_CODE,
@@ -415,7 +329,7 @@ class DashboardService
 
             return [
                 'code' => self::SUCCESS_CODE,
-                'message' => 'Your request was successfully submitted!',
+                'message' => 'Your profile has been updated!',
             ];
         }
 
@@ -423,5 +337,119 @@ class DashboardService
             'code' => self::INVALID_CODE,
             'message' => $form->getMessages(),
         ];
+    }
+
+    private function getActiveProblemTypes()
+    {
+        $problemTypes = $this->problemTypeTable->getByColumns(['active' => 1]);
+        $collection = [];
+
+        foreach ($problemTypes as $problemType) {
+            $collection[] = [
+                'id' => $problemType->problemTypeId,
+                'name' => $problemType->problemTypeName,
+            ];
+        }
+
+        return $collection;
+    }
+
+    private function getActivePermitStatuses()
+    {
+        $permitStatuses = $this->permitStatusTable->getByColumns(['active' => 1]);
+        $collection = [];
+
+        foreach ($permitStatuses as $permitStatus) {
+            $collection[] = [
+                'id' => $permitStatus->permitStatusId,
+                'name' => $permitStatus->permitStatusName,
+            ];
+        }
+
+        return $collection;
+    }
+
+    private function getDashboardPages()
+    {
+        return [
+            [
+                'title' => 'Settings',
+                'description' => 'Add, delete and update Website pages.',
+                'action' => 'setting',
+            ],
+            [
+                'title' => 'Users',
+                'description' => 'Add, delete and update Users, Residents and Employees.',
+                'action' => 'user',
+            ],
+            [
+                'title' => 'Employees',
+                'description' => 'View Employees performances.',
+                'action' => 'employee',
+            ],
+            [
+                'title' => 'FAQs',
+                'description' => 'Add, delete and update Frequently Asked Questions.',
+                'action' => 'faq',
+            ],
+            [
+                'title' => 'Problem Types',
+                'description' => 'Add, delete and update Problem Types.',
+                'action' => 'problem-type',
+            ],
+            [
+                'title' => 'Tickets',
+                'description' => 'Add, delete and update Tickets.',
+                'action' => 'ticket',
+            ],
+            [
+                'title' => 'Forms and List',
+                'description' => 'Add, delete and update Downloadable Forms and Lists.',
+                'action' => 'forms-and-list',
+            ],
+            [
+                'title' => 'Press Release',
+                'description' => 'Add, delete and update Press Release or Latest News.',
+                'action' => 'press-release',
+            ],
+            [
+                'title' => 'Reports',
+                'description' => 'Generate and see all reports.',
+                'action' => 'report',
+            ],
+        ];
+    }
+
+    private function validatePassword($password, $currentPassword, $newPassword, $confirmPassword)
+    {
+        $errors = [];
+
+        if ($password !== $currentPassword) {
+            $errors = 'Invalid current password.';
+            return $errors;
+        }
+
+        if ($newPassword !== $confirmPassword) {
+            $errors = 'New password and confirm password doesn\'t match.';
+            return $errors;
+        }
+
+        if (!preg_match("/\d/", $newPassword)) {
+            $errors[] = 'INVALID_ONE_DIGIT';
+        }
+
+        if (!preg_match("/[A-Z]/", $newPassword)) {
+            $errors[] = 'INVALID_ONE_UPPER';
+        }
+
+        if (!preg_match("/[a-z]/", $newPassword)) {
+            $errors[] = 'INVALID_ONE_LOWER';
+        }
+
+        if (strlen($newPassword) < 6 || strlen($newPassword) > 10) {
+            $errors[] = 'INVALID_LENGTH';
+        }
+
+        return $errors;
     }
 }

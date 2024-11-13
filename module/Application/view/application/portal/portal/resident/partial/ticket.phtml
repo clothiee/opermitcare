@@ -17,7 +17,7 @@ $countTickets = count($tickets);
             </div>
             <div class="dashboard__panel-header">
                 <h1>Ticket</h1>
-                <div class="dashboard__ticket-status dashboard__ticket-status--<?= $ticket['ticketStatusName'] ?>">
+                <div class="dashboard__ticket-status dashboard__ticket-status--<?= strtolower($ticket['ticketStatusName']) ?>">
                     <?= $ticket['ticketStatusName'] ?>
                 </div>
                 <h4>Ticket no. <?= $ticketNo ?></h4>

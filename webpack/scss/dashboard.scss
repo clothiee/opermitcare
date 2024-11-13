@@ -346,6 +346,7 @@
     }
   }
 
+  &__permit,
   &__ticket {
     border: 2px solid var(--dashboard-item-border-color);
     border-radius: 6px;
@@ -363,7 +364,8 @@
       border-radius: 5px;
       text-transform: capitalize;
 
-      &--active {
+      &--active,
+      &--assessed {
         background-color: #b2fedd;
         color: #00A69F;
       }
@@ -373,7 +375,8 @@
         color: #9b791b;
       }
 
-      &--closed {
+      &--closed,
+      &--rejected {
         background-color: #fe9085;
         color: #7a0100;
       }

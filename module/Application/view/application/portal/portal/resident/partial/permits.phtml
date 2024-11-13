@@ -1,22 +1,22 @@
 <?php
-$permits = $this->tickets ?: [];
-$countTickets = count($permits);
+$permits = $this->permits ?: [];
+$countPermits = count($permits);
 ?>
     <div class="dashboard__panel-header">
         <h1><?= $this->title; ?></h1>
-        <span><?= $countTickets ?> ticket (s) found.</span>
+        <span><?= $countPermits ?> application (s) found.</span>
     </div>
-<?php if ($countTickets) : ?>
+<?php if ($countPermits) : ?>
     <div class="dashboard__panel-collection">
-        <?php foreach ($permits as $ticketNo => $ticket) : ?>
-            <div class="dashboard__ticket">
-                <div class="dashboard__ticket-status dashboard__ticket-status--<?= $ticket['ticketStatusName'] ?>">
-                    <?= $ticket['ticketStatusName'] ?>
+        <?php foreach ($permits as $permitNo => $permit) : ?>
+            <div class="dashboard__permit">
+                <div class="dashboard__permit-status dashboard__permit-status--<?= strtolower($permit['permitStatusName']) ?>">
+                    <?= $permit['permitStatusName'] ?>
                 </div>
-                <div class="dashboard__ticket-number">Ticket no. <?= $ticketNo ?></div>
+                <div class="dashboard__permit-number">Application no. <?= $permitNo ?></div>
                 <div class="dashboard__divider"></div>
-                <div class="dashboard__ticket-date"><?= date("d M Y", strtotime($ticket['dateCreated'])) ?></div>
-                <div class="dashboard__ticket-view">View</div>
+                <div class="dashboard__permit-date"><?= date("d M Y", strtotime($permit['dateCreated'])) ?></div>
+                <div class="dashboard__permit-view">View</div>
             </div>
         <?php endforeach; ?>
     </div>
