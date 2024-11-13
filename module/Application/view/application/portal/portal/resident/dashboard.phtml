@@ -110,6 +110,11 @@ $panels = [
                     'problemType' => $this->problemType,
                     'sessionDetails' => $this->sessionDetails,
                 ]); ?>
+                <?= $this->partial('partial/permit', [
+                    'permits' => $this->permits,
+                    'permitStatus' => $this->permitStatus,
+                    'sessionDetails' => $this->sessionDetails,
+                ]); ?>
             </div>
         </div>
     </div>

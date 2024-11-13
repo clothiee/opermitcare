@@ -16,7 +16,7 @@ $countPermits = count($permits);
                 <div class="dashboard__permit-number">Application no. <?= $permitNo ?></div>
                 <div class="dashboard__divider"></div>
                 <div class="dashboard__permit-date"><?= date("d M Y", strtotime($permit['dateCreated'])) ?></div>
-                <div class="dashboard__permit-view">View</div>
+                <div class="dashboard__permit-view js-see-panel" data-panel="permit-<?= $permit['permitId'] ?>">View</div>
             </div>
         <?php endforeach; ?>
     </div>

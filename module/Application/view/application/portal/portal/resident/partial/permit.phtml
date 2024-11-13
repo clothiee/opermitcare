@@ -1,0 +1,41 @@
+<?php
+$permitStatusKey = array_search(2, array_column($this->permitStatus, 'id'));
+$permitStatus = $this->permitStatus[$permitStatusKey];
+$sessionDetails = $this->sessionDetails;
+$userId = $sessionDetails['user']['userId'];
+$permits = $this->permits ?: [];
+$countPermits = count($permits);
+?>
+
+<?php if ($countPermits) : ?>
+    <?php foreach ($permits as $permitNo => $permit) : ?>
+        <div class="dashboard__panel" data-panel="permit-<?= $permit['permitId'] ?>" data-permit-id="<?= $permit['permitId'] ?>">
+            <div class="dashboard__panel-breadcrumbs">
+                <span class="js-see-panel" data-panel="my-permit">My Special Permit (s)</span>
+            </div>
+            <div class="dashboard__panel-header">
+                <h1>Permit</h1>
+                <div class="dashboard__permit-status dashboard__permit-status--<?= strtolower($permit['permitStatusName']) ?>">
+                    <?= $permit['permitStatusName'] ?>
+                </div>
+                <h4>Application no. <?= $permitNo ?></h4>
+            </div>
+            <div class="dashboard__divider"></div>
+            <div class="dashboard__permit-details">
+                <?= $this->partial('partial/permit-item', [
+                    'permit' => $permit,
+                    'permitStatus' => $permitStatus,
+                ]); ?>
+            </div>
+            <div class="dashboard__permit-date-created">
+                <h4>Created</h4>
+                <span><?= date("d M Y", strtotime($permit['dateCreated'])) ?></span>
+            </div>
+            <div class="dashboard__permit-agent">
+                <h4>Recent Agent</h4>
+                <span class="dashboard__permit-agent--name">Lorem ipsum dolor sit amet</span>
+                <span class="dashboard__permit-agent--email">agent@opermitcare.com</span>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>

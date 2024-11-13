@@ -1,0 +1,77 @@
+<?php
+$permit = $this->permit;
+?>
+<div class="dashboard__permit-detail">
+    <div class="dashboard__permit-detail--label">Business Entity Type</div>
+    <div class="dashboard__permit-detail--value"><?= $permit['businessEntityType'] ?></div>
+</div>
+<?php switch ($permit['businessEntityType']) :
+    case 'Sole Proprietorship': ?>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">Last Name</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['lastName'] ?></div>
+        </div>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">First Name</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['firstName'] ?></div>
+        </div>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">Middle Name</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['middleName'] ?></div>
+        </div>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">Principal Address</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['principalAddress'] ?></div>
+        </div>
+    <?php break;
+    default: ?>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">Corporate Name</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['corporateName'] ?></div>
+        </div>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">Trade Name</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['Trade Name'] ?></div>
+        </div>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">Business Address</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['businessAddress'] ?></div>
+        </div>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">Nature Of Business</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['natureOfBusiness'] ?></div>
+        </div>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">Area (sqm)</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['area'] ?></div>
+        </div>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">Capital</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['capital'] ?></div>
+        </div>
+        <div class="dashboard__permit-detail">
+            <div class="dashboard__permit-detail--label">Monthly Rent</div>
+            <div class="dashboard__permit-detail--value"><?= $permit['monthlyRent'] ?></div>
+        </div>
+        <?php break;
+endswitch; ?>
+<div class="dashboard__permit-detail">
+    <div class="dashboard__permit-detail--label">Mayor's Fee</div>
+    <div class="dashboard__permit-detail--value"><?= $permit['mayorsFee'] ?></div>
+</div>
+<div class="dashboard__permit-detail">
+    <div class="dashboard__permit-detail--label">License Fee</div>
+    <div class="dashboard__permit-detail--value"><?= $permit['licenseFee'] ?></div>
+</div>
+<div class="dashboard__permit-detail">
+    <div class="dashboard__permit-detail--label">Garbage Fee</div>
+    <div class="dashboard__permit-detail--value"><?= $permit['garbageFee'] ?></div>
+</div>
+<div class="dashboard__permit-detail">
+    <div class="dashboard__permit-detail--label">Zoning Fee</div>
+    <div class="dashboard__permit-detail--value"><?= $permit['zoningFee'] ?></div>
+</div>
+<div class="dashboard__permit-detail">
+    <div class="dashboard__permit-detail--label">Processing Fee</div>
+    <div class="dashboard__permit-detail--value"><?= $permit['processingFee'] ?></div>
+</div>

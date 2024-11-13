@@ -430,12 +430,10 @@
         color: var(--dashboard-tab-gray-color);
         font-weight: 600;
         float: left;
-        @include get-responsive(width, 100%, 100px, 100px, 100px);
       }
 
       &--value{
         float: left;
-        @include get-responsive(width, 100%, calc(100% - 100px), calc(100% - 100px), calc(100% - 100px));
       }
     }
 
@@ -468,6 +466,30 @@
       h4 {
         color: var(--dashboard-tab-gray-color);
         font-weight: 600;
+      }
+    }
+  }
+
+  &__ticket {
+    &-detail {
+      &--label {
+        @include get-responsive(width, 100%, 100px, 100px, 100px);
+      }
+
+      &--value{
+        @include get-responsive(width, 100%, calc(100% - 100px), calc(100% - 100px), calc(100% - 100px));
+      }
+    }
+  }
+
+  &__permit {
+    &-detail {
+      &--label {
+        @include get-responsive(width, 100%, 170px, 170px, 170px);
+      }
+
+      &--value{
+        @include get-responsive(width, 100%, calc(100% - 170px), calc(100% - 170px), calc(100% - 170px));
       }
     }
   }
