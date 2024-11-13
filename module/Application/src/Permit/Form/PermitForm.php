@@ -28,21 +28,140 @@ class PermitForm extends Form implements InputFilterProviderInterface
              ->setAttribute('enctype', 'multipart/form-data');
         $this->add([
                        'type' => Hidden::class,
-                       'name' => 'replyId',
+                       'name' => 'permitId',
                    ]);
         $this->add([
                        'type' => Hidden::class,
-                       'name' => 'ticketId',
+                       'name' => 'residentId',
                    ]);
         $this->add([
                        'type' => Hidden::class,
-                       'name' => 'senderId',
+                       'name' => 'agentId',
                    ]);
         $this->add([
                        'type' => Text::class,
-                       'name' => 'message',
+                       'name' => 'businessEntityType',
                        'options' => [
-                           'label' => 'Message',
+                           'label' => 'Business Entity Type',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'lastName',
+                       'options' => [
+                           'label' => 'Last Name',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'firstName',
+                       'options' => [
+                           'label' => 'First Name',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'middleName',
+                       'options' => [
+                           'label' => 'Middle Name',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'principalAddress',
+                       'options' => [
+                           'label' => 'Principal Address',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'corporateName',
+                       'options' => [
+                           'label' => 'Corporate Name',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'tradeName',
+                       'options' => [
+                           'label' => 'Trade Name',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'businessAddress',
+                       'options' => [
+                           'label' => 'Business Address',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'natureOfBusiness',
+                       'options' => [
+                           'label' => 'Nature Of Business',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'area',
+                       'options' => [
+                           'label' => 'Area (sqm)',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'capital',
+                       'options' => [
+                           'label' => 'Capital',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'monthlyRent',
+                       'options' => [
+                           'label' => 'Monthly Rent',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'permitStatusId',
+                       'options' => [
+                           'label' => 'Permit Status Id',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'mayorsFee',
+                       'options' => [
+                           'label' => 'Mayor\'s Fee',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'licenseFee',
+                       'options' => [
+                           'label' => 'License Fee',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'garbageFee',
+                       'options' => [
+                           'label' => 'Garbage Fee',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'zoningFee',
+                       'options' => [
+                           'label' => 'Zoning Fee',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => Text::class,
+                       'name' => 'processingFee',
+                       'options' => [
+                           'label' => 'Processing Fee',
                        ],
                    ]);
         $this->add([
@@ -62,24 +181,10 @@ class PermitForm extends Form implements InputFilterProviderInterface
     {
         return [
             [
-                'name' => 'ticketId',
+                'name' => 'residentId',
                 'required' => true,
                 'filters' => [
                     ['name' => ToInt::class],
-                ],
-            ],
-            [
-                'name' => 'senderId',
-                'required' => true,
-                'filters' => [
-                    ['name' => ToInt::class],
-                ],
-            ],
-            [
-                'name' => 'message',
-                'required' => true,
-                'filters' => [
-                    ['name' => StripTags::class],
                 ],
             ],
         ];

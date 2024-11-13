@@ -2,6 +2,8 @@
 
 namespace Application\Portal\Service;
 
+use Application\Permit\Model\PermitTable;
+use Application\PermitStatus\Model\PermitStatusTable;
 use Application\ProblemType\Model\ProblemTypeTable;
 use Application\Reply\Model\ReplyTable;
 use Application\Ticket\Model\TicketTable;
@@ -33,6 +35,8 @@ class DashboardServiceFactory
         $ticketTable = $container->get(TicketTable::class);
         $ticketStatusTable = $container->get(TicketStatusTable::class);
         $replyTable = $container->get(ReplyTable::class);
+        $permitTable = $container->get(PermitTable::class);
+        $permitStatusTable = $container->get(PermitStatusTable::class);
 
         return new DashboardService(
             $config,
@@ -42,7 +46,9 @@ class DashboardServiceFactory
             $problemTypeTable,
             $ticketTable,
             $ticketStatusTable,
-            $replyTable
+            $replyTable,
+            $permitTable,
+            $permitStatusTable
         );
     }
 }

@@ -96,8 +96,9 @@ $panels = [
                         'title' => $panels['my-permit']['title'],
                     ]); ?>
                 </div>
-                <div class="dashboard__panel<?= $panels['my-permit']['class'] ?>" data-panel="apply-permit">
+                <div class="dashboard__panel<?= $panels['apply-permit']['class'] ?>" data-panel="apply-permit">
                     <?= $this->partial('partial/apply-permit', [
+                        'isError' => $isError,
                         'alertClass' => $panels['apply-permit']['alertClass'],
                         'alertMessage' => $panels['apply-permit']['alertMessage'],
                         'title' => $panels['apply-permit']['title'],

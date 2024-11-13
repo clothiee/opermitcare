@@ -7,6 +7,18 @@
         <a class="button">&times;</a>
     </div>
 <?php endif; ?>
+<?php if (!$this->isError && $this->alertMessage) : ?>
+    <div class="alert<?= $this->alertClass ?>">
+        <div>
+            <p>Thank you for submitting your application for a Special Permit. We are pleased to inform you that we
+                have received your application successfully.</p><br/>
+            <p>Your application is currently under review and will be verified and assessed by our team. We will notify
+                you as soon as there are updates on its status. Please allow some time for this process, as each application
+                is carefully evaluated to ensure compliance with all requirements.</p>
+        </div>
+        <a class="button">&times;</a>
+    </div>
+<?php endif; ?>
 <div class="dashboard__panel-header">
     <h1><?= $this->title ?></h1>
     <p>Put N/A if not applicable</p>

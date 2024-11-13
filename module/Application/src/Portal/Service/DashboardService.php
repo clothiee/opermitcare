@@ -2,6 +2,10 @@
 
 namespace Application\Portal\Service;
 
+use Application\Permit\Form\PermitForm;
+use Application\Permit\Model\Permit;
+use Application\Permit\Model\PermitTable;
+use Application\PermitStatus\Model\PermitStatusTable;
 use Application\ProblemType\Model\ProblemTypeTable;
 use Application\Reply\Form\ReplyForm;
 use Application\Reply\Model\Reply;
@@ -31,6 +35,8 @@ class DashboardService
     private $ticketTable;
     private $ticketStatusTable;
     private $replyTable;
+    private $permitTable;
+    private $permitStatusTable;
 
     /**
      * Dashboard Service constructor.
@@ -43,6 +49,8 @@ class DashboardService
      * @param TicketTable       $ticketTable
      * @param TicketStatusTable $ticketStatusTable
      * @param ReplyTable        $replyTable
+     * @param PermitTable       $permitTable
+     * @param PermitStatusTable $permitStatusTable
      */
     public function __construct(
         $config,
@@ -52,7 +60,9 @@ class DashboardService
         ProblemTypeTable $problemTypeTable,
         TicketTable $ticketTable,
         TicketStatusTable $ticketStatusTable,
-        ReplyTable $replyTable
+        ReplyTable $replyTable,
+        PermitTable $permitTable,
+        PermitStatusTable $permitStatusTable
     ) {
         $this->config = $config;
         $this->sessionService = $sessionService;
@@ -62,6 +72,8 @@ class DashboardService
         $this->ticketTable = $ticketTable;
         $this->ticketStatusTable = $ticketStatusTable;
         $this->replyTable = $replyTable;
+        $this->permitTable = $permitTable;
+        $this->permitStatusTable = $permitStatusTable;
     }
 
     /**
@@ -77,6 +89,7 @@ class DashboardService
             case 'Resident':
                 $viewOptions = [
                     'problemType' => $this->getActiveProblemTypes(),
+                    'permitStatus' => $this->getActivePermitStatuses(),
                     'tickets' => $this->getTickets(),
                     'activeTab' => 'overview',
                 ];
@@ -160,6 +173,21 @@ class DashboardService
         return $collection;
     }
 
+    private function getActivePermitStatuses()
+    {
+        $permitStatuses = $this->permitStatusTable->getByColumns(['active' => 1]);
+        $collection = [];
+
+        foreach ($permitStatuses as $permitStatus) {
+            $collection[] = [
+                'id' => $permitStatus->permitStatusId,
+                'name' => $permitStatus->permitStatusName,
+            ];
+        }
+
+        return $collection;
+    }
+
     public function getTickets()
     {
         $sessionDetails = $this->sessionService->get();
@@ -209,41 +237,6 @@ class DashboardService
         krsort($collection);
 
         return $collection;
-    }
-
-    public function createTicket($post)
-    {
-        $sessionDetails = $this->sessionService->get();
-
-        $post['residentId'] = $sessionDetails['user']['userId'];
-        $post['ticketStatusId'] = 2;
-        $post['dateCreated'] = date('Y-m-d H:i:s');
-
-        $form = new TicketForm();
-        $form->setData($post);
-
-        if ($form->isValid()) {
-            try {
-                $ticket = new Ticket();
-                $ticket->exchangeArray($post);
-                $this->ticketTable->save($ticket);
-            } catch (\Exception $exception) {
-                return [
-                    'code' => self::INVALID_CODE,
-                    'message' => $exception->getMessage(),
-                ];
-            }
-
-            return [
-                'code' => self::SUCCESS_CODE,
-                'message' => 'Your request was successfully submitted!',
-            ];
-        }
-
-        return [
-            'code' => self::INVALID_CODE,
-            'message' => $form->getMessages(),
-        ];
     }
 
     public function updatePassword($post)
@@ -328,6 +321,41 @@ class DashboardService
         return $errors;
     }
 
+    public function createTicket($post)
+    {
+        $sessionDetails = $this->sessionService->get();
+
+        $post['residentId'] = $sessionDetails['user']['userId'];
+        $post['ticketStatusId'] = 2;
+        $post['dateCreated'] = date('Y-m-d H:i:s');
+
+        $form = new TicketForm();
+        $form->setData($post);
+
+        if ($form->isValid()) {
+            try {
+                $ticket = new Ticket();
+                $ticket->exchangeArray($post);
+                $this->ticketTable->save($ticket);
+            } catch (\Exception $exception) {
+                return [
+                    'code' => self::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+
+            return [
+                'code' => self::SUCCESS_CODE,
+                'message' => 'Your request was successfully submitted!',
+            ];
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => $form->getMessages(),
+        ];
+    }
+
     public function replyTicket($post)
     {
         $sessionDetails = $this->sessionService->get();
@@ -353,6 +381,41 @@ class DashboardService
             return [
                 'code' => self::SUCCESS_CODE,
                 'message' => 'Message sent successfully!',
+            ];
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => $form->getMessages(),
+        ];
+    }
+
+    public function applyPermit($post)
+    {
+        $sessionDetails = $this->sessionService->get();
+
+        $post['residentId'] = $sessionDetails['user']['userId'];
+        $post['permitStatusId'] = 1;
+        $post['dateCreated'] = date('Y-m-d H:i:s');
+
+        $form = new PermitForm();
+        $form->setData($post);
+
+        if ($form->isValid()) {
+            try {
+                $permit = new Permit();
+                $permit->exchangeArray($post);
+                $this->permitTable->save($permit);
+            } catch (\Exception $exception) {
+                return [
+                    'code' => self::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+
+            return [
+                'code' => self::SUCCESS_CODE,
+                'message' => 'Your request was successfully submitted!',
             ];
         }
 
