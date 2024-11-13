@@ -118,6 +118,10 @@ export class LayoutSettingsModule {
                             : `<div class="dashboard__reply-error">${data.response.message}</div>`;
                         let replyHtml = `<div class="dashboard__reply dashboard__reply--right">${bubble}</div>`;
 
+                        if (data.code === 200) {
+                            panel.find('.dashboard__reply-empty').remove();
+                        }
+
                         $(replyHtml).appendTo(replyCollection);
                     },
                     error: function (jqXHR, textStatus, error) {
