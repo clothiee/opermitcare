@@ -22,7 +22,7 @@ $countPermits = count($permits);
             </div>
             <div class="dashboard__divider"></div>
             <div class="dashboard__permit-details">
-                <?= $this->partial('partial/permit-item', [
+                <?= $this->partial('partial/permit-details', [
                     'permit' => $permit,
                     'permitStatus' => $permitStatus,
                 ]); ?>

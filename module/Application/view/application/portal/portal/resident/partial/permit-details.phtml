@@ -1,6 +1,17 @@
 <?php
 $permit = $this->permit;
 ?>
+<h1>
+    <svg viewBox="5.5 3 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M15.5 5H10.5C8.29086 5 6.5 6.79086 6.5 9V15C6.5 17.2091 8.29086 19 10.5 19H15.5C17.7091 19 19.5 17.2091 19.5 15V9C19.5 6.79086 17.7091 5 15.5 5Z"
+              stroke="#000000" stroke-width="1" stroke-linecap="round"
+              stroke-linejoin="round"></path>
+        <path d="M16 9.75C16.4142 9.75 16.75 9.41421 16.75 9C16.75 8.58579 16.4142 8.25 16 8.25V9.75ZM10 8.25C9.58579 8.25 9.25 8.58579 9.25 9C9.25 9.41421 9.58579 9.75 10 9.75V8.25ZM16 12.75C16.4142 12.75 16.75 12.4142 16.75 12C16.75 11.5858 16.4142 11.25 16 11.25V12.75ZM10 11.25C9.58579 11.25 9.25 11.5858 9.25 12C9.25 12.4142 9.58579 12.75 10 12.75V11.25ZM13 15.75C13.4142 15.75 13.75 15.4142 13.75 15C13.75 14.5858 13.4142 14.25 13 14.25V15.75ZM10 14.25C9.58579 14.25 9.25 14.5858 9.25 15C9.25 15.4142 9.58579 15.75 10 15.75V14.25ZM16 8.25H10V9.75H16V8.25ZM16 11.25H10V12.75H16V11.25ZM13 14.25H10V15.75H13V14.25Z"
+              fill="#000000"></path>
+    </svg>
+    <span><?php strtoupper($permit['tradeName']) ?></span>
+</h1>
 <div class="dashboard__permit-detail">
     <div class="dashboard__permit-detail--label">Business Entity Type</div>
     <div class="dashboard__permit-detail--value"><?= $permit['businessEntityType'] ?></div>
@@ -30,10 +41,6 @@ $permit = $this->permit;
             <div class="dashboard__permit-detail--value"><?= $permit['corporateName'] ?></div>
         </div>
         <div class="dashboard__permit-detail">
-            <div class="dashboard__permit-detail--label">Trade Name</div>
-            <div class="dashboard__permit-detail--value"><?= $permit['Trade Name'] ?></div>
-        </div>
-        <div class="dashboard__permit-detail">
             <div class="dashboard__permit-detail--label">Business Address</div>
             <div class="dashboard__permit-detail--value"><?= $permit['businessAddress'] ?></div>
         </div>
@@ -41,20 +48,24 @@ $permit = $this->permit;
             <div class="dashboard__permit-detail--label">Nature Of Business</div>
             <div class="dashboard__permit-detail--value"><?= $permit['natureOfBusiness'] ?></div>
         </div>
-        <div class="dashboard__permit-detail">
-            <div class="dashboard__permit-detail--label">Area (sqm)</div>
-            <div class="dashboard__permit-detail--value"><?= $permit['area'] ?></div>
-        </div>
-        <div class="dashboard__permit-detail">
-            <div class="dashboard__permit-detail--label">Capital</div>
-            <div class="dashboard__permit-detail--value"><?= $permit['capital'] ?></div>
-        </div>
-        <div class="dashboard__permit-detail">
-            <div class="dashboard__permit-detail--label">Monthly Rent</div>
-            <div class="dashboard__permit-detail--value"><?= $permit['monthlyRent'] ?></div>
-        </div>
         <?php break;
 endswitch; ?>
+<div class="dashboard__permit-detail">
+    <div class="dashboard__permit-detail--label">Trade Name</div>
+    <div class="dashboard__permit-detail--value"><?= $permit['tradeName'] ?></div>
+</div>
+<div class="dashboard__permit-detail">
+    <div class="dashboard__permit-detail--label">Area (sqm)</div>
+    <div class="dashboard__permit-detail--value"><?= $permit['area'] ?></div>
+</div>
+<div class="dashboard__permit-detail">
+    <div class="dashboard__permit-detail--label">Capital</div>
+    <div class="dashboard__permit-detail--value"><?= $permit['capital'] ?></div>
+</div>
+<div class="dashboard__permit-detail">
+    <div class="dashboard__permit-detail--label">Monthly Rent</div>
+    <div class="dashboard__permit-detail--value"><?= $permit['monthlyRent'] ?></div>
+</div>
 <div class="dashboard__permit-detail">
     <div class="dashboard__permit-detail--label">Mayor's Fee</div>
     <div class="dashboard__permit-detail--value"><?= $permit['mayorsFee'] ?></div>

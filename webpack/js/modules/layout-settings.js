@@ -82,7 +82,7 @@ export class LayoutSettingsModule {
                 parent.find('.dashboard__input-field--text span').text($(this).text());
                 parent.find('[name="'+ inputName+ '"]').val($(this).text());
                 form.find('.dashboard__input-row--active').removeClass('dashboard__input-row--active');
-                form.find('.dashboard__input-row[data-type="' + $(this).data('type-id') + '"]')
+                form.find('.dashboard__input-row[data-type="default"], .dashboard__input-row[data-type="' + $(this).data('type-id') + '"]')
                     .addClass('dashboard__input-row--active');
             });
 
