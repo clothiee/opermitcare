@@ -2,6 +2,7 @@
 
 namespace Application\Ticket\Model;
 
+use Laminas\Db\Sql\Select;
 use RuntimeException;
 use Laminas\Db\TableGateway\TableGatewayInterface;
 
@@ -17,25 +18,15 @@ class TicketTable
     public function fetchAll()
     {
         $rowSet = $this->tableGateway->select();
-        $data = [];
 
-        foreach ($rowSet as $row) {
-            $data[] = $row;
-        }
-
-        return $data;
+        return $this->parseRow($rowSet);
     }
 
     public function getByColumns($columns)
     {
         $rowSet = $this->tableGateway->select($columns);
-        $data = [];
 
-        foreach ($rowSet as $row) {
-            $data[] = $row;
-        }
-
-        return $data;
+        return $this->parseRow($rowSet);
     }
 
     public function save(Ticket $ticket)
@@ -72,5 +63,30 @@ class TicketTable
     public function delete($ticketId)
     {
         $this->tableGateway->delete(['ticketId' => (int) $ticketId]);
+    }
+
+    public function getRecentByUserId($userId)
+    {
+        $table = $this->tableGateway->getTable();
+        $select = new Select($table);
+        $select->join('reply', 'reply.ticketId = ' . $table . '.ticketId', ['*'], $select::JOIN_LEFT)
+               ->where([
+                           'reply.senderId' => $userId,
+                       ])
+               ->group($table . '.ticketId');
+        $rowSet = $this->tableGateway->selectWith($select);
+
+        return $this->parseRow($rowSet);
+    }
+
+    private function parseRow($rowSet)
+    {
+        $data = [];
+
+        foreach ($rowSet as $row) {
+            $data[] = $row;
+        }
+
+        return $data;
     }
 }

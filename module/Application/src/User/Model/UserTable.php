@@ -17,25 +17,15 @@ class UserTable
     public function fetchAll()
     {
         $rowSet = $this->tableGateway->select();
-        $data = [];
 
-        foreach ($rowSet as $row) {
-            $data[] = $row;
-        }
-
-        return $data;
+        return $this->parseRow($rowSet);
     }
 
     public function getByColumns($columns)
     {
         $rowSet = $this->tableGateway->select($columns);
-        $data = [];
 
-        foreach ($rowSet as $row) {
-            $data[] = $row;
-        }
-
-        return $data;
+        return $this->parseRow($rowSet);
     }
 
     public function save(User $user)
@@ -73,5 +63,16 @@ class UserTable
     public function delete($userId)
     {
         $this->tableGateway->delete(['userId' => (int) $userId]);
+    }
+
+    private function parseRow($rowSet)
+    {
+        $data = [];
+
+        foreach ($rowSet as $row) {
+            $data[] = $row;
+        }
+
+        return $data;
     }
 }

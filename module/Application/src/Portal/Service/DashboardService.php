@@ -95,6 +95,17 @@ class DashboardService
                     'activeTab' => 'overview',
                 ];
                 break;
+            case 'Agent':
+                $viewOptions = [
+                    'problemType' => $this->getActiveProblemTypes(),
+                    'permitStatus' => $this->getActivePermitStatuses(),
+                    'tickets' => $this->getTickets(),
+                    'permits' => $this->getPermits(),
+                    'recentTickets' => $this->getRecentTickets(),
+                    'recentPermits' => $this->getRecentPermits(),
+                    'activeTab' => 'overview',
+                ];
+                break;
             default:
                 $viewOptions = [
                     'pages' => $this->getDashboardPages(),
@@ -112,78 +123,46 @@ class DashboardService
     {
         $sessionDetails = $this->sessionService->get();
         $permitStatuses = $this->permitStatusTable->fetchAll();
-        $statusCollection = [];
+        $permits = $sessionDetails['userType']['userTypeId'] === 4
+            ? $this->permitTable->getByColumns([
+                                                   'residentId' => $sessionDetails['user']['userId'],
+                                               ])
+            : $this->permitTable->fetchAll();
 
-        foreach ($permitStatuses as $permitStatus) {
-            $statusCollection[$permitStatus->permitStatusId] = $permitStatus->permitStatusName;
-        }
-
-        $permits = $this->permitTable->getByColumns([
-                                                        'residentId' => $sessionDetails['user']['userId'],
-                                                    ]);
-        $collection = [];
-
-        foreach ($permits as $permit) {
-            $data = (array) $permit;
-            $data['permitStatusName'] = $statusCollection[$data['permitStatusId']];
-            $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['permitId']);
-            $collection[$newId] = $data;
-        }
-
-        krsort($collection);
-
-        return $collection;
+        return $this->parsePermits($permits, $permitStatuses);
     }
 
     public function getTickets()
     {
         $sessionDetails = $this->sessionService->get();
-        $ticketStatus = $this->ticketStatusTable->fetchAll();
-        $statusCollection = [];
+        $ticketStatuses = $this->ticketStatusTable->fetchAll();
+        $tickets = $sessionDetails['userType']['userTypeId'] === 4
+            ? $this->ticketTable->getByColumns([
+                                                   'residentId' => $sessionDetails['user']['userId'],
+                                               ])
+            : $this->ticketTable->fetchAll();
 
-        foreach ($ticketStatus as $ticketStatus) {
-            $statusCollection[$ticketStatus->ticketStatusId] = $ticketStatus->ticketStatusName;
-        }
+        return $this->parseTickets($tickets, $ticketStatuses);
+    }
 
-        $tickets = $this->ticketTable->getByColumns([
-                                                        'residentId' => $sessionDetails['user']['userId'],
+    public function getRecentPermits()
+    {
+        $sessionDetails = $this->sessionService->get();
+        $permitStatuses = $this->permitStatusTable->fetchAll();
+        $tickets = $this->permitTable->getByColumns([
+                                                        'agentId' => $sessionDetails['user']['userId'],
                                                     ]);
-        $collection = [];
 
-        foreach ($tickets as $ticket) {
-            $data = (array) $ticket;
-            $data['ticketStatusName'] = $statusCollection[$data['ticketStatusId']];
-            $replies = $this->replyTable->getByColumns([
-                                                           'ticketId' => $data['ticketId'],
-                                                       ]);
-            $replyCollection = [];
+        return $this->parseTickets($tickets, $permitStatuses);
+    }
 
-            foreach ($replies as $replyKey => $replyItem) {
-                $reply = (array) $replyItem;
-                $sender = (array) $this->userTable->getByColumns([
-                                                                     'userId' => $reply['senderId'],
-                                                                 ])[0];
-                $replyCollection[$replyKey] = $reply;
-                $replyCollection[$replyKey]['sender'] = [
-                    'userId' => $sender['userId'],
-                    'userName' => $sender['userName'],
-                    'firstName' => $sender['firstName'],
-                    'lastName' => $sender['lastName'],
-                    'email' => $sender['email'],
-                    'userTypeId' => $sender['userTypeId'],
-                ];
-                $replyCollection[$replyKey]['userTypeId'] = $this->userTypeTable->getByUserTypeId($sender['userTypeId']);
-            }
+    public function getRecentTickets()
+    {
+        $sessionDetails = $this->sessionService->get();
+        $ticketStatuses = $this->ticketStatusTable->fetchAll();
+        $tickets = $this->ticketTable->getRecentByUserId($sessionDetails['user']['userId']);
 
-            $data['replies'] = $replyCollection;
-
-            $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['ticketId']);
-            $collection[$newId] = $data;
-        }
-
-        krsort($collection);
-
-        return $collection;
+        return $this->parseTickets($tickets, $ticketStatuses);
     }
 
     public function applyPermit($post)
@@ -271,6 +250,50 @@ class DashboardService
                 $reply = new Reply();
                 $reply->exchangeArray($post);
                 $this->replyTable->save($reply);
+
+                $ticket = (array) $this->ticketTable->getByColumns(['ticketId' => $post['ticketId']])[0];
+
+                $ticket['ticketStatusId'] = $post['ticketStatusId'];
+                $updateTicket = new Ticket();
+                $updateTicket->exchangeArray($ticket);
+                $this->ticketTable->save($updateTicket);
+            } catch (\Exception $exception) {
+                return [
+                    'code' => self::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+
+            $ticketStatus = (array) $this->ticketStatusTable->getByColumns([
+                                                                         'ticketStatusId' => $post['ticketStatusId'],
+                                                                     ])[0];
+
+            return [
+                'code' => self::SUCCESS_CODE,
+                'message' => 'Message sent successfully!',
+                'ticketStatus' => $ticketStatus,
+            ];
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => $form->getMessages(),
+        ];
+    }
+
+    public function updateTicketStatus($ticketId, $ticketStatusId)
+    {
+        $ticket = (array) $this->ticketTable->getByColumns(['ticketId' => $ticketId])[0];
+        $ticket['ticketStatusId'] = $ticketStatusId;
+
+        $form = new TicketForm();
+        $form->setData($ticket);
+
+        if ($form->isValid()) {
+            try {
+                $updateTicket = new Ticket();
+                $updateTicket->exchangeArray($ticket);
+                $this->ticketTable->save($updateTicket);
             } catch (\Exception $exception) {
                 return [
                     'code' => self::INVALID_CODE,
@@ -280,7 +303,7 @@ class DashboardService
 
             return [
                 'code' => self::SUCCESS_CODE,
-                'message' => 'Message sent successfully!',
+                'message' => 'Updated ticket successfully!',
             ];
         }
 
@@ -418,6 +441,74 @@ class DashboardService
                 'action' => 'report',
             ],
         ];
+    }
+
+    private function parseTickets($tickets, $ticketStatuses)
+    {
+        $statusCollection = [];
+
+        foreach ($ticketStatuses as $ticketStatus) {
+            $statusCollection[$ticketStatus->ticketStatusId] = $ticketStatus->ticketStatusName;
+        }
+
+        $collection = [];
+
+        foreach ($tickets as $ticket) {
+            $data = (array) $ticket;
+            $data['ticketStatusName'] = $statusCollection[$data['ticketStatusId']];
+            $replies = $this->replyTable->getByColumns([
+                                                           'ticketId' => $data['ticketId'],
+                                                       ]);
+            $replyCollection = [];
+
+            foreach ($replies as $replyKey => $replyItem) {
+                $reply = (array) $replyItem;
+                $sender = (array) $this->userTable->getByColumns([
+                                                                     'userId' => $reply['senderId'],
+                                                                 ])[0];
+                $replyCollection[$replyKey] = $reply;
+                $replyCollection[$replyKey]['sender'] = [
+                    'userId' => $sender['userId'],
+                    'userName' => $sender['userName'],
+                    'firstName' => $sender['firstName'],
+                    'lastName' => $sender['lastName'],
+                    'email' => $sender['email'],
+                    'userTypeId' => $sender['userTypeId'],
+                ];
+                $replyCollection[$replyKey]['userTypeId'] = $this->userTypeTable->getByUserTypeId($sender['userTypeId']);
+            }
+
+            $data['replies'] = $replyCollection;
+
+            $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['ticketId']);
+            $collection[$newId] = $data;
+        }
+
+        krsort($collection);
+
+        return $collection;
+    }
+
+    private function parsePermits($permits, $permitStatuses)
+    {
+        $statusCollection = [];
+
+        foreach ($permitStatuses as $permitStatus) {
+            $statusCollection[$permitStatus->permitStatusId] = $permitStatus->permitStatusName;
+        }
+
+        $collection = [];
+
+        foreach ($permits as $permit) {
+            $data = (array) $permit;
+            $data['permitStatusName'] = $statusCollection[$data['permitStatusId']];
+            $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['permitId']);
+            $collection[$newId] = $data;
+        }
+
+        krsort($collection);
+
+        return $collection;
     }
 
     private function validatePassword($password, $currentPassword, $newPassword, $confirmPassword)

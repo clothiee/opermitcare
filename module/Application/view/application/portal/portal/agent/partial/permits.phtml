@@ -1,0 +1,27 @@
+<?php
+$permits = $this->permits ?: [];
+$countPermits = count($permits);
+?>
+    <div class="dashboard__panel-header">
+        <h1><?= $this->title; ?></h1>
+        <span><?= $countPermits ?> application (s) found.</span>
+    </div>
+<?php if ($countPermits) : ?>
+    <div class="dashboard__panel-collection">
+        <?php foreach ($permits as $permitNo => $permit) : ?>
+            <div class="dashboard__permit">
+                <div class="dashboard__permit-status dashboard__permit-status--<?= strtolower($permit['permitStatusName']) ?>">
+                    <?= $permit['permitStatusName'] ?>
+                </div>
+                <div class="dashboard__permit-number">Application no. <?= $permitNo ?></div>
+                <div class="dashboard__divider"></div>
+                <div class="dashboard__permit-date"><?= date("d M Y", strtotime($permit['dateCreated'])) ?></div>
+                <div class="dashboard__permit-view js-see-panel" data-panel="permit-<?= $permit['permitId'] ?>">View</div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php else : ?>
+    <?= $this->partial('partial/no-data', [
+        'panel' => 'apply-permit',
+    ]); ?>
+<?php endif; ?>

@@ -1,0 +1,63 @@
+<?php
+$tickets = $this->tickets ?: [];
+$permits = $this->permits ?: [];
+$countTickets = count($tickets);
+$countPermits = count($permits);
+$countTicket = 0;
+$countPermit = 0;
+?>
+    <div class="dashboard__panel-header">
+        <h1>Recent Ticket (s)</h1>
+        <span class="js-see-panel" data-panel="my-ticket">See all (<?= $countTickets ?>)</span>
+    </div>
+<?php if ($countTickets) : ?>
+    <div class="dashboard__panel-collection">
+        <?php foreach ($tickets as $ticketNo => $ticket) :
+            $countTicket++;
+            if ($countTicket > 6) {
+                continue;
+            } ?>
+            <div class="dashboard__ticket" data-ticket="ticket-<?= $ticket['ticketId'] ?>">
+                <div class="dashboard__ticket-status dashboard__ticket-status--<?= strtolower($ticket['ticketStatusName']) ?>">
+                    <?= $ticket['ticketStatusName'] ?>
+                </div>
+                <div class="dashboard__ticket-number">Ticket no. <?= $ticketNo ?></div>
+                <div class="dashboard__divider"></div>
+                <div class="dashboard__ticket-date"><?= date("d M Y", strtotime($ticket['dateCreated'])) ?></div>
+                <div class="dashboard__ticket-view js-see-panel" data-panel="ticket-<?= $ticket['ticketId'] ?>">View</div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php else : ?>
+    <?= $this->partial('partial/no-data', [
+        'panel' => 'create-ticket',
+    ]); ?>
+<?php endif; ?>
+    <div class="dashboard__divider"></div>
+    <div class="dashboard__panel-header">
+        <h1>Recent Special Permit (s)</h1>
+        <span class="js-see-panel" data-panel="my-permit">See all (<?= count($permits) ?>)</span>
+    </div>
+<?php if ($countPermits) : ?>
+    <div class="dashboard__panel-collection">
+        <?php foreach ($permits as $permitNo => $permit) :
+            $countPermit++;
+            if ($countPermit > 6) {
+                continue;
+            } ?>
+            <div class="dashboard__permit">
+                <div class="dashboard__permit-status dashboard__permit-status--<?= strtolower($permit['permitStatusName']) ?>">
+                    <?= $permit['permitStatusName'] ?>
+                </div>
+                <div class="dashboard__permit-number">Ticket no. <?= $permitNo ?></div>
+                <div class="dashboard__divider"></div>
+                <div class="dashboard__permit-date"><?= date("d M Y", strtotime($permit['dateCreated'])) ?></div>
+                <div class="dashboard__permit-view js-see-panel" data-panel="permit-<?= $permit['permitId'] ?>">View</div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php else : ?>
+    <?= $this->partial('partial/no-data', [
+        'panel' => 'apply-permit',
+    ]); ?>
+<?php endif; ?>

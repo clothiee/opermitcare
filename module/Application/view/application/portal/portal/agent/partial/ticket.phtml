@@ -74,6 +74,10 @@ $countTickets = count($tickets);
                         </div>
                     <?php endif; ?>
                 </div>
+                <div class="dashboard__divider"></div>
+                <div class="dashboard__actions">
+                    <input class="dashboard__button dashboard__button--primary js-ticket-action" type="button" value="Close"/>
+                </div>
             </div>
             <div class="dashboard__tab-content" data-tab="ticket-replies">
                 <?php if ($countReplies) :

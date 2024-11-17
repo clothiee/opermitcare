@@ -17,25 +17,15 @@ class ProblemTypeTable
     public function fetchAll()
     {
         $rowSet = $this->tableGateway->select();
-        $data = [];
 
-        foreach ($rowSet as $row) {
-            $data[] = $row;
-        }
-
-        return $data;
+        return $this->parseRow($rowSet);
     }
 
     public function getByColumns($columns)
     {
         $rowSet = $this->tableGateway->select($columns);
-        $data = [];
 
-        foreach ($rowSet as $row) {
-            $data[] = $row;
-        }
-
-        return $data;
+        return $this->parseRow($rowSet);
     }
 
     public function save(ProblemType $problemType)
@@ -67,5 +57,16 @@ class ProblemTypeTable
     public function delete($problemTypeId)
     {
         $this->tableGateway->delete(['problemTypeId' => (int) $problemTypeId]);
+    }
+
+    private function parseRow($rowSet)
+    {
+        $data = [];
+
+        foreach ($rowSet as $row) {
+            $data[] = $row;
+        }
+
+        return $data;
     }
 }

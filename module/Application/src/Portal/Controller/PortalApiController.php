@@ -66,6 +66,8 @@ class PortalApiController extends AbstractActionController
 
             return $this->buildResponse($process['code'], [
                 'message' => $this->getResponseMessage($process['message']),
+                'ticketStatusId' => $process['ticketStatus']['ticketStatusId'],
+                'ticketStatusName' => $process['ticketStatus']['ticketStatusName'],
             ]);
         }
 
