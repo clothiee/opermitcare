@@ -18,19 +18,11 @@ $passwordValidation = [
         'message' => 'At least one lower case Letter (a-z)',
     ],
 ];
-$responseData = [];
 
 foreach ($this->responseData as $responseKey => $responseValue) {
     $passwordValidation[$responseValue]['class'] = ' error';
 };
 ?>
-<div class="dashboard__tab-header">
-    <h1><?= $panels['my-profile']['title']; ?></h1>
-</div>
-
-<div class="dashboard__panel-breadcrumbs">
-    <span class="js-see-panel" data-panel="my-ticket">My Ticket (s)</span>
-</div>
 <?php if ($this->alertMessage) : ?>
     <div class="alert<?= $this->alertClass ?>">
         <span><?= $this->alertMessage ?></span>
@@ -82,8 +74,8 @@ foreach ($this->responseData as $responseKey => $responseValue) {
                 <ul>
                     <?php foreach ($passwordValidation as $validation) :
                         $validationClass = empty($this->responseData) ? '' : ' valid';
-                        $validationClass = $validation['class'] ? $validation['class'] : $validationClass?>
-                        <li class="<?= $validationClass ?>"><?= $checkMark; ?><span><?= $validation['message']; ?></span>
+                        $liClass = empty($validation['class']) ? $validationClass : $validation['class']; ?>
+                        <li class="<?= $liClass ?>"><?= $checkMark; ?><span><?= $validation['message']; ?></span>
                     <?php endforeach; ?>
                 </ul>
             </div>

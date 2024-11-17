@@ -33,8 +33,14 @@ $countPermits = count($permits);
             </div>
             <div class="dashboard__permit-agent">
                 <h4>Recent Agent</h4>
-                <span class="dashboard__permit-agent--name">Lorem ipsum dolor sit amet</span>
-                <span class="dashboard__permit-agent--email">agent@opermitcare.com</span>
+                <?php if (!empty($permit['agentId'])) : ?>
+                    <span class="dashboard__permit-agent--name"><?= $permit['agentId']['firstName'] . ' ' . $permit['agentId']['lastName']; ?></span>
+                    <span class="dashboard__permit-agent--email"><?= $permit['agentId']['email']; ?></span>
+                <?php else: ?>
+                    <div class="dashboard__permit-agent">
+                        <span class="dashboard__permit-agent--name">None</span>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     <?php endforeach; ?>

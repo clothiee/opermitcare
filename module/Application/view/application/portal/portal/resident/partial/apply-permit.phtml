@@ -1,3 +1,56 @@
+<?php
+$responseData = $this->responseData;
+$formData = [
+    'businessEntityType' => !empty($responseData['businessEntityType']) ? $responseData['businessEntityType'] : '',
+    'lastName' => !empty($responseData['lastName']) ? $responseData['lastName'] : '',
+    'firstName' => !empty($responseData['firstName']) ? $responseData['firstName'] : '',
+    'middleName' => !empty($responseData['middleName']) ? $responseData['middleName'] : '',
+    'lessorName' => !empty($responseData['lessorName']) ? $responseData['lessorName'] : '',
+    'corporateName' => !empty($responseData['corporateName']) ? $responseData['corporateName'] : '',
+    'tradeName' => !empty($responseData['tradeName']) ? $responseData['tradeName'] : '',
+    'natureOfBusiness' => !empty($responseData['natureOfBusiness']) ? $responseData['natureOfBusiness'] : '',
+    'area' => !empty($responseData['area']) ? $responseData['area'] : '1',
+    'capital' => !empty($responseData['capital']) ? $responseData['capital'] : '100',
+    'monthlyRent' => !empty($responseData['monthlyRent']) ? $responseData['monthlyRent'] : '100',
+    'block' => !empty($responseData['block']) ? $responseData['block'] : '',
+    'lot' => !empty($responseData['lot']) ? $responseData['lot'] : '',
+    'house' => !empty($responseData['house']) ? $responseData['house'] : '',
+    'street' => !empty($responseData['street']) ? $responseData['street'] : '',
+    'barangay' => !empty($responseData['barangay']) ? $responseData['barangay'] : '',
+];
+$barangay = [
+    'Pilar Village',
+    'Almanza Dos',
+    'Almanza Uno',
+    'Talon Singko',
+    'Talon Kuatro',
+    'Talon Tres',
+    'Talon Dos',
+    'Talon Uno',
+    'CAA BF international',
+    'Pamplona Tres',
+    'Pamplona Dos',
+    'Pamplona Uno',
+    'Pulanglupa Dos',
+    'Pulanglupa Uno',
+    'Manuyo Dos',
+    'Manuyo Uno',
+    'Zapote',
+    'Elias Aldana',
+    'Daniel Fajardo',
+    'Ilaya',
+];
+$businessType = [
+    'Sole Proprietorship' => 1,
+    'Corporation' => 2,
+    'Partnership' => 2,
+    'One-Person Corporation' => 2,
+];
+$businessTypeId = strlen($formData['businessEntityType']) ? $businessType[$formData['businessEntityType']] : '';
+$showCategoryOne = $businessTypeId == 1 ? ' dashboard__input-row--active' : '';
+$showCategoryTwo = $businessTypeId == 2 ? ' dashboard__input-row--active' : '';
+$showCategoryDefault = $showCategoryOne || $showCategoryTwo ? ' dashboard__input-row--active' : '';
+?>
 <div class="dashboard__panel-breadcrumbs">
     <span class="js-see-panel" data-panel="my-permit">My Permit (s)</span>
 </div>
@@ -21,75 +74,148 @@
 <?php endif; ?>
 <div class="dashboard__panel-header">
     <h1><?= $this->title ?></h1>
-    <p>Put N/A if not applicable</p>
 </div>
 <form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" method="post">
     <div class="dashboard__form">
         <div class="dashboard__input-group">
             <label class="dashboard__dropdown">
                 <div class="dashboard__dropdown-button">
-                    <div class="dashboard__input-field dashboard__input-field--text"><span></span></div>
+                    <div class="dashboard__input-field dashboard__input-field--text"><span><?= $formData['businessEntityType']; ?></span></div>
                 </div>
                 <input class="dashboard__dropdown-input" type="checkbox"/>
                 <ul class="dashboard__dropdown-menu js-dropdown-type" data-name="businessEntityType">
-                    <li data-type-id="1">Sole Proprietorship</li>
-                    <li data-type-id="2">Corporation</li>
-                    <li data-type-id="2">Partnership</li>
-                    <li data-type-id="2">One-Person Corporation</li>
+                    <?php foreach ($businessType as $businessTypeName => $businessTypeId) : ?>
+                        <li data-type-id="<?= $businessTypeId ?>"><?= $businessTypeName ?></li>
+                    <?php endforeach; ?>
                 </ul>
             </label>
-            <input class="dashboard__input-field" type="hidden" name="businessEntityType"/>
+            <input class="dashboard__input-field"
+                   type="hidden"
+                   name="businessEntityType"
+                   value="<?= $formData['businessEntityType']; ?>"/>
             <label class="dashboard__input-label">Type of Business Entity</label>
         </div>
-        <div class="dashboard__input-row" data-type="default">
-            <div class="dashboard__input-group">
-                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="tradeName"/>
-                <label class="dashboard__input-label">Trade Name</label>
-            </div>
-        </div>
-        <div class="dashboard__input-row" data-type="1">
+        <div class="dashboard__input-row<?= $showCategoryOne ?>" data-type="1">
             <div class="dashboard__input-group dashboard__input-group--last-name">
-                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="lastName"/>
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="lastName"
+                       value="<?= $formData['lastName']; ?>"/>
                 <label class="dashboard__input-label">Last Name</label>
             </div>
             <div class="dashboard__input-group dashboard__input-group--first-name">
-                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="firstName"/>
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="firstName"
+                       value="<?= $formData['firstName']; ?>"/>
                 <label class="dashboard__input-label">First Name</label>
             </div>
             <div class="dashboard__input-group dashboard__input-group--middle-name">
-                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="MiddleName"/>
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="middleName"
+                       value="<?= $formData['middleName']; ?>"/>
                 <label class="dashboard__input-label">Middle Name</label>
             </div>
-            <div class="dashboard__input-group">
-                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="principalAddress"/>
-                <label class="dashboard__input-label">Principal Address</label>
-            </div>
         </div>
-        <div class="dashboard__input-row" data-type="2">
+        <div class="dashboard__input-row<?= $showCategoryTwo ?>" data-type="2">
             <div class="dashboard__input-group">
-                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="corporateName"/>
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="corporateName"
+                       value="<?= $formData['corporateName']; ?>"/>
                 <label class="dashboard__input-label">Corporate Name</label>
             </div>
-            <div class="dashboard__input-group">
-                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="businessAddress"/>
-                <label class="dashboard__input-label">Business Address</label>
+        </div>
+        <div class="dashboard__input-row<?= $showCategoryDefault ?>" data-type="default">
+            <div class="dashboard__input-group dashboard__input-group--block">
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="block"
+                       value="<?= $formData['block']; ?>"/>
+                <label class="dashboard__input-label">Block</label>
+            </div>
+            <div class="dashboard__input-group dashboard__input-group--lot">
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="lot"
+                       value="<?= $formData['lot']; ?>"/>
+                <label class="dashboard__input-label">Lot</label>
+            </div>
+            <div class="dashboard__input-group dashboard__input-group--house">
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="house"
+                       value="<?= $formData['house']; ?>"/>
+                <label class="dashboard__input-label">House/Building No.</label>
+            </div>
+            <div class="dashboard__input-group dashboard__input-group--street">
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="street"
+                       value="<?= $formData['street']; ?>"/>
+                <label class="dashboard__input-label">Street</label>
+            </div>
+            <div class="dashboard__input-group dashboard__input-group--barangay">
+                <label class="dashboard__dropdown">
+                    <div class="dashboard__dropdown-button">
+                        <div class="dashboard__input-field dashboard__input-field--text"><span><?= $formData['barangay']; ?></span></div>
+                    </div>
+                    <input class="dashboard__dropdown-input" type="checkbox"/>
+                    <ul class="dashboard__dropdown-menu js-dropdown-id" data-name="barangay">
+                        <?php foreach ($barangay as $brgy) : ?>
+                            <li data-id="<?= $brgy ?>"><?= $brgy ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </label>
+                <input class="dashboard__input-field"
+                       type="hidden"
+                       name="barangay"
+                       value="<?= $formData['barangay']; ?>"/>
+                <label class="dashboard__input-label">Barangay</label>
             </div>
             <div class="dashboard__input-group">
-                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="natureOfBusiness"/>
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="lessorName"
+                       value="<?= $formData['lessorName']; ?>"/>
+                <label class="dashboard__input-label">Lessor Name</label>
+            </div>
+            <div class="dashboard__input-group">
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="tradeName"
+                       value="<?= $formData['tradeName']; ?>"/>
+                <label class="dashboard__input-label">Trade Name</label>
+            </div>
+            <div class="dashboard__input-group">
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="natureOfBusiness"
+                       value="<?= $formData['natureOfBusiness']; ?>"/>
                 <label class="dashboard__input-label">Nature Of Business</label>
             </div>
-        </div>
-        <div class="dashboard__input-row" data-type="default">
             <div class="dashboard__input-group dashboard__input-group--area">
-                <input class="dashboard__input-field dashboard__input-field--text" type="number" min="1" name="area"/>
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="number"
+                       min="1"
+                       name="area"
+                       value="<?= $formData['area']; ?>"/>
                 <label class="dashboard__input-label">Area (sqm)</label>
             </div>
             <div class="dashboard__input-group dashboard__input-group--capital">
-                <input class="dashboard__input-field dashboard__input-field--text" type="number" min="1" name="capital"/>
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="number"
+                       min="1"
+                       name="capital"
+                       value="<?= $formData['capital']; ?>"/>
                 <label class="dashboard__input-label">Capital</label>
             </div>
             <div class="dashboard__input-group dashboard__input-group--monthly-rent">
-                <input class="dashboard__input-field dashboard__input-field--text" type="text" name="monthlyRent"/>
+                <input class="dashboard__input-field dashboard__input-field--text"
+                       type="text"
+                       name="monthlyRent"
+                       value="<?= $formData['monthlyRent']; ?>"/>
                 <label class="dashboard__input-label">Monthly Rent</label>
             </div>
         </div>

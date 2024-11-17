@@ -18,8 +18,8 @@ class Permit
     public $firstName;
     /** @var string|null $middleName */
     public $middleName;
-    /** @var string|null $principalAddress */
-    public $principalAddress;
+    /** @var string|null $lessorName */
+    public $lessorName;
     /** @var string|null $corporateName */
     public $corporateName;
     /** @var string|null $tradeName */
@@ -58,7 +58,7 @@ class Permit
         $this->lastName = !empty($data['lastName']) ? $data['lastName'] : null;
         $this->firstName = !empty($data['firstName']) ? $data['firstName'] : null;
         $this->middleName = !empty($data['middleName']) ? $data['middleName'] : null;
-        $this->principalAddress = !empty($data['principalAddress']) ? $data['principalAddress'] : null;
+        $this->lessorName = !empty($data['lessorName']) ? $data['lessorName'] : null;
         $this->corporateName = !empty($data['corporateName']) ? $data['corporateName'] : null;
         $this->tradeName = !empty($data['tradeName']) ? $data['tradeName'] : null;
         $this->businessAddress = !empty($data['businessAddress']) ? $data['businessAddress'] : null;

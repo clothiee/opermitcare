@@ -205,6 +205,7 @@ class PortalController extends AbstractActionController
                     $process = $this->dashboardService->applyPermit($post);
                     $viewOptions['response']['code'] = $process['code'];
                     $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                    $viewOptions['response']['data'] = $process['data'];
                     break;
                 case 'update-password':
                     $process= $this->dashboardService->updatePassword($post);

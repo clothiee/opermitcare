@@ -6,6 +6,7 @@ $response = $this->response;
 $alertClass = '';
 $alertMessage = !empty($response['message']) ? $response['message'] : false;
 $responseData = !empty($response['data']) ? $response['data'] : [];
+$isError = null;
 
 if (!empty($response['message'])) {
     $isError = !empty($response['code']) && $response['code'] === DashboardService::INVALID_CODE ? true : false;
@@ -103,6 +104,7 @@ $panels = [
                         'alertClass' => $panels['apply-permit']['alertClass'],
                         'alertMessage' => $panels['apply-permit']['alertMessage'],
                         'title' => $panels['apply-permit']['title'],
+                        'responseData' => $responseData,
                     ]); ?>
                 </div>
                 <?= $this->partial('partial/ticket', [

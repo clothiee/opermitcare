@@ -48,7 +48,7 @@ class PermitTable
             'lastName' => $permit->lastName,
             'firstName' => $permit->firstName,
             'middleName' => $permit->middleName,
-            'principalAddress' => $permit->principalAddress,
+            'lessorName' => $permit->lessorName,
             'corporateName' => $permit->corporateName,
             'tradeName' => $permit->tradeName,
             'businessAddress' => $permit->businessAddress,

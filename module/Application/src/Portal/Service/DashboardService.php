@@ -153,7 +153,7 @@ class DashboardService
                                                         'agentId' => $sessionDetails['user']['userId'],
                                                     ]);
 
-        return $this->parseTickets($tickets, $permitStatuses);
+        return $this->parsePermits($tickets, $permitStatuses);
     }
 
     public function getRecentTickets()
@@ -173,6 +173,19 @@ class DashboardService
         $post['permitStatusId'] = 1;
         $post['dateCreated'] = date('Y-m-d H:i:s');
 
+        if (empty($post['block']) || empty($post['lot']) || empty($post['street']) || empty($post['barangay'])) {
+            return [
+                'code' => self::INVALID_CODE,
+                'message' => 'Please complete the address.',
+                'data' => $post,
+            ];
+        }
+
+        $house = !empty($post['house']) ? ' ' . $post['house'] : '';
+        $addressLine1 = $post['block'] . ' ' . $post['lot'] . $house;
+        $addressLine2 = ' ' . $post['street'] . ' ' . $post['barangay'];
+        $post['businessAddress'] = sprintf('%s%s Las Piñas City', $addressLine1, $addressLine2);
+
         $form = new PermitForm();
         $form->setData($post);
 
@@ -185,18 +198,21 @@ class DashboardService
                 return [
                     'code' => self::INVALID_CODE,
                     'message' => $exception->getMessage(),
+                    'data' => $post,
                 ];
             }
 
             return [
                 'code' => self::SUCCESS_CODE,
                 'message' => 'Your request was successfully submitted!',
+                'data' => [],
             ];
         }
 
         return [
             'code' => self::INVALID_CODE,
             'message' => $form->getMessages(),
+            'post' => $post,
         ];
     }
 
@@ -504,6 +520,21 @@ class DashboardService
         foreach ($permits as $permit) {
             $data = (array) $permit;
             $data['permitStatusName'] = $statusCollection[$data['permitStatusId']];
+            $user = $this->userTable->getByColumns([
+                                                                 'userId' => $data['agentId'],
+                                                             ]);
+            if (!empty($user[0])) {
+                $agent = (array) $user[0];
+                $data['agentId'] = [
+                    'userId' => $agent['userId'],
+                    'userName' => $agent['userName'],
+                    'firstName' => $agent['firstName'],
+                    'lastName' => $agent['lastName'],
+                    'email' => $agent['email'],
+                    'userTypeId' => $agent['userTypeId'],
+                ];
+            }
+
             $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['permitId']);
             $collection[$newId] = $data;
         }

@@ -554,11 +554,16 @@
       &--last-name,
       &--first-name,
       &--area,
-      &--capital {
+      &--capital,
+      &--block,
+      &--lot,
+      &--street,
+      &--barangay {
         @include get-responsive(margin-right, null, 10px, 10px, 10px);
         @include get-responsive(width, 100%, calc(100%/3), calc(100%/3), calc(100%/3));
       }
       &--middle-name,
+      &--house,
       &--monthly-rent {
         @include get-responsive(width, 100%, calc((100%/3) - 20px), calc((100%/3) - 20px), calc((100%/3) - 20px));
       }
@@ -901,7 +906,7 @@
     &--section {
       background-color: var(--dashboard-card-background-color);
       border-radius: 20px;
-      overflow: hidden;
+      overflow: visible;
     }
   }
 }

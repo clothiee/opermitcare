@@ -73,6 +73,9 @@ export class LayoutSettingsModule {
                 const parent = $(this).closest('.dashboard__input-group');
 
                 parent.find('.dashboard__input-field--text span').text($(this).text());
+
+                console.log($(this).data('id'));
+
                 parent.find('[name="' + inputName + '"]').val($(this).data('id'));
             });
 

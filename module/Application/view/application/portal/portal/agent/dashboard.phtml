@@ -6,6 +6,7 @@ $response = $this->response;
 $alertClass = '';
 $alertMessage = !empty($response['message']) ? $response['message'] : false;
 $responseData = !empty($response['data']) ? $response['data'] : [];
+$isError = null;
 
 if (!empty($response['message'])) {
     $isError = !empty($response['code']) && $response['code'] === DashboardService::INVALID_CODE ? true : false;
