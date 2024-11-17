@@ -1,5 +1,6 @@
 .dashboard {
-  &--resident {
+  &--resident,
+  &--agent {
     padding-top: 60px;
   }
 
@@ -143,7 +144,6 @@
       @include get-responsive(float, left, left);
       @include get-responsive(padding, 10px, 10px, 20px, 20px);
       @include get-responsive(text-align, center, center);
-      @include get-responsive(width, calc(100% / 6), calc(100% / 6));
 
       &.active {
         @include get-responsive(background-color, null, null, #ffffff, #ffffff);
@@ -905,8 +905,26 @@
   &__wrapper {
     &--section {
       background-color: var(--dashboard-card-background-color);
-      border-radius: 20px;
       overflow: visible;
+    }
+  }
+  &__side-bar {
+    li {
+      @include get-responsive(width, calc(100% / 6), calc(100% / 6));
+    }
+  }
+}
+
+.dashboard--agent .dashboard {
+  &__wrapper {
+    &--section {
+      background-color: var(--dashboard-card-background-color);
+      overflow: visible;
+    }
+  }
+  &__side-bar {
+    li {
+      @include get-responsive(width, calc(100% / 4), calc(100% / 4));
     }
   }
 }

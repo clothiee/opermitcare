@@ -24,10 +24,10 @@ $countTickets = count($tickets);
                 <h4>Ticket no. <?= $ticketNo ?></h4>
             </div>
             <div class="dashboard__tab-action">
-                <div class="dashboard__tab active" data-tab="ticket-overview">Overview</div>
-                <div class="dashboard__tab" data-tab="ticket-replies">Replies</div>
+                <div class="dashboard__tab active" data-tab="overview">Overview</div>
+                <div class="dashboard__tab" data-tab="replies">Replies</div>
             </div>
-            <div class="dashboard__tab-content active" data-tab="ticket-overview">
+            <div class="dashboard__tab-content active" data-tab="overview">
                 <div class="dashboard__ticket-details">
                     <h1>
                         <svg viewBox="5.5 3 15 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -79,7 +79,7 @@ $countTickets = count($tickets);
                     <input class="dashboard__button dashboard__button--primary js-ticket-action" type="button" value="Close"/>
                 </div>
             </div>
-            <div class="dashboard__tab-content" data-tab="ticket-replies">
+            <div class="dashboard__tab-content" data-tab="replies">
                 <?php if ($countReplies) :
                     $dateList = [];
                     ?>

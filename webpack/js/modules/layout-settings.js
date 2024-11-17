@@ -48,7 +48,7 @@ export class LayoutSettingsModule {
                 $(`.dashboard__panel[data-panel="${targetPanel}"]`).addClass('active');
 
                 $(`.dashboard__tab, .dashboard__tab-content`).removeClass('active');
-                $(`.dashboard__panel[data-panel="${targetPanel}"]`).find('[data-tab="ticket-overview"]').addClass('active');
+                $(`.dashboard__panel[data-panel="${targetPanel}"]`).find('[data-tab="overview"]').addClass('active');
             });
 
             $(document).on('click', '.dashboard__tab', function () {
