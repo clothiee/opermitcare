@@ -85,7 +85,9 @@ $countTickets = count($tickets);
                     ?>
                     <div class="dashboard__reply-collection">
                         <?php foreach ($ticket['replies'] as $reply) :
-                            $class = $reply['sender']['userId'] === $userId ? '--right' : '--left';
+                            $isYou = $reply['sender']['userId'] === $userId;
+                            $class = $isYou ? '--right' : '--left';
+                            $displayName = $isYou ? 'You' : $reply['sender']['firstName'];
                             $date = date("d M Y", strtotime($reply['dateCreated'])); ?>
                             <?php if (!in_array($date, $dateList)) :
                             $dateList[] = $date; ?>
@@ -96,7 +98,7 @@ $countTickets = count($tickets);
                             <div class="dashboard__reply dashboard__reply<?= $class ?>">
                                 <div class="dashboard__reply-sender">
                                     <span class="dashboard__reply-sender--type"><?= $reply['userTypeId']['userTypeName']; ?></span>
-                                    <span class="dashboard__reply-sender--name"><?= $reply['sender']['firstName']; ?></span>
+                                    <span class="dashboard__reply-sender--name"><?= $displayName ?></span>
                                 </div>
                                 <div class="dashboard__reply-bubble">
                                     <?= $reply['message'] ?>

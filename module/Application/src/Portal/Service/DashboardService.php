@@ -272,6 +272,8 @@ class DashboardService
                 'code' => self::SUCCESS_CODE,
                 'message' => 'Message sent successfully!',
                 'ticketStatus' => $ticketStatus,
+                'userType' => $sessionDetails['userType'],
+                'dateCreated' => date("H:i a", strtotime($post['dateCreated'])),
             ];
         }
 

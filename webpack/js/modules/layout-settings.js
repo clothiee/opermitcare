@@ -15,8 +15,6 @@ export class LayoutSettingsModule {
                 }
 
                 return $('.navigation').removeClass('navigation--sticky');
-                return $('.navigation').removeClass('navigation--sticky');
-                return $('.navigation').removeClass('navigation--sticky');
             });
 
             $(document).on('click', '.login__input svg', function () {
@@ -112,23 +110,23 @@ export class LayoutSettingsModule {
 
             $(document).on('click', '[value="Close"]', function () {
                 const panel = $(this).closest('.dashboard__panel');
-                const message = 'I am closing the ticket.';
+                const message = 'I\'m closing the ticket.';
 
                 return replyTicket(panel, message, 3);
             });
 
             $(document).on('click', '[value="Open"]', function () {
                 const panel = $(this).closest('.dashboard__panel');
-                const message = 'I am re-opening the ticket.';
+                const message = 'I\'m re-opening the ticket.';
 
                 return replyTicket(panel, message, 1);
             });
         };
 
         let replyTicket = function (panel, message, ticketStatusId) {
-            const replyCollection = panel.find('.dashboard__reply-collection');
             const ticketId = panel.data('ticket-id');
             const ticket = $(`.dashboard__ticket[data-ticket="ticket-${ticketId}"]`);
+            const replyCollection = panel.find('.dashboard__reply-collection');
 
             return $.ajax({
                 url: configuration.ajax.replyTicket,
@@ -145,6 +143,12 @@ export class LayoutSettingsModule {
                     let replyHtml = `<div class="dashboard__reply dashboard__reply--right">${bubble}</div>`;
 
                     if (data.code === 200) {
+                        let senderType = `<span class="dashboard__reply-sender--type">${data.response.userType.userTypeName}</span>`;
+                        let senderName = `<span class="dashboard__reply-sender--name">You</span>`;
+                        let sender = `<div class="dashboard__reply-sender">${senderType}${senderName}</div>`;
+                        let time = `<div class="dashboard__reply-time">${data.response.dateCreated}</div>`;
+                        replyHtml = `<div class="dashboard__reply dashboard__reply--right">${sender}${bubble}${time}</div>`;
+
                         ticket.find('.dashboard__ticket-status')
                             .attr('class', 'dashboard__ticket-status')
                             .addClass(`dashboard__ticket-status--${data.response.ticketStatusName}`)
@@ -156,15 +160,18 @@ export class LayoutSettingsModule {
                             .html(data.response.ticketStatusName);
 
                         if (data.response.ticketStatusId === 1) {
-                            $('.js-ticket-action').attr('value', 'Close')
+                            $('.js-ticket-action').attr('value', 'Close');
                         }
 
                         if (data.response.ticketStatusId === 3) {
-                            $('.js-ticket-action').attr('value', 'Open')
+                            $('.js-ticket-action').attr('value', 'Open');
                         }
                     }
 
                     $(replyHtml).appendTo(replyCollection);
+
+                    const newReplyCollection = panel.find('.dashboard__reply-collection');
+                    newReplyCollection.scrollTop(newReplyCollection[0].scrollHeight);
                 },
                 error: function (jqXHR, textStatus, error) {
                     console.log(textStatus + ': ' + error + "\n" + jqXHR.responseText);
