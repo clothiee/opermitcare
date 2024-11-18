@@ -68,9 +68,9 @@ class PermitForm extends Form implements InputFilterProviderInterface
                    ]);
         $this->add([
                        'type' => Text::class,
-                       'name' => 'principalAddress',
+                       'name' => 'lessorName',
                        'options' => [
-                           'label' => 'Principal Address',
+                           'label' => 'lessorName',
                        ],
                    ]);
         $this->add([
@@ -169,10 +169,17 @@ class PermitForm extends Form implements InputFilterProviderInterface
                        'name' => 'dateCreated',
                    ]);
         $this->add([
+                       'type' => Text::class,
+                       'name' => 'remarks',
+                       'options' => [
+                           'label' => 'Remarks',
+                       ],
+                   ]);
+        $this->add([
                        'name' => 'submit',
                        'type' => Submit::class,
                        'attributes' => [
-                           'value' => 'Send',
+                           'value' => 'Confirm',
                        ],
                    ]);
     }

@@ -187,13 +187,13 @@ class PortalController extends AbstractActionController
      */
     private function dashboard()
     {
-        $viewOptions = $this->dashboardService->initialize();
+        $viewOptions = [];
         $request = $this->getRequest();
 
         if ($request->isPost()) {
             $post = $request->getPost()->toArray();
 
-            $viewOptions['activeTab'] = $post['process'];
+            $viewOptions['activeTab'] = $post['process'] ?: 'overview';
 
             switch ($post['process']) {
                 case 'create-ticket':
@@ -207,6 +207,15 @@ class PortalController extends AbstractActionController
                     $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
                     $viewOptions['response']['data'] = $process['data'];
                     break;
+                case 'assess-permit':
+                    $process = $this->dashboardService->accessPermit($post);
+                    $viewOptions['response']['code'] = $process['code'];
+                    $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                    $viewOptions['response']['data'] = $process['data'];
+                    $viewOptions['activeTab'] = 'my-permit';
+                    $viewOptions['activePanel'] = $process['activePanel'];
+                    $viewOptions['activeTabAction'] = $process['activeTabAction'];
+                    break;
                 case 'update-password':
                     $process= $this->dashboardService->updatePassword($post);
                     $viewOptions['response']['code'] = $process['code'];
@@ -219,7 +228,10 @@ class PortalController extends AbstractActionController
 
         $viewModel = new ViewModel();
         $viewModel->setTemplate($this->getTemplate());
-        $viewModel->setVariables($viewOptions);
+        $viewModel->setVariables(array_merge(
+            $this->dashboardService->initialize(),
+            $viewOptions)
+        );
 
         return $viewModel;
     }

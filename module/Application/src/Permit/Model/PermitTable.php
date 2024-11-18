@@ -63,6 +63,7 @@ class PermitTable
             'zoningFee' => $permit->zoningFee,
             'processingFee' => $permit->processingFee,
             'dateCreated' => $permit->dateCreated,
+            'remarks' => $permit->remarks,
         ];
 
         $permitId = (int) $permit->permitId;

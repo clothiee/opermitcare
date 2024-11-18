@@ -48,6 +48,8 @@ class Permit
     public $processingFee;
     /** @var string|null $dateCreated */
     public $dateCreated;
+    /** @var string|null $remarks */
+    public $remarks;
 
     public function exchangeArray($data)
     {
@@ -73,5 +75,6 @@ class Permit
         $this->zoningFee = !empty($data['zoningFee']) ? $data['zoningFee'] : null;
         $this->processingFee = !empty($data['processingFee']) ? $data['processingFee'] : null;
         $this->dateCreated = !empty($data['dateCreated']) ? $data['dateCreated'] : null;
+        $this->remarks = !empty($data['remarks']) ? $data['remarks'] : null;
     }
 }

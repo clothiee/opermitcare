@@ -2,6 +2,7 @@
 
 namespace Application\Portal\Service;
 
+use Application\Permit\Form\PermitAssessForm;
 use Application\Permit\Form\PermitForm;
 use Application\Permit\Model\Permit;
 use Application\Permit\Model\PermitTable;
@@ -26,6 +27,7 @@ class DashboardService
     const SUCCESS_MESSAGE = 'Success';
     const INVALID_CODE = 401;
     const INVALID_MESSAGE = 'Invalid request';
+    const SUBMIT_ACCESS = 'Assess';
 
     private $config;
     private $sessionService;
@@ -115,7 +117,6 @@ class DashboardService
 
         return array_merge($viewOptions, [
             'sessionDetails' => $sessionDetails,
-
         ]);
     }
 
@@ -212,7 +213,7 @@ class DashboardService
         return [
             'code' => self::INVALID_CODE,
             'message' => $form->getMessages(),
-            'post' => $post,
+            'data' => $post,
         ];
     }
 
@@ -299,35 +300,66 @@ class DashboardService
         ];
     }
 
-    public function updateTicketStatus($ticketId, $ticketStatusId)
+    public function accessPermit($post)
     {
-        $ticket = (array) $this->ticketTable->getByColumns(['ticketId' => $ticketId])[0];
-        $ticket['ticketStatusId'] = $ticketStatusId;
+        $sessionDetails = $this->sessionService->get();
 
-        $form = new TicketForm();
-        $form->setData($ticket);
+        $form = new PermitAssessForm($post);
+        $form->setData($post);
+
+        if ($form->isValid()) {
+            $permit = (array) $this->permitTable->getByColumns(['permitId' => $post['permitId']])[0];
+            $permit['permitStatusId'] = $post['submit'] === self::SUBMIT_ACCESS ? 2 : 3;
+            $permit['agentId'] = $sessionDetails['user']['userId'];
+            $permit['mayorsFee'] = $post['mayorsFee'];
+            $permit['licenseFee'] = $post['licenseFee'];
+            $permit['garbageFee'] = $post['garbageFee'];
+            $permit['zoningFee'] = $post['zoningFee'];
+            $permit['processingFee'] = 100;
+            $permit['remarks'] = sprintf('[%s] %s', date('Y-m-d H:i:s'), $post['remarks']) ;
+        } else {
+            return [
+                'code' => self::INVALID_CODE,
+                'message' => 'Invalid Form! Remarks field is required.',
+                'data' => $post,
+                'activePanel' => 'permit-' . $post['permitId'],
+                'activeTabAction' => 'assess',
+            ];
+        }
+
+        $form = new PermitForm();
+        $form->setData($permit);
 
         if ($form->isValid()) {
             try {
-                $updateTicket = new Ticket();
-                $updateTicket->exchangeArray($ticket);
-                $this->ticketTable->save($updateTicket);
+                $updatePermit = new Permit();
+                $updatePermit->exchangeArray($permit);
+                $this->permitTable->save($updatePermit);
             } catch (\Exception $exception) {
                 return [
                     'code' => self::INVALID_CODE,
                     'message' => $exception->getMessage(),
+                    'data' => $post,
+                    'activePanel' => 'permit-' . $post['permitId'],
+                    'activeTabAction' => 'assess',
                 ];
             }
 
             return [
                 'code' => self::SUCCESS_CODE,
-                'message' => 'Updated ticket successfully!',
+                'message' => 'Updated permit successfully!',
+                'data' => $permit,
+                'activePanel' => 'permit-' . $post['permitId'],
+                'activeTabAction' => 'overview',
             ];
         }
 
         return [
             'code' => self::INVALID_CODE,
             'message' => $form->getMessages(),
+            'data' => $post,
+            'activePanel' => 'permit-' . $post['permitId'],
+            'activeTabAction' => 'assess',
         ];
     }
 

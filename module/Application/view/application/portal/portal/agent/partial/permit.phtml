@@ -5,14 +5,24 @@ $sessionDetails = $this->sessionDetails;
 $userId = $sessionDetails['user']['userId'];
 $permits = $this->permits ?: [];
 $countPermits = count($permits);
+$isOverviewActive = $this->activeTabAction === 'overview' ? ' active' : '';
+$isAssessActive = $this->activeTabAction === 'assess' ? ' active' : '';
 ?>
 
 <?php if ($countPermits) : ?>
-    <?php foreach ($permits as $permitNo => $permit) : ?>
-        <div class="dashboard__panel" data-panel="permit-<?= $permit['permitId'] ?>" data-permit-id="<?= $permit['permitId'] ?>">
+    <?php foreach ($permits as $permitNo => $permit) :
+        $isActive = $this->activePanel === 'permit-' . $permit['permitId'] ? ' active' : ''; ?>
+        <div class="dashboard__panel<?= $isActive ?>" data-panel="permit-<?= $permit['permitId'] ?>"
+             data-permit-id="<?= $permit['permitId'] ?>">
             <div class="dashboard__panel-breadcrumbs">
                 <span class="js-see-panel" data-panel="my-permit">My Special Permit (s)</span>
             </div>
+            <?php if ($this->alertMessage) : ?>
+                <div class="alert<?= $this->alertClass ?>">
+                    <span><?= $this->alertMessage ?></span>
+                    <a class="button">&times;</a>
+                </div>
+            <?php endif; ?>
             <div class="dashboard__panel-header">
                 <h1>Permit</h1>
                 <div class="dashboard__permit-status dashboard__permit-status--<?= strtolower($permit['permitStatusName']) ?>">
@@ -21,10 +31,10 @@ $countPermits = count($permits);
                 <h4>Application no. <?= $permitNo ?></h4>
             </div>
             <div class="dashboard__tab-action">
-                <div class="dashboard__tab active" data-tab="overview">Overview</div>
-                <div class="dashboard__tab" data-tab="assess">Assess</div>
+                <div class="dashboard__tab<?= $isOverviewActive; ?>" data-tab="overview">Overview</div>
+                <div class="dashboard__tab<?= $isAssessActive; ?>" data-tab="assess">Assess</div>
             </div>
-            <div class="dashboard__tab-content active" data-tab="overview">
+            <div class="dashboard__tab-content<?= $isOverviewActive; ?>" data-tab="overview">
                 <div class="dashboard__permit-details">
                     <?= $this->partial('partial/permit-details', [
                         'permit' => $permit,
@@ -47,8 +57,9 @@ $countPermits = count($permits);
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="dashboard__tab-content" data-tab="assess">
+            <div class="dashboard__tab-content<?= $isAssessActive; ?>" data-tab="assess">
                 <?= $this->partial('partial/permit-assess', [
+                    'responseData' => $this->responseData,
                     'permit' => $permit,
                     'permitStatus' => $permitStatus,
                 ]); ?>

@@ -1,13 +1,21 @@
 <?php
 $permit = $this->permit;
+$responseData = $this->responseData;
+$licenseFee = $permit['capital'] < 999999 ? 650 : $permit['capital'] * 0.001;
+$garbageFee = $permit['area'] <= 20 ? 500 : ($permit['area'] - 20) * 5;
+$zoningFee = $permit['area'] <= 20 ? 300 : ($permit['area'] - 20) * 5;
+$formData = [
+    'mayorsFee' => !empty($responseData['mayorsFee']) ? $responseData['mayorsFee'] : '',
+    'licenseFee' => !empty($responseData['licenseFee']) ? $responseData['licenseFee'] : $licenseFee,
+    'garbageFee' => !empty($responseData['garbageFee']) ? $responseData['garbageFee'] : $garbageFee,
+    'zoningFee' => !empty($responseData['zoningFee']) ? $responseData['zoningFee'] : $zoningFee,
+    'remarks' => !empty($responseData['remarks']) ? $responseData['remarks'] : '',
+];
 $mayorsFee = [
     'Tiange Tenant' => 3000,
     'Exhibit' => 3000,
     'Operator' => 8000,
 ];
-$licenceFee = $permit['capital'] < 999999 ? 650 : $permit['capital'] * 0.001;
-$garbageFee = $permit['area'] <= 20 ? 500 : ($permit['area'] - 20) * 5;
-$zoningFee = $permit['area'] <= 20 ? 300 : ($permit['area'] - 20) * 5;
 ?>
 <form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" method="post">
     <div class="dashboard__form">
@@ -27,44 +35,52 @@ $zoningFee = $permit['area'] <= 20 ? 300 : ($permit['area'] - 20) * 5;
                    type="hidden"
                    name="mayorsFee"
                    value="<?= $formData['mayorsFee']; ?>"/>
-            <label class="dashboard__input-label">Mayor's Fee (if Any)</label>
+            <label class="dashboard__input-label">Mayor's Fee (If Any)</label>
         </div>
         <div class="dashboard__input-group">
             <input class="dashboard__input-field dashboard__input-field--text"
                    type="number"
-                   min="650"
-                   name="licenceFee"
-                   value="<?= $licenceFee; ?>"
+                   min="0"
+                   name="licenseFee"
+                   value="<?= $formData['licenseFee']; ?>"
                    readonly/>
             <label class="dashboard__input-label">Licence Fee</label>
         </div>
         <div class="dashboard__input-group">
             <input class="dashboard__input-field dashboard__input-field--text"
                    type="number"
-                   min="1"
-                   name="area"
-                   value="<?= $garbageFee; ?>"/>
+                   min="0"
+                   name="garbageFee"
+                   value="<?= $formData['garbageFee']; ?>"/>
             <label class="dashboard__input-label">Garbage Fee</label>
         </div>
         <div class="dashboard__input-group">
             <input class="dashboard__input-field dashboard__input-field--text"
                    type="number"
-                   min="1"
-                   name="area"
-                   value="<?= $zoningFee; ?>"/>
+                   min="0"
+                   name="zoningFee"
+                   value="<?= $formData['zoningFee']; ?>"/>
             <label class="dashboard__input-label">Zoning Fee</label>
         </div>
         <div class="dashboard__input-group">
             <input class="dashboard__input-field dashboard__input-field--text"
-                   type="text"
-                   name="monthlyRent"
-                   value="100"/>
-            <label class="dashboard__input-label">Processing Fee</label>
+                   type="number"
+                   name="processingFee"
+                   value="100"
+                   readonly/>
+            <label class="dashboard__input-label">Processing Fee (Fixed)</label>
+        </div>
+        <div class="dashboard__input-group">
+            <textarea class="dashboard__input-field dashboard__input-field--textarea"
+                  name="remarks"><?= $formData['remarks']; ?></textarea>
+            <label class="dashboard__input-label">Remarks</label>
         </div>
     </div>
     <div class="dashboard__divider"></div>
     <div class="dashboard__actions">
+        <input type="hidden" name="permitId" value="<?= $permit['permitId']; ?>"/>
         <input type="hidden" name="process" value="assess-permit"/>
-        <input class="dashboard__button dashboard__button--primary" type="submit" value="Assess"/>
+        <input class="dashboard__button dashboard__button--red" type="submit" name="submit" value="Reject"/>
+        <input class="dashboard__button dashboard__button--primary" type="submit" name="submit" value="Assess"/>
     </div>
 </form>

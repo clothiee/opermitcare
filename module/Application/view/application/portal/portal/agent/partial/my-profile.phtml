@@ -75,7 +75,7 @@ foreach ($this->responseData as $responseKey => $responseValue) {
                     <?php foreach ($passwordValidation as $validation) :
                     $validationClass = empty($this->responseData) ? '' : ' valid';
                     $liClass = empty($validation['class']) ? $validationClass : $validation['class']; ?>
-                    <li class="<?= $liClass ?>"><?= $checkMark; ?><span><?= $validation['message']; ?></span>
+                    <li class="<?= $liClass ?>"><?= $checkMark; ?><span><?= $validation['message'] ?: ''; ?></span>
                         <?php endforeach; ?>
                 </ul>
             </div>
