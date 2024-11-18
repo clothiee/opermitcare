@@ -73,7 +73,7 @@ $panels = [
                     <?= $this->partial('partial/my-profile', [
                         'alertClass' => $panels['my-profile']['alertClass'],
                         'alertMessage' => $panels['my-profile']['alertMessage'],
-                        'responseData' => $responseData,
+                        'responseData' => strlen($panels['my-profile']['class']) ? $responseData : [],
                         'title' => $panels['my-profile']['title'],
                         'sessionDetails' => $this->sessionDetails,
                     ]); ?>
