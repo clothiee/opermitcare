@@ -9,7 +9,8 @@ $countPermits = count($permits);
 
 <?php if ($countPermits) : ?>
     <?php foreach ($permits as $permitNo => $permit) : ?>
-        <div class="dashboard__panel" data-panel="permit-<?= $permit['permitId'] ?>" data-permit-id="<?= $permit['permitId'] ?>">
+        <div class="dashboard__panel" data-panel="permit-<?= $permit['permitId'] ?>"
+             data-permit-id="<?= $permit['permitId'] ?>">
             <div class="dashboard__panel-breadcrumbs">
                 <span class="js-see-panel" data-panel="my-permit">My Special Permit (s)</span>
             </div>
@@ -20,28 +21,42 @@ $countPermits = count($permits);
                 </div>
                 <h4>Application no. <?= $permitNo ?></h4>
             </div>
-            <div class="dashboard__divider"></div>
-            <div class="dashboard__permit-details">
-                <?= $this->partial('partial/permit-details', [
-                    'permit' => $permit,
-                    'permitStatus' => $permitStatus,
-                ]); ?>
-            </div>
-            <div class="dashboard__permit-date-created">
-                <h4>Created</h4>
-                <span><?= date("d M Y", strtotime($permit['dateCreated'])) ?></span>
-            </div>
-            <div class="dashboard__permit-agent">
-                <h4>Recent Agent</h4>
-                <?php if (!empty($permit['agentId'])) : ?>
-                    <span class="dashboard__permit-agent--name"><?= $permit['agentId']['firstName'] . ' ' . $permit['agentId']['lastName']; ?></span>
-                    <span class="dashboard__permit-agent--email"><?= $permit['agentId']['email']; ?></span>
-                <?php else: ?>
-                    <div class="dashboard__permit-agent">
-                        <span class="dashboard__permit-agent--name">None</span>
-                    </div>
+            <div class="dashboard__tab-action">
+                <div class="dashboard__tab active" data-tab="overview">Overview</div>
+                <?php if ($permit['permitStatusId'] === 2) : ?>
+                    <div class="dashboard__tab" data-tab="soa">SoA</div>
                 <?php endif; ?>
             </div>
+            <div class="dashboard__tab-content active" data-tab="overview">
+                <div class="dashboard__permit-details">
+                    <?= $this->partial('partial/permit-details', [
+                        'permit' => $permit,
+                        'permitStatus' => $permitStatus,
+                    ]); ?>
+                </div>
+                <div class="dashboard__permit-date-created">
+                    <h4>Created</h4>
+                    <span><?= date("d M Y", strtotime($permit['dateCreated'])) ?></span>
+                </div>
+                <div class="dashboard__permit-agent">
+                    <h4>Recent Agent</h4>
+                    <?php if (!empty($permit['agentId'])) : ?>
+                        <span class="dashboard__permit-agent--name"><?= $permit['agentId']['firstName'] . ' ' . $permit['agentId']['lastName']; ?></span>
+                        <span class="dashboard__permit-agent--email"><?= $permit['agentId']['email']; ?></span>
+                    <?php else: ?>
+                        <div class="dashboard__permit-agent">
+                            <span class="dashboard__permit-agent--name">None</span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php if ($permit['permitStatusId'] === 2) : ?>
+                <div class="dashboard__tab-content<?= $isAssessActive; ?>" data-tab="soa">
+                    <?= $this->partial('partial/statement-of-account', [
+                        'permit' => $permit,
+                    ]); ?>
+                </div>
+            <?php endif; ?>
         </div>
     <?php endforeach; ?>
 <?php endif; ?>

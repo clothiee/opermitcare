@@ -114,36 +114,35 @@ $particulars = [
     ],
 ];
 ?>
-<table class="statement-of-account__table">
-    <tbody>
+<div class="dashboard__statement" id="statement-of-account">
+    <table class="statement-of-account__table">
+        <tbody>
         <tr>
-            <td colspan="7">
+            <td colspan="6">
                 <strong>REPUBLIC OF THE PHILIPPINES</strong><br/>
                 CITY GOVERNMENT OF LAS PIÑAS<br/>
                 Opermitcare Special Permit
             </td>
-            <td colspan="1">
+            <td colspan="2">
                 Billing Date: <?= date("d M Y") ?><br/>
                 Period: <?= date("Y", strtotime($permit['dateCreated'])) ?>
             </td>
         </tr>
         <tr>
-            <td colspan="8">
-                <div class="statement-of-account__title">Statement of Account</div>
-            </td>
+            <td colspan="8" class="statement-of-account__title"><span>Statement of Account</span></td>
         </tr>
         <?php foreach ($permitDetails as $category => $columns) : ?>
             <tr>
-                <td colspan="8">
-                    <div class="statement-of-account__table-category"><?= $category ?></div>
-                </td>
+                <td colspan="8" class="statement-of-account__table-category"><strong><?= $category ?></strong></td>
             </tr>
             <tr>
                 <?php foreach ($columns as $column) :
-                    $style = !empty($column['style']) ? $column['style'] : ''; ?>
-                    <td colspan="<?= $column['colspan'] ?>"<?= $style; ?>>
+                    $style = !empty($column['style']) ? $column['style'] : '';
+                    $colspan = !empty($column['colspan']) ? ' colspan="'.$column['colspan'].'"' : '';
+                    ?>
+                    <td<?= $colspan ?><?= $style; ?>>
                         <?php if (!empty($column['title'])) : ?>
-                            <div class="statement-of-account__table-label"><?= $column['title'] ?></div>
+                            <div class="statement-of-account__table-label"><strong><?= $column['title'] ?></strong></div>
                         <?php endif; ?>
                         <div class="statement-of-account__table-value"><?= $column['value'] ?></div>
                     </td>
@@ -154,9 +153,9 @@ $particulars = [
             <td colspan="8" class="statement-of-account__table-space"></td>
         </tr>
         <tr>
-            <td colspan="1" class="statement-of-account__table-summary-title">NRC</td>
-            <td colspan="6" class="statement-of-account__table-summary-title">Particulars</td>
-            <td colspan="1" class="statement-of-account__table-summary-title">Tax Due (PHP)</td>
+            <td colspan="1" class="statement-of-account__table-summary-title"><strong>NRC</strong></td>
+            <td colspan="6" class="statement-of-account__table-summary-title"><strong>Particulars</strong></td>
+            <td colspan="1" class="statement-of-account__table-summary-title"><strong>Tax Due (PHP)</strong></td>
         </tr>
         <?php foreach ($particulars as $particular) :
             $style = !empty($particular['style']) ? $particular['style'] : ''; ?>
@@ -178,41 +177,45 @@ $particulars = [
             </td>
         </tr>
         <tr>
-            <td colspan="8" class="statement-of-account__table-space"></td>
+            <td colspan="8" class="statement-of-account__table-space">&nbsp;</td>
         </tr>
         <tr>
-            <td colspan="8" class="statement-of-account__table-divider"></td>
+            <td colspan="8" class="statement-of-account__table-divider">&nbsp;</td>
         </tr>
         <tr>
-            <td colspan="8" class="statement-of-account__table-footer">
-                <div class="statement-of-account__table-footer--notice">
-                    <div class="statement-of-account__table-category">Notice</div>
-                    <ol>
-                        <li>Payment later than the quarterly deadline shall subject the taxpayer to the following:
-                            <ul>
-                                <li>Surcharge of twenty five percent (25%) of the total UNPAID balance on taxes, charges or
-                                    fees due.
-                                </li>
-                                <li>Plus an interest of two percent (2%) per month of the total UNPIAD balance on taxes or
-                                    charges.
-                                </li>
-                            </ul>
-                        </li>
-                        <li>Payment made thru Checks must bear the account name <strong>CITY GOVERNMENT OF LAS
-                                PIÑAS</strong> only as the Payee.
-                        </li>
-                    </ol>
-                </div>
-                <div class="statement-of-account__table-footer--deadline">
-                    <div class="statement-of-account__table-category">Quarterly Deadline of Payment</div>
-                    <p>
-                        1st Quarter - Every 20th of January<br/>
-                        2nd Quarter - Every 20th of April<br/>
-                        3rd Quarter - Every 20th of July<br/>
-                        4th Quarter - Every 20th of October
-                    </p>
-                </div>
+            <td colspan="4" class="statement-of-account__table-footer statement-of-account__table-footer--notice">
+                <div class="statement-of-account__table-category"><strong>Notice</strong></div>
+                <ol>
+                    <li>Payment later than the quarterly deadline shall subject the taxpayer to the following:
+                        <ul>
+                            <li>Surcharge of twenty five percent (25%) of the total UNPAID balance on taxes, charges or
+                                fees due.
+                            </li>
+                            <li>Plus an interest of two percent (2%) per month of the total UNPIAD balance on taxes or
+                                charges.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Payment made thru Checks must bear the account name <strong>CITY GOVERNMENT OF LAS
+                            PIÑAS</strong> only as the Payee.
+                    </li>
+                </ol>
+            </td>
+            <td colspan="4" class="statement-of-account__table-footer statement-of-account__table-footer--deadline">
+                <div class="statement-of-account__table-category"><strong>Quarterly Deadline of Payment</strong></div>
+                <p>
+                    1st Quarter - Every 20th of January<br/>
+                    2nd Quarter - Every 20th of April<br/>
+                    3rd Quarter - Every 20th of July<br/>
+                    4th Quarter - Every 20th of October
+                </p>
             </td>
         </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+<div class="dashboard__divider"></div>
+<div class="dashboard__actions">
+    <input type="hidden" name="permitId" value="<?= $permit['permitId']; ?>"/>
+    <input class="dashboard__button dashboard__button--primary" type="submit" value="Print"/>
+</div>
