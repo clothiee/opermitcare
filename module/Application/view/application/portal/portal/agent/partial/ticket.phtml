@@ -9,6 +9,7 @@ $countTickets = count($tickets);
 
 <?php if ($countTickets) : ?>
     <?php foreach ($tickets as $ticketNo => $ticket) :
+        $ticketAction = $ticket['ticketStatusId'] === 3 ? 'Open' : 'Close';
         $countReplies = count($ticket['replies']);
         $recentAgents = []; ?>
         <div class="dashboard__panel" data-panel="ticket-<?= $ticket['ticketId'] ?>"
@@ -76,7 +77,7 @@ $countTickets = count($tickets);
                 </div>
                 <div class="dashboard__divider"></div>
                 <div class="dashboard__actions">
-                    <input class="dashboard__button dashboard__button--primary js-ticket-action" type="button" value="Close"/>
+                    <input class="dashboard__button dashboard__button--primary js-ticket-action" type="button" value="<?= $ticketAction ?>"/>
                 </div>
             </div>
             <div class="dashboard__tab-content" data-tab="replies">
