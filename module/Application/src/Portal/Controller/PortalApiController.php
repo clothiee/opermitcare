@@ -56,7 +56,7 @@ class PortalApiController extends AbstractActionController
         }
     }
 
-    public function replyTicket()
+    private function replyTicket()
     {
         $request = $this->getRequest();
 

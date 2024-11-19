@@ -303,7 +303,6 @@ class DashboardService
     public function accessPermit($post)
     {
         $sessionDetails = $this->sessionService->get();
-
         $form = new PermitAssessForm($post);
         $form->setData($post);
 
@@ -311,10 +310,10 @@ class DashboardService
             $permit = (array) $this->permitTable->getByColumns(['permitId' => $post['permitId']])[0];
             $permit['permitStatusId'] = $post['submit'] === self::SUBMIT_ACCESS ? 2 : 3;
             $permit['agentId'] = $sessionDetails['user']['userId'];
-            $permit['mayorsFee'] = $post['mayorsFee'];
-            $permit['licenseFee'] = $post['licenseFee'];
-            $permit['garbageFee'] = $post['garbageFee'];
-            $permit['zoningFee'] = $post['zoningFee'];
+            $permit['mayorsFee'] = $post['mayorsFee'] ?: 0;
+            $permit['licenseFee'] = $post['licenseFee'] ?: 0;
+            $permit['garbageFee'] = $post['garbageFee'] ?: 0;
+            $permit['zoningFee'] = $post['zoningFee'] ?: 0;
             $permit['processingFee'] = 100;
             $permit['remarks'] = sprintf('[%s] %s', date('Y-m-d H:i:s'), $post['remarks']) ;
         } else {

@@ -28,13 +28,13 @@ $layoutVariables = $this->layout()->getVariable('layoutVariables');
 </head>
 <body>
 <header role="banner">
-    <?= $this->partial('partial/navigation', $layoutVariables) ?>
+    <?= $this->partial('partial/navigation', $layoutVariables); ?>
 </header>
 <section class="content">
     <?= $this->content ?>
 </section>
 <footer role="group">
-    <?= $this->partial('partial/footer', $layoutVariables) ?>
+    <?= $this->partial('partial/footer', $layoutVariables); ?>
 </footer>
 <?= $this->inlineScript()
          ->prependFile($this->basePath('assets/js/app.js')); ?>

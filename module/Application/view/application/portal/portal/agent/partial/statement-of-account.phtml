@@ -1,0 +1,221 @@
+<?php
+$permit = $this->permit;
+
+switch ($permit['businessEntityType']) {
+    case 'Sole Proprietorship':
+        $permitDetails['Tax Payer\'s Details'] = [
+            [
+                'colspan' => 2,
+                'style' => ' style="width:25%"',
+                'title' => 'Last Name',
+                'value' => $permit['lastName'],
+            ],
+            [
+                'colspan' => 5,
+                'style' => ' style="width:50%"',
+                'title' => 'First Name',
+                'value' => $permit['firstName'],
+            ],
+            [
+                'colspan' => 1,
+                'style' => ' style="width:25%"',
+                'title' => 'Middle Name',
+                'value' => $permit['middleName'],
+            ],
+        ];
+        $permitDetails['Tax Payer\'s Address'][0] = [
+            'colspan' => 8,
+            'value' => $permit['businessAddress'],
+        ];
+        $permitDetails['Lessor Name'][0] = [
+            'colspan' => 8,
+            'value' => $permit['lessorName'],
+        ];
+        break;
+    default:
+        $permitDetails['Business Name'][0] = [
+            'colspan' => 8,
+            'value' => $permit['corporateName'],
+        ];
+        $permitDetails['Business Address'][0] = [
+            'colspan' => 8,
+            'value' => $permit['businessAddress'],
+        ];
+        break;
+}
+
+$permitDetails['Trade Name'][0] = [
+    'colspan' => 8,
+    'value' => $permit['tradeName'],
+];
+$permitDetails['Nature Of Business'][0] = [
+    'colspan' => 8,
+    'value' => $permit['natureOfBusiness'],
+];;
+$permitDetails['Others Details'] = [
+    [
+        'colspan' => 2,
+        'style' => ' style="width:25%"',
+        'title' => 'Ownership',
+        'value' => $permit['businessEntityType'],
+    ],
+    [
+        'colspan' => 2,
+        'style' => ' style="width:25%"',
+        'title' => 'Area (Sqm)',
+        'value' => $permit['area'],
+    ],
+    [
+        'colspan' => 2,
+        'style' => ' style="width:25%"',
+        'title' => 'Capital',
+        'value' => $permit['capital'],
+    ],
+    [
+        'colspan' => 2,
+        'style' => ' style="width:25%"',
+        'title' => 'Monthly Rent',
+        'value' => $permit['monthlyRent'],
+    ],
+];
+$subTotal = $permit['mayorsFee'] + $permit['licenseFee'] + $permit['garbageFee'] + $permit['zoningFee'];
+$total = $subTotal + $permit['processingFee'];
+$particulars = [
+    [
+        'title' => 'Mayor\'s Fee',
+        'value' => $permit['mayorsFee'],
+    ],
+    [
+        'title' => 'License Fee',
+        'value' => $permit['licenseFee'],
+    ],
+    [
+        'title' => 'Garbage Fee',
+        'value' => $permit['garbageFee'],
+    ],
+    [
+        'title' => 'Zoning Fee',
+        'value' => $permit['zoningFee'],
+    ],
+    [
+        'style' => ' style="text-align: right; border-bottom: 1px solid #000000"',
+        'title' => 'Sub Total',
+        'value' => $subTotal,
+    ],
+    [
+        'style' => ' style="border-bottom: 2px solid #000000"',
+        'title' => 'Processing Fee',
+        'value' => $permit['processingFee'],
+    ],
+    [
+        'style' => ' style="text-align: right; border-bottom: 5px double #000000"',
+        'title' => 'Total',
+        'value' => $total,
+    ],
+];
+?>
+<div class="dashboard__statement" id="statement-of-account">
+    <table class="statement-of-account__table">
+        <tbody>
+        <tr>
+            <td colspan="6">
+                <strong>REPUBLIC OF THE PHILIPPINES</strong><br/>
+                CITY GOVERNMENT OF LAS PIÑAS<br/>
+                Opermitcare Special Permit
+            </td>
+            <td colspan="2">
+                Billing Date: <?= date("d M Y") ?><br/>
+                Period: <?= date("Y", strtotime($permit['dateCreated'])) ?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="8" class="statement-of-account__title"><span>Statement of Account</span></td>
+        </tr>
+        <?php foreach ($permitDetails as $category => $columns) : ?>
+            <tr>
+                <td colspan="8" class="statement-of-account__table-category"><strong><?= $category ?></strong></td>
+            </tr>
+            <tr>
+                <?php foreach ($columns as $column) :
+                    $style = !empty($column['style']) ? $column['style'] : '';
+                    $colspan = !empty($column['colspan']) ? ' colspan="'.$column['colspan'].'"' : '';
+                    ?>
+                    <td<?= $colspan ?><?= $style; ?>>
+                        <?php if (!empty($column['title'])) : ?>
+                            <div class="statement-of-account__table-label"><strong><?= $column['title'] ?></strong></div>
+                        <?php endif; ?>
+                        <div class="statement-of-account__table-value"><?= $column['value'] ?></div>
+                    </td>
+                <?php endforeach; ?>
+            </tr>
+        <?php endforeach; ?>
+        <tr>
+            <td colspan="8" class="statement-of-account__table-space"></td>
+        </tr>
+        <tr>
+            <td colspan="1" class="statement-of-account__table-summary-title"><strong>NRC</strong></td>
+            <td colspan="6" class="statement-of-account__table-summary-title"><strong>Particulars</strong></td>
+            <td colspan="1" class="statement-of-account__table-summary-title"><strong>Tax Due (PHP)</strong></td>
+        </tr>
+        <?php foreach ($particulars as $particular) :
+            $style = !empty($particular['style']) ? $particular['style'] : ''; ?>
+            <tr>
+                <td colspan="1"></td>
+                <td colspan="6"
+                    class="statement-of-account__table-summary-label"<?= $style; ?>><?= $particular['title']; ?></td>
+                <td colspan="1" class="statement-of-account__table-summary-value"<?= $style; ?>><?= sprintf('%0.2f',
+                                                                                                            $particular['value']); ?></td>
+            </tr>
+        <?php endforeach; ?>
+        <tr>
+            <td colspan="8" class="statement-of-account__table-space"></td>
+        </tr>
+        <tr>
+            <td colspan="8">
+                <div class="statement-of-account__table-label">Generated By</div>
+                <div class="statement-of-account__table-value"><strong>Opermitcare</strong></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="8" class="statement-of-account__table-space">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="8" class="statement-of-account__table-divider">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="4" class="statement-of-account__table-footer statement-of-account__table-footer--notice">
+                <div class="statement-of-account__table-category"><strong>Notice</strong></div>
+                <ol>
+                    <li>Payment later than the quarterly deadline shall subject the taxpayer to the following:
+                        <ul>
+                            <li>Surcharge of twenty five percent (25%) of the total UNPAID balance on taxes, charges or
+                                fees due.
+                            </li>
+                            <li>Plus an interest of two percent (2%) per month of the total UNPIAD balance on taxes or
+                                charges.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Payment made thru Checks must bear the account name <strong>CITY GOVERNMENT OF LAS
+                            PIÑAS</strong> only as the Payee.
+                    </li>
+                </ol>
+            </td>
+            <td colspan="4" class="statement-of-account__table-footer statement-of-account__table-footer--deadline">
+                <div class="statement-of-account__table-category"><strong>Quarterly Deadline of Payment</strong></div>
+                <p>
+                    1st Quarter - Every 20th of January<br/>
+                    2nd Quarter - Every 20th of April<br/>
+                    3rd Quarter - Every 20th of July<br/>
+                    4th Quarter - Every 20th of October
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="dashboard__divider"></div>
+<div class="dashboard__actions">
+    <input type="hidden" name="permitId" value="<?= $permit['permitId']; ?>"/>
+    <input class="dashboard__button dashboard__button--primary" type="submit" value="Print"/>
+</div>
