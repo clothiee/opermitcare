@@ -12,5 +12,4 @@ return [
     'Laminas\Validator',
     'Laminas\Session',
     'Application',
-    'Utilities',
 ];

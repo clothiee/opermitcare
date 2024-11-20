@@ -2,8 +2,8 @@
 
 namespace Application\Portal\Service;
 
-use Application\User\Model\UserTable;
-use Application\UserType\Model\UserTypeTable;
+use Application\Opermitcare\User\Model\UserTable;
+use Application\Opermitcare\UserType\Model\UserTypeTable;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;

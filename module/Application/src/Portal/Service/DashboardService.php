@@ -2,23 +2,23 @@
 
 namespace Application\Portal\Service;
 
-use Application\Permit\Form\PermitAssessForm;
-use Application\Permit\Form\PermitForm;
-use Application\Permit\Model\Permit;
-use Application\Permit\Model\PermitTable;
-use Application\PermitStatus\Model\PermitStatusTable;
-use Application\ProblemType\Model\ProblemTypeTable;
-use Application\Reply\Form\ReplyForm;
-use Application\Reply\Model\Reply;
-use Application\Reply\Model\ReplyTable;
-use Application\Ticket\Form\TicketForm;
-use Application\Ticket\Model\Ticket;
-use Application\Ticket\Model\TicketTable;
-use Application\TicketStatus\Model\TicketStatusTable;
-use Application\User\Form\UserForm;
-use Application\User\Model\User;
-use Application\User\Model\UserTable;
-use Application\UserType\Model\UserTypeTable;
+use Application\Opermitcare\Permit\Form\PermitAssessForm;
+use Application\Opermitcare\Permit\Form\PermitForm;
+use Application\Opermitcare\Permit\Model\Permit;
+use Application\Opermitcare\Permit\Model\PermitTable;
+use Application\Opermitcare\PermitStatus\Model\PermitStatusTable;
+use Application\Opermitcare\ProblemType\Model\ProblemTypeTable;
+use Application\Opermitcare\Reply\Form\ReplyForm;
+use Application\Opermitcare\Reply\Model\Reply;
+use Application\Opermitcare\Reply\Model\ReplyTable;
+use Application\Opermitcare\Ticket\Form\TicketForm;
+use Application\Opermitcare\Ticket\Model\Ticket;
+use Application\Opermitcare\Ticket\Model\TicketTable;
+use Application\Opermitcare\TicketStatus\Model\TicketStatusTable;
+use Application\Opermitcare\User\Form\UserForm;
+use Application\Opermitcare\User\Model\User;
+use Application\Opermitcare\User\Model\UserTable;
+use Application\Opermitcare\UserType\Model\UserTypeTable;
 use ArrayObject;
 
 class DashboardService

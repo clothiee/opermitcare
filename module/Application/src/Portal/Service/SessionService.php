@@ -2,9 +2,9 @@
 
 namespace Application\Portal\Service;
 
-use Application\User\Model\User;
-use Application\User\Model\UserTable;
-use Application\UserType\Model\UserTypeTable;
+use Application\Opermitcare\User\Model\User;
+use Application\Opermitcare\User\Model\UserTable;
+use Application\Opermitcare\UserType\Model\UserTypeTable;
 use ArrayObject;
 use Laminas\Session\Container;
 use Laminas\View\Model\JsonModel;

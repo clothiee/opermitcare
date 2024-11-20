@@ -2,14 +2,14 @@
 
 namespace Application\Portal\Service;
 
-use Application\Permit\Model\PermitTable;
-use Application\PermitStatus\Model\PermitStatusTable;
-use Application\ProblemType\Model\ProblemTypeTable;
-use Application\Reply\Model\ReplyTable;
-use Application\Ticket\Model\TicketTable;
-use Application\TicketStatus\Model\TicketStatusTable;
-use Application\User\Model\UserTable;
-use Application\UserType\Model\UserTypeTable;
+use Application\Opermitcare\Permit\Model\PermitTable;
+use Application\Opermitcare\PermitStatus\Model\PermitStatusTable;
+use Application\Opermitcare\ProblemType\Model\ProblemTypeTable;
+use Application\Opermitcare\Reply\Model\ReplyTable;
+use Application\Opermitcare\Ticket\Model\TicketTable;
+use Application\Opermitcare\TicketStatus\Model\TicketStatusTable;
+use Application\Opermitcare\User\Model\UserTable;
+use Application\Opermitcare\UserType\Model\UserTypeTable;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;

@@ -5,7 +5,6 @@ namespace Application\Portal\Controller;
 use Application\Portal\Service\DashboardService;
 use Application\Portal\Service\SessionService;
 use ArrayObject;
-use Laminas\Http\Response;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
