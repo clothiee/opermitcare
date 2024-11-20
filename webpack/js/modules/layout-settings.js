@@ -176,7 +176,7 @@ export class LayoutSettingsModule {
                             .addClass(`dashboard__ticket-status--${data.response.ticketStatusName}`)
                             .html(data.response.ticketStatusName);
 
-                        if (data.response.ticketStatusId === 1) {
+                        if (data.response.ticketStatusId === 2) {
                             $('.js-ticket-action').attr('value', 'Close');
                         }
 

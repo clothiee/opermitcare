@@ -222,7 +222,7 @@ class DashboardService
         $sessionDetails = $this->sessionService->get();
 
         $post['residentId'] = $sessionDetails['user']['userId'];
-        $post['ticketStatusId'] = 2;
+        $post['ticketStatusId'] = 1;
         $post['dateCreated'] = date('Y-m-d H:i:s');
 
         $form = new TicketForm();
