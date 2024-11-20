@@ -31,9 +31,10 @@ class FileTable
     public function save(File $file)
     {
         $data = [
-            'ticketId' => $file->ticketId,
+            'tag' => $file->tag,
             'fileName' => $file->fileName,
             'filePath' => $file->filePath,
+            'dateCreated' => $file->dateCreated,
         ];
 
         $fileId = (int) $file->fileId;

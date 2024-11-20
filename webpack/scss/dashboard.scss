@@ -301,11 +301,13 @@
       margin-top: 20px;
       width: 100%;
     }
+
     &-content {
       display: none;
       float: left;
       margin-top: 20px;
       width: 100%;
+
       &.active {
         display: block;
       }
@@ -408,11 +410,14 @@
       display: flex;
       flex-direction: column;
       float: left;
-      padding: 20px;
+      overflow: hidden;
       @include get-responsive(width, 100%, calc(100% - 150px), calc(100% - 200px), calc(100% - 200px));
 
       h1 {
+        margin-top: 20px;
+        padding: 0 20px;
         @include get-responsive(font-size, 16px);
+
         svg {
           width: 15px;
         }
@@ -423,6 +428,7 @@
       float: left;
       margin-top: 15px;
       overflow: hidden;
+      padding: 0 20px;
       text-align: justify;
       word-wrap: normal;
 
@@ -432,8 +438,16 @@
         float: left;
       }
 
-      &--value{
+      &--value {
         float: left;
+      }
+
+      &--attachment {
+        background-color: var(--dashboard-attachments-background-color);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
       }
     }
 
@@ -482,7 +496,7 @@
         @include get-responsive(width, 100%, 100px, 100px, 100px);
       }
 
-      &--value{
+      &--value {
         @include get-responsive(width, 100%, calc(100% - 100px), calc(100% - 100px), calc(100% - 100px));
       }
     }
@@ -494,7 +508,7 @@
         @include get-responsive(width, 100%, 170px, 170px, 170px);
       }
 
-      &--value{
+      &--value {
         @include get-responsive(width, 100%, calc(100% - 170px), calc(100% - 170px), calc(100% - 170px));
       }
     }
@@ -506,11 +520,14 @@
         max-width: calc(100% - 40px);
       }
     }
+
     &-col {
       float: left;
+
       &--fields {
         @include get-responsive(width, 100%, 330px, 330px, 330px);
       }
+
       &--validation {
         @include get-responsive(padding-left, null, 20px, 20px, 20px);
         @include get-responsive(width, 100%, calc(100% - 330px), calc(100% - 330px), calc(100% - 330px));
@@ -523,10 +540,12 @@
       float: left;
       width: 100%;
       display: none;
+
       &--active {
         display: unset !important;
       }
     }
+
     &-group {
       float: left;
       width: 100%;
@@ -541,12 +560,12 @@
         border: 2px solid var(--dashboard-input-active-border-color);
       }
 
-      svg {
+      > svg {
         fill: var(--dashboard-input-default-border-color);
       }
 
       &--show {
-        svg {
+        > svg {
           fill: var(--dashboard-input-active-border-color);
         }
       }
@@ -560,12 +579,13 @@
       &--street,
       &--barangay {
         @include get-responsive(margin-right, null, 10px, 10px, 10px);
-        @include get-responsive(width, 100%, calc(100%/3), calc(100%/3), calc(100%/3));
+        @include get-responsive(width, 100%, calc(100% / 3), calc(100% / 3), calc(100% / 3));
       }
+
       &--middle-name,
       &--house,
       &--monthly-rent {
-        @include get-responsive(width, 100%, calc((100%/3) - 20px), calc((100%/3) - 20px), calc((100%/3) - 20px));
+        @include get-responsive(width, 100%, calc((100% / 3) - 20px), calc((100% / 3) - 20px), calc((100% / 3) - 20px));
       }
     }
 
@@ -599,7 +619,7 @@
       font-size: 10px;
       position: absolute;
       left: 15px;
-      top: -5px;
+      top: -10px;
       padding: 0 6px;
       font-weight: 600;
     }
@@ -711,6 +731,94 @@
     }
   }
 
+  &__attachment {
+    min-height: 40px;
+
+    &-file {
+      position: absolute;
+      visibility: hidden;
+    }
+
+    .file-block {
+      border-radius: 10px;
+      background-color: rgba(144, 163, 203, 0.2);
+      color: initial;
+      display: inline-flex;
+      margin: 5px;
+      @include get-responsive(max-width, 120px);
+
+      & > span.name {
+        display: inline-flex;
+        line-height: 30px;
+        padding-right: 10px;
+        width: 100%;
+        vertical-align: middle;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .file-names {
+      float: left;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .file-delete {
+      background-color: #6eb4ff00;
+      color: initial;
+      cursor: pointer;
+      display: flex;
+      font-size: large;
+      justify-content: center;
+      margin-right: 3px;
+      width: 24px;
+
+      &:hover {
+        background-color: rgba(144, 163, 203, 0.2);
+        border-radius: 10px;
+      }
+
+      & > span {
+        transform: rotate(45deg);
+      }
+    }
+  }
+
+  &__file {
+    color: #3e3e3e;
+    cursor: pointer;
+    float: left;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    height: 100%;
+    gap: 10px;
+    &:active, &:hover {
+      color: var(--main-color);
+    }
+
+    &--name {
+      flex-grow: 1;
+      padding-right: 20px;
+      width: calc(100% - 50px);
+    }
+
+    &--icon {
+      width: 25px;
+    }
+
+    svg {
+      stroke: var(--main-color);
+    }
+
+    g {
+      fill: var(--main-color);
+    }
+  }
+
   &__actions {
     float: left;
     width: 100%;
@@ -797,12 +905,28 @@
         color: #dd4a4a;
       }
     }
+
+    &--attachment {
+      float: right;
+      line-height: 41px;
+
+      svg {
+        stroke: #ffffff;
+      }
+
+      &:hover {
+        svg {
+          color: var(--main-color);
+        }
+      }
+    }
   }
 
   &__reply {
     float: left;
     width: 100%;
     margin-bottom: 20px;
+
     &-collection {
       background-color: #f9f9f9;
       border-bottom: 2px solid var(--dashboard-item-border-color);
@@ -815,10 +939,12 @@
       scrollbar-width: thin;
       @include get-responsive(overflow-y, scroll, scroll, auto, auto);
     }
+
     &-empty {
       font-weight: 600;
       color: var(--main-color);
     }
+
     &-bubble {
       border-radius: 6px;
       margin-top: 5px;
@@ -828,10 +954,12 @@
       @include get-responsive(max-width, calc(100% - 53px), calc(100% - 53px), 70%, 70%);
       @include get-responsive(word-break, break-word);
     }
+
     &-date {
       color: #6a6a6a;
       text-align: center;
     }
+
     &-sender {
       float: left;
       width: 100%;
@@ -851,20 +979,24 @@
         vertical-align: top;
       }
     }
+
     &-time {
       color: #6a6a6a;
       font-size: 10px;
       padding-top: 7px;
     }
+
     &-error {
       color: #ff0000;
       float: right;
     }
+
     &-submit {
       float: left;
       margin-top: 20px;
       width: 100%;
     }
+
     &-input {
       border: 2px solid var(--main-color);
       border-radius: 5px;
@@ -876,10 +1008,12 @@
       @include get-responsive(margin-right, null, 5px, 5px, 5px);
       @include get-responsive(margin-bottom, 10px);
     }
+
     &--left {
       .dashboard__reply-bubble {
         background-color: #e1e1e1;
         float: left;
+
         &:before {
           content: ' ';
           position: absolute;
@@ -891,19 +1025,23 @@
           border-color: transparent transparent transparent #e1e1e1;
         }
       }
+
       .dashboard__reply-sender {
         text-align: left;
       }
+
       .dashboard__reply-time {
         float: left;
         margin-left: 10px;
       }
     }
+
     &--right {
       .dashboard__reply-bubble {
         background-color: var(--main-color);
         color: #ffffff;
         float: right;
+
         &:after {
           content: ' ';
           position: absolute;
@@ -915,9 +1053,11 @@
           border-color: var(--main-color) var(--main-color) transparent transparent;
         }
       }
+
       .dashboard__reply-sender {
         text-align: right;
       }
+
       .dashboard__reply-time {
         float: right;
         margin-right: 10px;
@@ -934,6 +1074,7 @@
       overflow: hidden;
     }
   }
+
   &__side-bar {
     li {
       @include get-responsive(width, calc(100% / 6), calc(100% / 6));
@@ -949,6 +1090,7 @@
       overflow: hidden;
     }
   }
+
   &__side-bar {
     li {
       @include get-responsive(width, calc(100% / 4), calc(100% / 4));

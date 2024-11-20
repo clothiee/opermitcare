@@ -45,7 +45,7 @@ class TicketTable
 
         if ($ticketId === 0) {
             $this->tableGateway->insert($data);
-            return;
+            return $this->tableGateway->getLastInsertValue();
         }
 
         try {

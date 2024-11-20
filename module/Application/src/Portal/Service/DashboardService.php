@@ -39,6 +39,7 @@ class DashboardService
     private $replyTable;
     private $permitTable;
     private $permitStatusTable;
+    private $fileService;
 
     /**
      * Dashboard Service constructor.
@@ -53,6 +54,7 @@ class DashboardService
      * @param ReplyTable        $replyTable
      * @param PermitTable       $permitTable
      * @param PermitStatusTable $permitStatusTable
+     * @param FileService       $fileService
      */
     public function __construct(
         $config,
@@ -64,7 +66,8 @@ class DashboardService
         TicketStatusTable $ticketStatusTable,
         ReplyTable $replyTable,
         PermitTable $permitTable,
-        PermitStatusTable $permitStatusTable
+        PermitStatusTable $permitStatusTable,
+        FileService $fileService
     ) {
         $this->config = $config;
         $this->sessionService = $sessionService;
@@ -76,6 +79,7 @@ class DashboardService
         $this->replyTable = $replyTable;
         $this->permitTable = $permitTable;
         $this->permitStatusTable = $permitStatusTable;
+        $this->fileService = $fileService;
     }
 
     /**
@@ -120,6 +124,11 @@ class DashboardService
         ]);
     }
 
+    /**
+     * Get Permits
+     *
+     * @return array
+     */
     public function getPermits()
     {
         $sessionDetails = $this->sessionService->get();
@@ -133,6 +142,11 @@ class DashboardService
         return $this->parsePermits($permits, $permitStatuses);
     }
 
+    /**
+     * Get Tickets
+     *
+     * @return array
+     */
     public function getTickets()
     {
         $sessionDetails = $this->sessionService->get();
@@ -146,6 +160,11 @@ class DashboardService
         return $this->parseTickets($tickets, $ticketStatuses);
     }
 
+    /**
+     * Get Recent Permits
+     *
+     * @return array
+     */
     public function getRecentPermits()
     {
         $sessionDetails = $this->sessionService->get();
@@ -157,6 +176,11 @@ class DashboardService
         return $this->parsePermits($tickets, $permitStatuses);
     }
 
+    /**
+     * Get Recent Tickets
+     *
+     * @return array
+     */
     public function getRecentTickets()
     {
         $sessionDetails = $this->sessionService->get();
@@ -166,6 +190,13 @@ class DashboardService
         return $this->parseTickets($tickets, $ticketStatuses);
     }
 
+    /**
+     * Apply Permit
+     *
+     * @param $post
+     *
+     * @return array
+     */
     public function applyPermit($post)
     {
         $sessionDetails = $this->sessionService->get();
@@ -217,7 +248,15 @@ class DashboardService
         ];
     }
 
-    public function createTicket($post)
+    /**
+     * Create Ticket
+     *
+     * @param $post
+     * @param $files
+     *
+     * @return array
+     */
+    public function createTicket($post, $files)
     {
         $sessionDetails = $this->sessionService->get();
 
@@ -232,7 +271,9 @@ class DashboardService
             try {
                 $ticket = new Ticket();
                 $ticket->exchangeArray($post);
-                $this->ticketTable->save($ticket);
+                $id = $this->ticketTable->save($ticket);
+
+                $this->fileService->upload('ticket-'.$id, $files['attachment']);
             } catch (\Exception $exception) {
                 return [
                     'code' => self::INVALID_CODE,
@@ -252,6 +293,13 @@ class DashboardService
         ];
     }
 
+    /**
+     * Reply Ticket
+     *
+     * @param $post
+     *
+     * @return array
+     */
     public function replyTicket($post)
     {
         $sessionDetails = $this->sessionService->get();
@@ -300,6 +348,13 @@ class DashboardService
         ];
     }
 
+    /**
+     * Access Permit
+     *
+     * @param $post
+     *
+     * @return array
+     */
     public function accessPermit($post)
     {
         $sessionDetails = $this->sessionService->get();
@@ -362,6 +417,13 @@ class DashboardService
         ];
     }
 
+    /**
+     * Update Password
+     *
+     * @param $post
+     *
+     * @return array
+     */
     public function updatePassword($post)
     {
         $sessionDetails = $this->sessionService->get();
@@ -411,6 +473,11 @@ class DashboardService
         ];
     }
 
+    /**
+     * Get Active Problem Types
+     *
+     * @return array
+     */
     private function getActiveProblemTypes()
     {
         $problemTypes = $this->problemTypeTable->getByColumns(['active' => 1]);
@@ -426,6 +493,11 @@ class DashboardService
         return $collection;
     }
 
+    /**
+     * Get Active Permit Statuses
+     *
+     * @return array
+     */
     private function getActivePermitStatuses()
     {
         $permitStatuses = $this->permitStatusTable->getByColumns(['active' => 1]);
@@ -441,6 +513,11 @@ class DashboardService
         return $collection;
     }
 
+    /**
+     * Get Dashboard Pages
+     *
+     * @return array
+     */
     private function getDashboardPages()
     {
         return [
@@ -492,6 +569,14 @@ class DashboardService
         ];
     }
 
+    /**
+     * Parse Tickets
+     *
+     * @param $tickets
+     * @param $ticketStatuses
+     *
+     * @return array
+     */
     private function parseTickets($tickets, $ticketStatuses)
     {
         $statusCollection = [];
@@ -508,7 +593,9 @@ class DashboardService
             $replies = $this->replyTable->getByColumns([
                                                            'ticketId' => $data['ticketId'],
                                                        ]);
+            $files = $this->fileService->getByTag('ticket-'.$data['ticketId']);
             $replyCollection = [];
+            $fileCollection = [];
 
             foreach ($replies as $replyKey => $replyItem) {
                 $reply = (array) $replyItem;
@@ -527,7 +614,17 @@ class DashboardService
                 $replyCollection[$replyKey]['userTypeId'] = $this->userTypeTable->getByUserTypeId($sender['userTypeId']);
             }
 
+            foreach ($files as $fileItem) {
+                $file = (array) $fileItem;
+                $fileCollection[] = [
+                    'fileName' => $file['fileName'],
+                    'fileInfo' => pathinfo($file['filePath']),
+                    'dateCreated' => $file['dateCreated'],
+                ];
+            }
+
             $data['replies'] = $replyCollection;
+            $data['files'] = $fileCollection;
 
             $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['ticketId']);
             $collection[$newId] = $data;
@@ -538,6 +635,14 @@ class DashboardService
         return $collection;
     }
 
+    /**
+     * Parse Permits
+     *
+     * @param $permits
+     * @param $permitStatuses
+     *
+     * @return array
+     */
     private function parsePermits($permits, $permitStatuses)
     {
         $statusCollection = [];
@@ -575,6 +680,16 @@ class DashboardService
         return $collection;
     }
 
+    /**
+     * Validate Password
+     *
+     * @param $password
+     * @param $currentPassword
+     * @param $newPassword
+     * @param $confirmPassword
+     *
+     * @return array|string
+     */
     private function validatePassword($password, $currentPassword, $newPassword, $confirmPassword)
     {
         $errors = [];

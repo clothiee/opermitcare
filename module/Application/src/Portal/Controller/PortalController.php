@@ -6,6 +6,7 @@ use Application\Opermitcare\User\Form\UserForm;
 use Application\Portal\Service\DashboardService;
 use Application\Portal\Service\SessionService;
 use ArrayObject;
+use Laminas\Form\Element\File;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
@@ -193,12 +194,13 @@ class PortalController extends AbstractActionController
 
         if ($request->isPost()) {
             $post = $request->getPost()->toArray();
+            $files = $request->getFiles()->toArray();
 
             $viewOptions['activeTab'] = $post['process'] ?: 'overview';
 
             switch ($post['process']) {
                 case 'create-ticket':
-                    $process = $this->dashboardService->createTicket($post);
+                    $process = $this->dashboardService->createTicket($post, $files);
                     $viewOptions['response']['code'] = $process['code'];
                     $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
                     break;

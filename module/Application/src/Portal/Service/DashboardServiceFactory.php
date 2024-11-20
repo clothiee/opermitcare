@@ -37,6 +37,7 @@ class DashboardServiceFactory
         $replyTable = $container->get(ReplyTable::class);
         $permitTable = $container->get(PermitTable::class);
         $permitStatusTable = $container->get(PermitStatusTable::class);
+        $fileService = $container->get(FileService::class);
 
         return new DashboardService(
             $config,
@@ -48,7 +49,8 @@ class DashboardServiceFactory
             $ticketStatusTable,
             $replyTable,
             $permitTable,
-            $permitStatusTable
+            $permitStatusTable,
+            $fileService
         );
     }
 }

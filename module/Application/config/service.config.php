@@ -22,6 +22,8 @@ use Application\Opermitcare\UserType\Model\UserTypeTable;
 use Application\Opermitcare\UserType\Model\UserTypeTableFactory;
 use Application\Portal\Service\DashboardService;
 use Application\Portal\Service\DashboardServiceFactory;
+use Application\Portal\Service\FileService;
+use Application\Portal\Service\FileServiceFactory;
 use Application\Portal\Service\SessionService;
 use Application\Portal\Service\SessionServiceFactory;
 
@@ -30,16 +32,17 @@ $table = [
     PermitTable::class => PermitTableFactory::class,
     PermitStatusTable::class => PermitStatusTableFactory::class,
     ProblemTypeTable::class => ProblemTypeTableFactory::class,
+    ReplyTable::class => ReplyTableFactory::class,
     TicketTable::class => TicketTableFactory::class,
     TicketStatusTable::class => TicketStatusTableFactory::class,
     UserTable::class => UserTableFactory::class,
     UserTypeTable::class => UserTypeTableFactory::class,
-    ReplyTable::class => ReplyTableFactory::class,
 ];
 
 $service = [
-    SessionService::class => SessionServiceFactory::class,
     DashboardService::class => DashboardServiceFactory::class,
+    FileService::class => FileServiceFactory::class,
+    SessionService::class => SessionServiceFactory::class,
 ];
 
 return [
