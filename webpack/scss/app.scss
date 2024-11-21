@@ -11,6 +11,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  position: relative;
+  scrollbar-color: var(--mid-gray) transparent;
+  scrollbar-width: thin;
 }
 
 header {

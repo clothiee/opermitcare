@@ -93,23 +93,33 @@ endswitch; ?>
 <?php if (!empty($permit['files'])) : ?>
     <div class="dashboard__permit-detail dashboard__permit-detail--attachment">
         <?php foreach ($permit['files'] as $file) : ?>
-            <a href="/<?= $file['fileInfo']['dirname'] . '/'. $file['fileInfo']['basename'] ?>" download>
-                <div class="dashboard__file">
-                    <div class="dashboard__file--icon">
-                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 7.90909V16C6 19.3137 8.68629 22 12 22V22C15.3137 22 18 19.3137 18 16V6C18 3.79086 16.2091 2 14 2V2C11.7909 2 10 3.79086 10 6V15.1818C10 16.2864 10.8954 17.1818 12 17.1818V17.1818C13.1046 17.1818 14 16.2864 14 15.1818V8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <div class="dashboard__file--name"><?= $file['fileName']; ?>.<?= $file['fileInfo']['extension'] ?></div>
-                    <div class="dashboard__file--icon">
+            <div class="dashboard__file">
+                <div class="dashboard__file--icon">
+                    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 7.90909V16C6 19.3137 8.68629 22 12 22V22C15.3137 22 18 19.3137 18 16V6C18 3.79086 16.2091 2 14 2V2C11.7909 2 10 3.79086 10 6V15.1818C10 16.2864 10.8954 17.1818 12 17.1818V17.1818C13.1046 17.1818 14 16.2864 14 15.1818V8"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="dashboard__file--name"><?= $file['fileName']; ?>.<?= $file['fileInfo']['extension'] ?></div>
+                <a href="/<?= $file['fileInfo']['dirname'] . '/' . $file['fileInfo']['basename'] ?>" download>
+                    <div class="dashboard__file--download">
                         <svg focusable="false" width="20px" height="20px" viewBox="0 0 48 48" aria-hidden="true">
                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <path d="M37.1205006,40.035 L11.2545006,40.035 C10.7025006,40.035 10.2545006,40.483 10.2545006,41.035 L10.2545006,43.035 C10.2545006,43.587 10.7025006,44.035 11.2545006,44.035 L37.1205006,44.035 C37.6725006,44.035 38.1205006,43.587 38.1205006,43.035 L38.1205006,41.035 C38.1205006,40.483 37.6725006,40.035 37.1205006,40.035 L37.1205006,40.035 Z M10.8805006,23.535 C9.70750064,22.364 9.70650064,20.465 10.8775006,19.292 L11.5845006,18.585 L22.1875006,29.176 L22.1875006,4 L26.1875006,4 L26.1875006,29.171 L36.7735006,18.586 L37.4805006,19.293 C38.6515006,20.464 38.6515006,22.364 37.4805006,23.535 L24.1885006,36.827 L10.8805006,23.535 Z"></path>
                             </g>
                         </svg>
                     </div>
+                </a>
+                <div class="dashboard__file--preview"
+                     data-file-name="/<?= $file['fileInfo']['dirname'] . '/' . $file['fileInfo']['basename'] ?>"
+                     data-file-extension="<?= $file['fileInfo']['extension'] ?>">
+                    <svg focusable="false" width="20px" viewBox="0 0 24 24" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M21.71 11.2535C20.9435 10.0884 17.2917 5 12.0002 5C6.36056 5 2.58388 10.7799 2.17695 11.4304L2.10436 11.556C1.95283 11.8611 1.96664 12.2246 2.14618 12.5195L2.29085 12.7465C3.05724 13.9116 6.70868 19 12.0002 19C17.6398 19 21.4169 13.2201 21.8235 12.5696L21.896 12.444C22.0475 12.1389 22.0338 11.7754 21.8547 11.4805L21.71 11.2535ZM4.00049 12C4.98699 10.6245 7.95149 7 11.793 7C15.4396 7 18.2962 10.2662 19.4204 11.7736L19.586 12C18.5995 13.3755 15.6345 17 11.793 17C8.14634 17 5.28978 13.7338 4.16603 12.2264L4.00049 12ZM16.0006 12C16.0006 9.7945 14.2061 8 12.0006 8C9.79512 8 8.00062 9.7945 8.00062 12C8.00062 14.2055 9.79512 16 12.0006 16C14.2061 16 16.0006 14.2055 16.0006 12ZM10.0006 12C10.0006 10.897 10.8976 10 12.0006 10C13.1036 10 14.0006 10.897 14.0006 12C14.0006 13.103 13.1036 14 12.0006 14C10.8976 14 10.0006 13.103 10.0006 12Z"></path>
+                    </svg>
                 </div>
-            </a>
+            </div>
         <?php endforeach; ?>
     </div>
 <?php endif; ?>

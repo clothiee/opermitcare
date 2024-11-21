@@ -430,8 +430,6 @@
       text-align: justify;
       word-wrap: normal;
 
-      &:last-child {}
-
       &--label {
         color: var(--dashboard-tab-gray-color);
         font-weight: 600;
@@ -797,6 +795,7 @@
     flex-direction: row;
     height: 100%;
     gap: 10px;
+
     &:active, &:hover {
       color: var(--main-color);
     }
@@ -807,16 +806,23 @@
       width: calc(100% - 50px);
     }
 
-    &--icon {
+    &--icon,
+    &--download {
       width: 25px;
+
+      svg {
+        stroke: var(--main-color);
+      }
+
+      g {
+        fill: var(--main-color);
+      }
     }
 
-    svg {
-      stroke: var(--main-color);
-    }
-
-    g {
-      fill: var(--main-color);
+    &--preview {
+      svg {
+        fill: var(--main-color);
+      }
     }
   }
 
@@ -1062,6 +1068,71 @@
       .dashboard__reply-time {
         float: right;
         margin-right: 10px;
+      }
+    }
+  }
+
+  &__dialog {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    top: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-wrapper {
+      margin: 0 auto;
+      width:100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    &-header {
+      line-height: 30px;
+      vertical-align: middle;
+      span {
+        float: right;
+        background-color: #fff;
+        color: var(--main-color);
+        border-radius: 50px;
+        height: 40px;
+        width: 40px;
+        font-size: 30px;
+        text-align: center;
+        line-height: 40px;
+        -webkit-box-shadow: 0 0 3px 1px rgba(181, 181, 181, 0.5);
+        -moz-box-shadow: 0 0 3px 1px rgba(181, 181, 181, 0.5);
+        box-shadow: 0 0 3px 1px rgba(181, 181, 181, 0.5);
+      }
+    }
+    &-content {
+      background-color: var(--dashboard-dialog-body-background-color);
+      border-right: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      border-radius: 10px;
+      -webkit-box-shadow: 0 0 3px 1px rgba(181, 181, 181, 0.5);
+      -moz-box-shadow: 0 0 3px 1px rgba(181, 181, 181, 0.5);
+      box-shadow: 0 0 3px 1px rgba(181, 181, 181, 0.5);
+      height: 100%;
+      overflow-y: auto;
+      max-height: calc(100vh - 200px);
+      scrollbar-color: var(--mid-gray) transparent;
+      scrollbar-width: thin;
+
+      img, object {
+        width: 100%;
+      }
+      object {
+        min-height: calc(100vh - 100px);
       }
     }
   }

@@ -142,6 +142,31 @@ export class LayoutSettingsModule {
 
             attachment('ticket');
             attachment('permit');
+
+            $(document).on('click', '.dashboard__dialog-header span', function () {
+                const dialog = $('.dashboard__dialog');
+
+                dialog.find('.dashboard__dialog-content').html('');
+                dialog.hide();
+            });
+
+            $(document).on('click', '.dashboard__file--preview', function () {
+                const dialog = $('.dashboard__dialog');
+                const extension = $(this).data('file-extension');
+                const fileName = $(this).data('file-name');
+
+                console.log(fileName);
+                console.log(extension);
+
+                if (extension === 'pdf') {
+                    const pdf = `<object data="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20210101201653/PDF.pdf"></object>`;
+                    dialog.find('.dashboard__dialog-content').html(pdf);
+                } else {
+                    dialog.find('.dashboard__dialog-content').html(`<img src="${fileName}"/>`);
+                }
+
+                dialog.show();
+            });
         };
 
         let replyTicket = function (panel, message, ticketStatusId) {
