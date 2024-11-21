@@ -59,13 +59,12 @@ class FileService
      *
      * @return array
      */
-    public function upload($tag, $files) {
+    public function upload($tag, $files)
+    {
         $response = [];
 
-        if (!empty($files)) {
-            foreach ($files as $file) {
-                $response[] = $this->execute($tag, $file);
-            }
+        foreach ($files as $file) {
+            $response[] = $this->execute($tag, $file);
         }
 
         return $response;
@@ -76,17 +75,20 @@ class FileService
      *
      * @return array
      */
-    public function validate($files) {
-        if (!empty($files)) {
-            foreach ($files as $file) {
-                $fileSize = filesize($file['tmp_name']);
+    public function validate($files)
+    {
+        foreach ($files as $file) {
+            if (empty($file['tmp_name'])) {
+                continue;
+            }
 
-                if ($fileSize >= self::UPLOAD_MAX_SIZE || !$fileSize) {
-                    return [
-                        'code' => self::INVALID_CODE,
-                        'message' => self::INVALID_MESSAGE,
-                    ];
-                }
+            $fileSize = filesize($file['tmp_name']);
+
+            if ($fileSize >= self::UPLOAD_MAX_SIZE || !$fileSize) {
+                return [
+                    'code' => self::INVALID_CODE,
+                    'message' => self::INVALID_MESSAGE,
+                ];
             }
         }
 

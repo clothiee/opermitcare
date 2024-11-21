@@ -687,6 +687,7 @@ class DashboardService
                     'userName' => $agent['userName'],
                     'firstName' => $agent['firstName'],
                     'lastName' => $agent['lastName'],
+                    'middleName' => $agent['middleName'],
                     'email' => $agent['email'],
                     'userTypeId' => $agent['userTypeId'],
                 ];

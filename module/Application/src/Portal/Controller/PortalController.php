@@ -196,37 +196,7 @@ class PortalController extends AbstractActionController
             $post = $request->getPost()->toArray();
             $files = $request->getFiles()->toArray();
 
-            $viewOptions['activeTab'] = $post['process'] ?: 'overview';
-
-            switch ($post['process']) {
-                case 'create-ticket':
-                    $process = $this->dashboardService->createTicket($post, $files);
-                    $viewOptions['response']['code'] = $process['code'];
-                    $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
-                    break;
-                case 'apply-permit':
-                    $process = $this->dashboardService->applyPermit($post, $files);
-                    $viewOptions['response']['code'] = $process['code'];
-                    $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
-                    $viewOptions['response']['data'] = $process['data'];
-                    break;
-                case 'assess-permit':
-                    $process = $this->dashboardService->accessPermit($post);
-                    $viewOptions['response']['code'] = $process['code'];
-                    $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
-                    $viewOptions['response']['data'] = $process['data'];
-                    $viewOptions['activeTab'] = 'my-permit';
-                    $viewOptions['activePanel'] = $process['activePanel'];
-                    $viewOptions['activeTabAction'] = $process['activeTabAction'];
-                    break;
-                case 'update-password':
-                    $process= $this->dashboardService->updatePassword($post);
-                    $viewOptions['response']['code'] = $process['code'];
-                    $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
-                    $viewOptions['response']['data'] = $process['data'];
-                    $viewOptions['activeTab'] = 'my-profile';
-                    break;
-            }
+            $viewOptions = $this->process($post, $files);
         }
 
         $viewModel = new ViewModel();
@@ -237,6 +207,43 @@ class PortalController extends AbstractActionController
         );
 
         return $viewModel;
+    }
+
+    private function process($post, $files)
+    {
+        $viewOptions['activeTab'] = $post['process'] ?: 'overview';
+
+        switch ($post['process']) {
+            case 'create-ticket':
+                $process = $this->dashboardService->createTicket($post, $files);
+                $viewOptions['response']['code'] = $process['code'];
+                $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                break;
+            case 'apply-permit':
+                $process = $this->dashboardService->applyPermit($post, $files);
+                $viewOptions['response']['code'] = $process['code'];
+                $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                $viewOptions['response']['data'] = $process['data'];
+                break;
+            case 'assess-permit':
+                $process = $this->dashboardService->accessPermit($post);
+                $viewOptions['response']['code'] = $process['code'];
+                $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                $viewOptions['response']['data'] = $process['data'];
+                $viewOptions['activeTab'] = 'my-permit';
+                $viewOptions['activePanel'] = $process['activePanel'];
+                $viewOptions['activeTabAction'] = $process['activeTabAction'];
+                break;
+            case 'update-password':
+                $process= $this->dashboardService->updatePassword($post);
+                $viewOptions['response']['code'] = $process['code'];
+                $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                $viewOptions['response']['data'] = $process['data'];
+                $viewOptions['activeTab'] = 'my-profile';
+                break;
+        }
+
+        return $viewOptions;
     }
 
     /**

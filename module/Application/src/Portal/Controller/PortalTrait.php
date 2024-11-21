@@ -20,7 +20,10 @@ trait PortalTrait
             : '';
 
         if ($userTypeName) {
-            return "application/portal/portal/$userTypeName/$action";
+            $param1 = $this->params()->fromRoute('param1');
+            $templatePath = strlen($param1) ? 'partial/' . $param1 : $action;
+
+            return "application/portal/portal/$userTypeName/$templatePath";
         }
 
         return "application/portal/portal/invalid";
