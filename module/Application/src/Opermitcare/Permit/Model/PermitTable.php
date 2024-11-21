@@ -70,7 +70,7 @@ class PermitTable
 
         if ($permitId === 0) {
             $this->tableGateway->insert($data);
-            return;
+            return $this->tableGateway->getLastInsertValue();
         }
 
         try {

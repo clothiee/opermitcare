@@ -194,11 +194,20 @@ class DashboardService
      * Apply Permit
      *
      * @param $post
+     * @param $files
      *
      * @return array
      */
-    public function applyPermit($post)
+    public function applyPermit($post, $files)
     {
+        $validateFile = $this->fileService->validate($files['attachment']);
+
+        if ($validateFile['code'] === FileService::INVALID_CODE) {
+            $validateFile['data'] = $post;
+
+            return $validateFile;
+        }
+
         $sessionDetails = $this->sessionService->get();
 
         $post['residentId'] = $sessionDetails['user']['userId'];
@@ -225,7 +234,9 @@ class DashboardService
             try {
                 $permit = new Permit();
                 $permit->exchangeArray($post);
-                $this->permitTable->save($permit);
+                $id = $this->permitTable->save($permit);
+
+                $response = $this->fileService->upload('permit-'.$id, $files['attachment']);
             } catch (\Exception $exception) {
                 return [
                     'code' => self::INVALID_CODE,
@@ -259,6 +270,13 @@ class DashboardService
     public function createTicket($post, $files)
     {
         $sessionDetails = $this->sessionService->get();
+        $validateFile = $this->fileService->validate($files['attachment']);
+
+        if ($validateFile['code'] === FileService::INVALID_CODE) {
+            $validateFile['data'] = $post;
+
+            return $validateFile;
+        }
 
         $post['residentId'] = $sessionDetails['user']['userId'];
         $post['ticketStatusId'] = 1;
@@ -659,6 +677,9 @@ class DashboardService
             $user = $this->userTable->getByColumns([
                                                                  'userId' => $data['agentId'],
                                                              ]);
+            $files = $this->fileService->getByTag('permit-'.$data['permitId']);
+            $fileCollection = [];
+
             if (!empty($user[0])) {
                 $agent = (array) $user[0];
                 $data['agentId'] = [
@@ -670,6 +691,17 @@ class DashboardService
                     'userTypeId' => $agent['userTypeId'],
                 ];
             }
+
+            foreach ($files as $fileItem) {
+                $file = (array) $fileItem;
+                $fileCollection[] = [
+                    'fileName' => $file['fileName'],
+                    'fileInfo' => pathinfo($file['filePath']),
+                    'dateCreated' => $file['dateCreated'],
+                ];
+            }
+
+            $data['files'] = $fileCollection;
 
             $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['permitId']);
             $collection[$newId] = $data;

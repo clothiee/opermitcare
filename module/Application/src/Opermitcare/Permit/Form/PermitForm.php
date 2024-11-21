@@ -4,6 +4,7 @@ namespace Application\Opermitcare\Permit\Form;
 
 use Laminas\Filter\StripTags;
 use Laminas\Filter\ToInt;
+use Laminas\Form\Element\File;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
@@ -173,6 +174,17 @@ class PermitForm extends Form implements InputFilterProviderInterface
                        'name' => 'remarks',
                        'options' => [
                            'label' => 'Remarks',
+                       ],
+                   ]);
+        $this->add([
+                       'type' => File::class,
+                       'name' => 'attachment',
+                       'options' => [
+                           'label' => 'Attachment (s)',
+                       ],
+                       'attributes' => [
+                           'type'     => 'file',
+                           'multiple' => 'true'
                        ],
                    ]);
         $this->add([

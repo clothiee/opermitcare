@@ -5,17 +5,18 @@ namespace Application\Portal\Service;
 use Application\Opermitcare\File\Model\File;
 use Application\Opermitcare\File\Model\FileTable;
 use ArrayObject;
+use Exception;
 
 class FileService
 {
     const SUCCESS_CODE = 200;
     const SUCCESS_MESSAGE = 'Success';
-    const INVALID_CODE = 500;
+    const INVALID_CODE = 401;
     const INVALID_MESSAGE = 'Invalid file size.';
     const FILE_DIRECTORY = 'uploads';
     const FILE_NAME_FORMAT = '%s/%s-%s-%s.%s';
     const TEMPORARY_PATH = './public/%s';
-    const UPLOAD_MAX_SIZE = 2000000;
+    const UPLOAD_MAX_SIZE = 1000000;
 
     private $config;
     private $fileTable;
@@ -45,7 +46,7 @@ class FileService
     {
         try {
             return $this->fileTable->getByColumns(['tag' => $tag]);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return [];
         }
     }
@@ -71,6 +72,31 @@ class FileService
     }
 
     /**
+     * @param $files
+     *
+     * @return array
+     */
+    public function validate($files) {
+        if (!empty($files)) {
+            foreach ($files as $file) {
+                $fileSize = filesize($file['tmp_name']);
+
+                if ($fileSize >= self::UPLOAD_MAX_SIZE || !$fileSize) {
+                    return [
+                        'code' => self::INVALID_CODE,
+                        'message' => self::INVALID_MESSAGE,
+                    ];
+                }
+            }
+        }
+
+        return [
+            'code' => self::SUCCESS_CODE,
+            'message' => self::SUCCESS_MESSAGE,
+        ];
+    }
+
+    /**
      * Execute Upload File
      *
      * @param $tag
@@ -81,15 +107,6 @@ class FileService
     private function execute($tag, $file)
     {
         try {
-            $fileSize = filesize($file['tmp_name']);
-
-            if ($fileSize >= self::UPLOAD_MAX_SIZE || !$fileSize) {
-                throw new \Exception(
-                    self::INVALID_MESSAGE,
-                    self::INVALID_CODE
-                );
-            }
-
             $pathInfo = pathinfo($file['name']);
             $newFilePath = str_replace(' ', '-', sprintf(
                 self::FILE_NAME_FORMAT,
@@ -118,7 +135,7 @@ class FileService
                 'code' => self::SUCCESS_CODE,
                 'message' => self::SUCCESS_MESSAGE,
             ];
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return [
                 'code' => self::INVALID_CODE,
                 'message' => $exception->getMessage(),

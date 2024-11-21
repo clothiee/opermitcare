@@ -104,6 +104,7 @@ export class LayoutSettingsModule {
                 form.find('.dashboard__input-field--text span').text('');
                 form.find('.dashboard__input-field[type="hidden"]').val('');
                 form.find('.dashboard__input-row--active').removeClass('dashboard__input-row--active');
+                form.find('#files-names').html('');
                 form[0].reset();
             });
 
@@ -139,7 +140,8 @@ export class LayoutSettingsModule {
                 setTimeout(function(){newWin.close();},10);
             });
 
-            attachments();
+            attachment('ticket');
+            attachment('permit');
         };
 
         let replyTicket = function (panel, message, ticketStatusId) {
@@ -198,16 +200,16 @@ export class LayoutSettingsModule {
             });
         };
 
-        let attachments = function () {
+        let attachment = function (category) {
             const dt = new DataTransfer();
 
-            $("#attachment").on('change', function(e){
+            $('#attachment-'+category).on('change', function(e){
                 for(var i = 0; i < this.files.length; i++){
                     let fileBloc = $('<span/>', {class: 'file-block'}),
                         fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
                     fileBloc.append('<span class="file-delete"><span>+</span></span>')
                         .append(fileName);
-                    $("#file-list > #files-names").append(fileBloc);
+                    $('#file-list > #files-names').append(fileBloc);
                 };
 
                 for (let file of this.files) {
@@ -226,7 +228,7 @@ export class LayoutSettingsModule {
                         }
                     }
 
-                    document.getElementById('attachment').files = dt.files;
+                    document.getElementById('attachment-'+category).files = dt.files;
                 });
             });
         };

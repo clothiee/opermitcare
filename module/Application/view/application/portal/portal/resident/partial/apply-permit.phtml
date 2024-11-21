@@ -75,7 +75,7 @@ $showCategoryDefault = $showCategoryOne || $showCategoryTwo ? ' dashboard__input
 <div class="dashboard__panel-header">
     <h1><?= $this->title ?></h1>
 </div>
-<form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" method="post">
+<form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" enctype="multipart/form-data" method="post">
     <div class="dashboard__form">
         <div class="dashboard__input-group">
             <label class="dashboard__dropdown">
@@ -218,12 +218,36 @@ $showCategoryDefault = $showCategoryOne || $showCategoryTwo ? ' dashboard__input
                        value="<?= $formData['monthlyRent']; ?>"/>
                 <label class="dashboard__input-label">Monthly Rent</label>
             </div>
+            <div class="dashboard__input-group">
+                <div class="dashboard__attachment">
+                <span id="file-list">
+                    <span id="files-names"></span>
+                </span>
+                </div>
+                <label class="dashboard__input-label">Attachment (s)</label>
+            </div>
         </div>
     </div>
-    <div class="dashboard__divider"></div>
-    <div class="dashboard__actions">
-        <input type="hidden" name="process" value="apply-permit"/>
-        <input class="dashboard__button dashboard__button--secondary" type="button" value="Reset"/>
-        <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
+    <div class="dashboard__input-row<?= $showCategoryDefault ?>" data-type="default">
+        <div class="dashboard__divider"></div>
+        <div class="dashboard__actions">
+            <input type="hidden" name="process" value="apply-permit"/>
+            <input class="dashboard__button dashboard__button--secondary" type="button" value="Reset"/>
+            <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
+            <label for="attachment-permit">
+                <a class="dashboard__button dashboard__button--primary dashboard__button--attachment" type="button">
+                    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 7.90909V16C6 19.3137 8.68629 22 12 22V22C15.3137 22 18 19.3137 18 16V6C18 3.79086 16.2091 2 14 2V2C11.7909 2 10 3.79086 10 6V15.1818C10 16.2864 10.8954 17.1818 12 17.1818V17.1818C13.1046 17.1818 14 16.2864 14 15.1818V8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Attach File</span>
+                </a>
+            </label>
+            <input class="dashboard__attachment-file"
+                   type="file"
+                   name="attachment[]"
+                   accept=".jpg, .jpeg, .png, .pdf"
+                   id="attachment-permit"
+                   multiple/>
+        </div>
     </div>
 </form>
