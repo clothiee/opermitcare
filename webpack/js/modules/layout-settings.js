@@ -146,26 +146,23 @@ export class LayoutSettingsModule {
             $(document).on('click', '.dashboard__dialog-header span', function () {
                 const dialog = $('.dashboard__dialog');
 
-                dialog.find('.dashboard__dialog-content').html('');
+                dialog.attr('class', 'dashboard__dialog');
+                dialog.html('');
                 dialog.hide();
             });
 
             $(document).on('click', '.dashboard__file--preview', function () {
-                const dialog = $('.dashboard__dialog');
                 const extension = $(this).data('file-extension');
                 const fileName = $(this).data('file-name');
-
-                console.log(fileName);
-                console.log(extension);
+                let htmlContent = '';
 
                 if (extension === 'pdf') {
-                    const pdf = `<object data="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20210101201653/PDF.pdf"></object>`;
-                    dialog.find('.dashboard__dialog-content').html(pdf);
+                    htmlContent = `<object data="${fileName}"></object>`;
                 } else {
-                    dialog.find('.dashboard__dialog-content').html(`<img src="${fileName}"/>`);
+                    htmlContent = `<img src="${fileName}"/>`;
                 }
 
-                dialog.show();
+                return buildDialog('preview', htmlContent);
             });
         };
 
@@ -256,6 +253,18 @@ export class LayoutSettingsModule {
                     document.getElementById('attachment-'+category).files = dt.files;
                 });
             });
+        };
+
+        let buildDialog = function (className, htmlContent) {
+            const dialog = $('.dashboard__dialog');
+            const dialogHeader = `<div class="dashboard__dialog-header"><span>&times;</span></div>`;
+            const dialogContent = `<div class="dashboard__dialog-content">${htmlContent}</div>`;
+            const dialogWrapper = `<div class="dashboard__dialog-wrapper">${dialogHeader}${dialogContent}</div>`;
+
+            dialog.addClass(`dashboard__dialog--${className}`);
+            dialog.html(dialogWrapper);
+
+            dialog.show();
         };
 
         return addEventListener();
