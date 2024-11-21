@@ -12,15 +12,14 @@ $isAssessActive = $this->activeTabAction === 'assess' ? ' active' : '';
 <?php if ($countPermits) : ?>
     <?php foreach ($permits as $permitNo => $permit) :
         $isActive = $this->activePanel === 'permit-' . $permit['permitId'] ? ' active' : ''; ?>
-        <div class="dashboard__panel<?= $isActive ?>" data-panel="permit-<?= $permit['permitId'] ?>"
-             data-permit-id="<?= $permit['permitId'] ?>">
+        <div class="dashboard__panel<?= $isActive ?>" data-panel="permit-<?= $permit['permitId'] ?>" data-id="<?= $permit['permitId'] ?>">
             <div class="dashboard__panel-breadcrumbs">
                 <span class="js-see-panel" data-panel="my-permit">My Special Permit (s)</span>
             </div>
             <?php if ($this->alertMessage) : ?>
                 <div class="alert<?= $this->alertClass ?>">
                     <span><?= $this->alertMessage ?></span>
-                    <a class="button">&times;</a>
+                    <a class="alert__button js-alert-close">&times;</a>
                 </div>
             <?php endif; ?>
             <div class="dashboard__panel-header">

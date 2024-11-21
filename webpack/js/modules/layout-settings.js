@@ -5,18 +5,6 @@ export class LayoutSettingsModule {
 
     initialize() {
         let addEventListener = function () {
-            if (window.history.replaceState) {
-                window.history.replaceState(null, null, window.location.href);
-            }
-
-            $(window).scroll(function () {
-                if ($(this).scrollTop() > 300) {
-                    return $('.navigation').addClass('navigation--sticky');
-                }
-
-                return $('.navigation').removeClass('navigation--sticky');
-            });
-
             $(document).on('click', '.login__input svg', function () {
                 let targetParent = $(this).closest('.login__input');
 
@@ -94,177 +82,285 @@ export class LayoutSettingsModule {
                     .addClass('dashboard__input-row--active');
             });
 
-            $(document).on('click', '.alert a.button', function () {
-                $(this).parent().remove();
-            });
-
-            $(document).on('click', '[value="Reset"]', function () {
-                const form = $(this).closest('form');
-
-                form.find('.dashboard__input-field--text span').text('');
-                form.find('.dashboard__input-field[type="hidden"]').val('');
-                form.find('.dashboard__input-row--active').removeClass('dashboard__input-row--active');
-                form.find('#files-names').html('');
-                form[0].reset();
-            });
-
-            $(document).on('click', '[value="Reply"]', function () {
-                const panel = $(this).closest('.dashboard__panel');
-                const message = panel.find('.dashboard__reply-input').val();
-
-                return replyTicket(panel, message, 1);
-            });
-
-            $(document).on('click', '[value="Close"]', function () {
-                const panel = $(this).closest('.dashboard__panel');
-                const message = 'I\'m closing the ticket.';
-
-                return replyTicket(panel, message, 3);
-            });
-
-            $(document).on('click', '[value="Open"]', function () {
-                const panel = $(this).closest('.dashboard__panel');
-                const message = 'I\'m re-opening the ticket.';
-
-                return replyTicket(panel, message, 1);
-            });
-
-            $(document).on('click', '[value="Print"]', function () {
-                var divToPrint=document.getElementById('statement-of-account');
-                var newWin=window.open('','Print Statement Of Account');
-                var style = 'ol,ul{padding-left:15px}ol{font-size:12px}ul{padding-bottom:15px}.statement-of-account__table{border-spacing:0;border-collapse:collapse;font-family:\'Open Sans\',sans-serif;font-size:12px;width:100%}.statement-of-account__title{border-bottom:3px solid #000;letter-spacing:1px;padding-top:20px;text-transform:uppercase;width:100%}.statement-of-account__table-category{font-size:10px;padding-top:10px;text-transform:uppercase}.statement-of-account__table-label{font-size:10px;padding-top:5px}.statement-of-account__table-space{height:20px}.statement-of-account__table-summary-title{border:2px solid #000000;font-size:12px;padding:3px;text-align:center}.statement-of-account__table-summary-label{padding:5px}.statement-of-account__table-summary-value{padding:5px;text-align:right}.statement-of-account__table-divider{height:20px;border-top:2px dashed #000}.statement-of-account__table-footer{padding:10px;border:1px solid #000;vertical-align:top}';
-                newWin.document.open();
-                newWin.document.write('<html><head><style>'+style+'</style></head><body onload="window.print()">'+divToPrint.outerHTML+'</body></html>');
-                newWin.document.close();
-
-                setTimeout(function(){newWin.close();},10);
-            });
-
-            attachment('ticket');
-            attachment('permit');
-
-            $(document).on('click', '.dashboard__dialog-header span', function () {
-                const dialog = $('.dashboard__dialog');
-
-                dialog.attr('class', 'dashboard__dialog');
-                dialog.html('');
-                dialog.hide();
-            });
-
-            $(document).on('click', '.dashboard__file--preview', function () {
-                const extension = $(this).data('file-extension');
-                const fileName = $(this).data('file-name');
-                let htmlContent = '';
-
-                if (extension === 'pdf') {
-                    htmlContent = `<object data="${fileName}"></object>`;
-                } else {
-                    htmlContent = `<img src="${fileName}"/>`;
-                }
-
-                return buildDialog('preview', htmlContent);
-            });
+            Layout.render();
+            Dashboard.render()
         };
 
-        let replyTicket = function (panel, message, ticketStatusId) {
-            const ticketId = panel.data('ticket-id');
-            const ticket = $(`.dashboard__ticket[data-ticket="ticket-${ticketId}"]`);
-            const replyCollection = panel.find('.dashboard__reply-collection');
+        let Dashboard = {
+            render: function () {
+                Dashboard.attachment.init('ticket');
+                Dashboard.attachment.init('permit');
+                Dashboard.ticket.init();
+                Dashboard.permit.init();
+            },
+            attachment: {
+                init: function (category) {
+                    const dt = new DataTransfer();
 
-            return $.ajax({
-                url: configuration.ajax.replyTicket,
-                type: 'POST',
-                data: {
-                    ticketId: ticketId,
-                    message: message,
-                    ticketStatusId: ticketStatusId
-                },
-                success: function (data) {
-                    let bubble = data.code === 200
-                        ? `<div class="dashboard__reply-bubble">${message}</div>`
-                        : `<div class="dashboard__reply-error">${data.response.message}</div>`;
-                    let replyHtml = `<div class="dashboard__reply dashboard__reply--right">${bubble}</div>`;
+                    $('#attachment-' + category).on('change', function (e) {
+                        for (var i = 0; i < this.files.length; i++) {
+                            let fileBloc = $('<span/>', {class: 'file-block'}),
+                                fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
+                            fileBloc.append('<span class="file-delete"><span>+</span></span>')
+                                .append(fileName);
+                            $('#file-list > #files-names').append(fileBloc);
+                        }
+                        ;
 
-                    if (data.code === 200) {
-                        let senderType = `<span class="dashboard__reply-sender--type">${data.response.userType.userTypeName}</span>`;
-                        let senderName = `<span class="dashboard__reply-sender--name">You</span>`;
-                        let sender = `<div class="dashboard__reply-sender">${senderType}${senderName}</div>`;
-                        let time = `<div class="dashboard__reply-time">${data.response.dateCreated}</div>`;
-                        replyHtml = `<div class="dashboard__reply dashboard__reply--right">${sender}${bubble}${time}</div>`;
-
-                        ticket.find('.dashboard__ticket-status')
-                            .attr('class', 'dashboard__ticket-status')
-                            .addClass(`dashboard__ticket-status--${data.response.ticketStatusName}`)
-                            .html(data.response.ticketStatusName);
-                        panel.find('.dashboard__reply-empty').remove();
-                        panel.find('.dashboard__ticket-status')
-                            .attr('class', 'dashboard__ticket-status')
-                            .addClass(`dashboard__ticket-status--${data.response.ticketStatusName}`)
-                            .html(data.response.ticketStatusName);
-
-                        if (data.response.ticketStatusId === 2) {
-                            $('.js-ticket-action').attr('value', 'Close');
+                        for (let file of this.files) {
+                            dt.items.add(file);
                         }
 
-                        if (data.response.ticketStatusId === 3) {
-                            $('.js-ticket-action').attr('value', 'Open');
-                        }
-                    }
+                        this.files = dt.files;
 
-                    $(replyHtml).appendTo(replyCollection);
+                        $('span.file-delete').click(function () {
+                            let name = $(this).next('span.name').text();
+                            $(this).parent().remove();
+                            for (let i = 0; i < dt.items.length; i++) {
+                                if (name === dt.items[i].getAsFile().name) {
+                                    dt.items.remove(i);
+                                    continue;
+                                }
+                            }
 
-                    const newReplyCollection = panel.find('.dashboard__reply-collection');
-                    newReplyCollection.scrollTop(newReplyCollection[0].scrollHeight);
-                },
-                error: function (jqXHR, textStatus, error) {
-                    console.log(textStatus + ': ' + error + "\n" + jqXHR.responseText);
+                            document.getElementById('attachment-' + category).files = dt.files;
+                        });
+                    });
                 }
-            });
+            },
+            dialog: {
+                execute: function(element) {
+                    const action = element.val();
+                    const panel = element.closest('.dashboard__panel').data('panel');
+                    const details = panel.split('-');
+                    const message = `<p><strong>Are you sure you want to <strong>${action}</strong> this ${details[0]}?</strong></p>`;
+
+                    return Dashboard.dialog.confirmation(panel, action, message);
+                },
+                confirmation: function(panel, action, message) {
+                    const divider = `<div class="dashboard__divider"></div>`;
+                    const cancel = `<input class="dashboard__button dashboard__button--secondary js-dialog-close" type="button" value="Cancel"/>`;
+                    const confirm = `<input class="dashboard__button dashboard__button--primary js-dialog-confirm" type="button" value="Confirm"/>`;
+                    const actions = `<div class="dashboard__actions" data-panel="${panel}" data-action="${action}">${cancel}${confirm}</div>`;
+                    const htmlContent = `${message}${divider}${actions}`;
+
+                    return Layout.dialog.build('confirmation', htmlContent);
+                }
+            },
+            ticket: {
+                init: function () {
+                    $(document).on('click', '.js-ticket-action', function () {
+                        return Dashboard.dialog.execute($(this));
+                    });
+                },
+                reply: {
+                    execute: function (panel, message, ticketStatusId) {
+                        return Layout.ajax('POST', configuration.ajax.replyTicket, {
+                            ticketId: panel.data('id'),
+                            message: message,
+                            ticketStatusId: ticketStatusId
+                        }).always(function (data) {
+                            return Dashboard.ticket.reply.callback(panel, message, data);
+                        });
+                    },
+                    callback: function (panel, message, data) {
+                        const ticketId = panel.data('id');
+                        const ticket = $(`.dashboard__ticket[data-id="ticket-${ticketId}"]`);
+                        const replyCollection = panel.find('.dashboard__reply-collection');
+                        let bubble = data.code === 200
+                            ? `<div class="dashboard__reply-bubble">${message}</div>`
+                            : `<div class="dashboard__reply-error">${data.response.message}</div>`;
+                        let replyHtml = `<div class="dashboard__reply dashboard__reply--right">${bubble}</div>`;
+
+                        if (data.code === 200) {
+                            let senderType = `<span class="dashboard__reply-sender--type">${data.response.userType.userTypeName}</span>`;
+                            let senderName = `<span class="dashboard__reply-sender--name">You</span>`;
+                            let sender = `<div class="dashboard__reply-sender">${senderType}${senderName}</div>`;
+                            let time = `<div class="dashboard__reply-time">${data.response.dateCreated}</div>`;
+                            replyHtml = `<div class="dashboard__reply dashboard__reply--right">${sender}${bubble}${time}</div>`;
+
+                            ticket.find('.dashboard__ticket-status')
+                                .attr('class', 'dashboard__ticket-status')
+                                .addClass(`dashboard__ticket-status--${data.response.ticketStatusName}`)
+                                .html(data.response.ticketStatusName);
+                            panel.find('.dashboard__reply-empty').remove();
+                            panel.find('.dashboard__ticket-status')
+                                .attr('class', 'dashboard__ticket-status')
+                                .addClass(`dashboard__ticket-status--${data.response.ticketStatusName}`)
+                                .html(data.response.ticketStatusName);
+
+                            if (data.response.ticketStatusId === 3) {
+                                $('.js-ticket-action').attr('value', 'Open');
+                            } else {
+                                $('.js-ticket-action').attr('value', 'Close');
+                            }
+                        }
+
+                        $(replyHtml).appendTo(replyCollection);
+
+                        const newReplyCollection = panel.find('.dashboard__reply-collection');
+
+                        if (typeof newReplyCollection[0] !== "undefined") {
+                            newReplyCollection.scrollTop(newReplyCollection[0].scrollHeight);
+                        }
+
+                        panel.find('.dashboard__reply-input').val('');
+                        Layout.dialog.close();
+                    },
+                }
+            },
+            permit: {
+                init: function() {
+                    $(document).on('click', '.js-permit-action', function () {
+                        return Dashboard.dialog.execute($(this));
+                    });
+                },
+                soa: {
+                    print: function () {
+                        const element = document.getElementById('statement-of-account');
+                        const style = 'ol,ul{padding-left:15px}ol{font-size:12px}ul{padding-bottom:15px}.statement-of-account__table{border-spacing:0;border-collapse:collapse;font-family:\'Open Sans\',sans-serif;font-size:12px;width:100%}.statement-of-account__title{border-bottom:3px solid #000;letter-spacing:1px;padding-top:20px;text-transform:uppercase;width:100%}.statement-of-account__table-category{font-size:10px;padding-top:10px;text-transform:uppercase}.statement-of-account__table-label{font-size:10px;padding-top:5px}.statement-of-account__table-space{height:20px}.statement-of-account__table-summary-title{border:2px solid #000000;font-size:12px;padding:3px;text-align:center}.statement-of-account__table-summary-label{padding:5px}.statement-of-account__table-summary-value{padding:5px;text-align:right}.statement-of-account__table-divider{height:20px;border-top:2px dashed #000}.statement-of-account__table-footer{padding:10px;border:1px solid #000;vertical-align:top}';
+
+                        return Layout.print.execute(element, style);
+                    }
+                }
+            }
         };
-
-        let attachment = function (category) {
-            const dt = new DataTransfer();
-
-            $('#attachment-'+category).on('change', function(e){
-                for(var i = 0; i < this.files.length; i++){
-                    let fileBloc = $('<span/>', {class: 'file-block'}),
-                        fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
-                    fileBloc.append('<span class="file-delete"><span>+</span></span>')
-                        .append(fileName);
-                    $('#file-list > #files-names').append(fileBloc);
-                };
-
-                for (let file of this.files) {
-                    dt.items.add(file);
-                }
-
-                this.files = dt.files;
-
-                $('span.file-delete').click(function(){
-                    let name = $(this).next('span.name').text();
-                    $(this).parent().remove();
-                    for(let i = 0; i < dt.items.length; i++){
-                        if(name === dt.items[i].getAsFile().name){
-                            dt.items.remove(i);
-                            continue;
-                        }
+        let Layout = {
+            render: function () {
+                Layout.window.init();
+                Layout.form.init();
+                Layout.dialog.init();
+                Layout.print.init();
+            },
+            ajax: function (type, endpoint, data) {
+                return $.ajax({
+                    url: endpoint,
+                    type: type,
+                    data: data,
+                    error: function (jqXHR, textStatus, error) {
+                        console.log(textStatus + ': ' + error + "\n" + jqXHR.responseText);
                     }
-
-                    document.getElementById('attachment-'+category).files = dt.files;
                 });
-            });
-        };
+            },
+            window: {
+                init: function () {
+                    if (window.history.replaceState) {
+                        window.history.replaceState(null, null, window.location.href);
+                    }
 
-        let buildDialog = function (className, htmlContent) {
-            const dialog = $('.dashboard__dialog');
-            const dialogHeader = `<div class="dashboard__dialog-header"><span>&times;</span></div>`;
-            const dialogContent = `<div class="dashboard__dialog-content">${htmlContent}</div>`;
-            const dialogWrapper = `<div class="dashboard__dialog-wrapper">${dialogHeader}${dialogContent}</div>`;
+                    $(window).scroll(function () {
+                        if ($(this).scrollTop() > 300) {
+                            return $('.navigation').addClass('navigation--sticky');
+                        }
 
-            dialog.addClass(`dashboard__dialog--${className}`);
-            dialog.html(dialogWrapper);
+                        return $('.navigation').removeClass('navigation--sticky');
+                    });
+                }
+            },
+            dialog: {
+                init: function () {
+                    $(document).on('click', '.js-dialog-close', function () {
+                        return Layout.dialog.close();
+                    });
 
-            dialog.show();
+                    $(document).on('click', '.js-dialog-show', function () {
+                        return Layout.dialog.show($(this));
+                    });
+
+                    $(document).on('click', '.js-dialog-confirm', function () {
+                        const actions = $(this).closest('.dashboard__actions');
+                        const action = actions.data('action');
+                        const panel = $(`.dashboard__panel[data-panel="${actions.data('panel')}"]`);
+
+                        switch (action) {
+                            case 'Close':
+                                return Dashboard.ticket.reply.execute(panel, 'I\'m closing the ticket.', 3);
+                            case 'Open':
+                                return Dashboard.ticket.reply.execute(panel, 'I\'m re-opening the ticket.', 1);
+                            case 'Assess':
+                            case 'Reopen':
+                            case 'Reject':
+                                panel.find('.js-submit').val(action).click();
+                                return Layout.dialog.close();
+                            default:
+                                return false;
+                        }
+                    });
+
+                    $(document).on('click', '.js-reply', function () {
+                        const panel = $(this).closest('.dashboard__panel');
+                        const message = panel.find('.dashboard__reply-input').val();
+
+                        return Dashboard.ticket.reply.execute(panel, message, 2);
+                    });
+                },
+                build: function (className, htmlContent) {
+                    const dialog = $('dialog');
+                    const dialogHeader = `<div class="dialog__header"><span class="js-dialog-close">&times;</span></div>`;
+                    const dialogContent = `<div class="dialog__content">${htmlContent}</div>`;
+                    const dialogWrapper = `<div class="dialog__wrapper">${dialogHeader}${dialogContent}</div>`;
+
+                    dialog.addClass(`dialog dialog--${className}`).html(dialogWrapper).show();
+
+                    return false;
+                },
+                close: function () {
+                    const dialog = $('dialog');
+
+                    return dialog.attr('class', '').html('').hide();
+                },
+                show: function (element) {
+                    const extension = element.data('file-extension');
+                    const fileName = element.data('file-name');
+                    let htmlContent = extension === 'pdf'
+                        ? `<object data="${fileName}"></object>`
+                        : `<img src="${fileName}"/>`;
+
+                    return Layout.dialog.build('preview', htmlContent);
+                }
+            },
+            form: {
+                init: function () {
+                    $(document).on('click', '.js-reset', function () {
+                        Layout.form.reset($(this));
+                    });
+
+                    $(document).on('click', '.js-alert-close', function () {
+                        $(this).parent().remove();
+                    });
+                },
+                reset: function (element) {
+                    const form = element.closest('form');
+
+                    form.find('.dashboard__input-field--text span').text('');
+                    form.find('.dashboard__input-field[type="hidden"]').val('');
+                    form.find('.dashboard__input-row--active').removeClass('dashboard__input-row--active');
+                    form.find('#files-names').html('');
+                    form[0].reset();
+                }
+            },
+            print: {
+                init: function () {
+                    $(document).on('click', '.js-print', function () {
+                        const module = $(this).data('module');
+                        const file = $(this).data('file');
+
+                        return Dashboard[module][file].print();
+                    });
+                },
+                execute: function (element, style) {
+                    const htmlContent = `<html><head><style>${style}</style></head><body onload="window.print()">${element.outerHTML}</body></html>`;
+                    const printDialog = window.open('', 'Print-View');
+
+                    printDialog.document.open();
+                    printDialog.document.write(htmlContent);
+                    printDialog.document.close();
+
+                    setTimeout(function () {
+                        printDialog.close();
+                    }, 10);
+                }
+            }
         };
 
         return addEventListener();

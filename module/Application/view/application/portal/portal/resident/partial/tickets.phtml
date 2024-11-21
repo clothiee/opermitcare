@@ -9,7 +9,7 @@ $countTickets = count($tickets);
 <?php if ($countTickets) : ?>
     <div class="dashboard__panel-collection">
         <?php foreach ($tickets as $ticketNo => $ticket) : ?>
-            <div class="dashboard__ticket" data-ticket="ticket-<?= $ticket['ticketId'] ?>">
+            <div class="dashboard__ticket" data-id="ticket-<?= $ticket['ticketId'] ?>">
                 <div class="dashboard__ticket-status dashboard__ticket-status--<?= strtolower($ticket['ticketStatusName']) ?>">
                     <?= $ticket['ticketStatusName'] ?>
                 </div>

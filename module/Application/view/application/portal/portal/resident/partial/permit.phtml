@@ -9,8 +9,7 @@ $countPermits = count($permits);
 
 <?php if ($countPermits) : ?>
     <?php foreach ($permits as $permitNo => $permit) : ?>
-        <div class="dashboard__panel" data-panel="permit-<?= $permit['permitId'] ?>"
-             data-permit-id="<?= $permit['permitId'] ?>">
+        <div class="dashboard__panel" data-panel="permit-<?= $permit['permitId'] ?>" data-id="<?= $permit['permitId'] ?>">
             <div class="dashboard__panel-breadcrumbs">
                 <span class="js-see-panel" data-panel="my-permit">My Special Permit (s)</span>
             </div>

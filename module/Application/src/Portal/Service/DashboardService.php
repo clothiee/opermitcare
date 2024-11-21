@@ -27,7 +27,11 @@ class DashboardService
     const SUCCESS_MESSAGE = 'Success';
     const INVALID_CODE = 401;
     const INVALID_MESSAGE = 'Invalid request';
-    const SUBMIT_ACCESS = 'Assess';
+    const SUBMIT = [
+        'Reopen' => 1,
+        'Assess' => 2,
+        'Reject' => 3,
+    ];
 
     private $config;
     private $sessionService;
@@ -376,20 +380,10 @@ class DashboardService
     public function accessPermit($post)
     {
         $sessionDetails = $this->sessionService->get();
-        $form = new PermitAssessForm($post);
+        $form = new PermitAssessForm();
         $form->setData($post);
 
-        if ($form->isValid()) {
-            $permit = (array) $this->permitTable->getByColumns(['permitId' => $post['permitId']])[0];
-            $permit['permitStatusId'] = $post['submit'] === self::SUBMIT_ACCESS ? 2 : 3;
-            $permit['agentId'] = $sessionDetails['user']['userId'];
-            $permit['mayorsFee'] = $post['mayorsFee'] ?: 0;
-            $permit['licenseFee'] = $post['licenseFee'] ?: 0;
-            $permit['garbageFee'] = $post['garbageFee'] ?: 0;
-            $permit['zoningFee'] = $post['zoningFee'] ?: 0;
-            $permit['processingFee'] = 100;
-            $permit['remarks'] = sprintf('[%s] %s', date('Y-m-d H:i:s'), $post['remarks']) ;
-        } else {
+        if (!$form->isValid()) {
             return [
                 'code' => self::INVALID_CODE,
                 'message' => 'Invalid Form! Remarks field is required.',
@@ -399,39 +393,49 @@ class DashboardService
             ];
         }
 
+        $permit = (array) $this->permitTable->getByColumns(['permitId' => $post['permitId']])[0];
+        $permit['permitStatusId'] = self::SUBMIT[$post['submit']];
+        $permit['agentId'] = $sessionDetails['user']['userId'];
+        $permit['mayorsFee'] = $post['mayorsFee'] ?: 0;
+        $permit['licenseFee'] = $post['licenseFee'] ?: 0;
+        $permit['garbageFee'] = $post['garbageFee'] ?: 0;
+        $permit['zoningFee'] = $post['zoningFee'] ?: 0;
+        $permit['processingFee'] = 100;
+        $permit['remarks'] = sprintf('[%s] %s', date('Y-m-d H:i:s'), $post['remarks']);
+
         $form = new PermitForm();
         $form->setData($permit);
 
-        if ($form->isValid()) {
-            try {
-                $updatePermit = new Permit();
-                $updatePermit->exchangeArray($permit);
-                $this->permitTable->save($updatePermit);
-            } catch (\Exception $exception) {
-                return [
-                    'code' => self::INVALID_CODE,
-                    'message' => $exception->getMessage(),
-                    'data' => $post,
-                    'activePanel' => 'permit-' . $post['permitId'],
-                    'activeTabAction' => 'assess',
-                ];
-            }
-
+        if (!$form->isValid()) {
             return [
-                'code' => self::SUCCESS_CODE,
-                'message' => 'Updated permit successfully!',
-                'data' => $permit,
+                'code' => self::INVALID_CODE,
+                'message' => $form->getMessages(),
+                'data' => $post,
                 'activePanel' => 'permit-' . $post['permitId'],
-                'activeTabAction' => 'overview',
+                'activeTabAction' => 'assess',
+            ];
+        }
+
+        try {
+            $updatePermit = new Permit();
+            $updatePermit->exchangeArray($permit);
+            $this->permitTable->save($updatePermit);
+        } catch (\Exception $exception) {
+            return [
+                'code' => self::INVALID_CODE,
+                'message' => $exception->getMessage(),
+                'data' => $post,
+                'activePanel' => 'permit-' . $post['permitId'],
+                'activeTabAction' => 'assess',
             ];
         }
 
         return [
-            'code' => self::INVALID_CODE,
-            'message' => $form->getMessages(),
-            'data' => $post,
+            'code' => self::SUCCESS_CODE,
+            'message' => 'Updated permit successfully!',
+            'data' => $permit,
             'activePanel' => 'permit-' . $post['permitId'],
-            'activeTabAction' => 'assess',
+            'activeTabAction' => 'overview',
         ];
     }
 

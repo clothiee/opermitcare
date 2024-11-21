@@ -4,7 +4,7 @@
 <?php if ($this->alertMessage) : ?>
     <div class="alert<?= $this->alertClass ?>">
         <span><?= $this->alertMessage ?></span>
-        <a class="button">&times;</a>
+        <a class="alert__button js-alert-close">&times;</a>
     </div>
 <?php endif; ?>
 <div class="dashboard__panel-header">
@@ -54,7 +54,7 @@
     <div class="dashboard__divider"></div>
     <div class="dashboard__actions">
         <input type="hidden" name="process" value="create-ticket"/>
-        <input class="dashboard__button dashboard__button--secondary" type="button" value="Reset"/>
+        <input class="dashboard__button dashboard__button--secondary js-reset" type="button" value="Reset"/>
         <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
         <label for="attachment-ticket">
             <a class="dashboard__button dashboard__button--primary dashboard__button--attachment" type="button">

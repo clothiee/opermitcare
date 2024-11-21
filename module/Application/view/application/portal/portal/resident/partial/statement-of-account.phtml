@@ -234,5 +234,7 @@ $particulars = [
 <div class="dashboard__divider"></div>
 <div class="dashboard__actions">
     <input type="hidden" name="permitId" value="<?= $permit['permitId']; ?>"/>
-    <input class="dashboard__button dashboard__button--primary" type="submit" value="Print"/>
+    <input class="dashboard__button dashboard__button--primary js-print" type="submit" value="Print"
+           data-module="permit"
+           data-file="soa"/>
 </div>

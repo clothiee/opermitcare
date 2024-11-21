@@ -15,7 +15,7 @@ $alertMessage = !empty($response['message']) ? $response['message'] : '';
         <?php if ($isError) : ?>
             <div class="alert error">
                 <?= $alertMessage ?>
-                <a class="button">&times;</a>
+                <a class="alert__button js-alert-close">&times;</a>
             </div>
         <?php endif; ?>
         <div class="login__card">

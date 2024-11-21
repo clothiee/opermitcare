@@ -13,8 +13,7 @@ $countTickets = count($tickets);
         $problemType = $this->problemType[$problemTypeKey];
         $recentAgents = [];
         ?>
-        <div class="dashboard__panel" data-panel="ticket-<?= $ticket['ticketId'] ?>"
-             data-ticket-id="<?= $ticket['ticketId'] ?>">
+        <div class="dashboard__panel" data-panel="ticket-<?= $ticket['ticketId'] ?>" data-id="<?= $ticket['ticketId'] ?>">
             <div class="dashboard__panel-breadcrumbs">
                 <span class="js-see-panel" data-panel="my-ticket">My Ticket (s)</span>
             </div>
@@ -74,7 +73,7 @@ $countTickets = count($tickets);
                                             </svg>
                                         </div>
                                     </a>
-                                    <div class="dashboard__file--preview"
+                                    <div class="dashboard__file--preview js-dialog-show"
                                          data-file-name="/<?= $file['fileInfo']['dirname'] . '/' . $file['fileInfo']['basename'] ?>"
                                          data-file-extension="<?= $file['fileInfo']['extension'] ?>">
                                         <svg focusable="false" width="20px" viewBox="0 0 24 24" fill="none"
@@ -115,8 +114,7 @@ $countTickets = count($tickets);
                 </div>
                 <div class="dashboard__divider"></div>
                 <div class="dashboard__actions">
-                    <input class="dashboard__button dashboard__button--primary js-ticket-action" type="button"
-                           value="<?= $ticketAction ?>"/>
+                    <input class="dashboard__button dashboard__button--primary js-ticket-action" type="button" value="<?= $ticketAction ?>"/>
                 </div>
             </div>
             <div class="dashboard__tab-content" data-tab="replies">
@@ -155,7 +153,7 @@ $countTickets = count($tickets);
                 <?php endif; ?>
                 <div class="dashboard__reply-submit">
                     <input class="dashboard__reply-input" type="text"/>
-                    <input class="dashboard__button dashboard__button--primary" type="button" value="Reply"/>
+                    <input class="dashboard__button dashboard__button--primary js-reply" type="button" value="Reply"/>
                 </div>
             </div>
         </div>

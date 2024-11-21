@@ -30,6 +30,10 @@ a {
   }
 }
 
+dialog {
+  display: none;
+}
+
 @import "./navigation";
 @import "./home";
 @import "./login";
@@ -37,3 +41,4 @@ a {
 @import "./dashboard";
 @import "./statement-of-account";
 @import "./footer";
+@import "components/dialog";

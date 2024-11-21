@@ -17,7 +17,7 @@ $countPermit = 0;
             if ($countTicket > 6) {
                 continue;
             } ?>
-            <div class="dashboard__ticket" data-ticket="ticket-<?= $ticket['ticketId'] ?>">
+            <div class="dashboard__ticket" data-id="ticket-<?= $ticket['ticketId'] ?>">
                 <div class="dashboard__ticket-status dashboard__ticket-status--<?= strtolower($ticket['ticketStatusName']) ?>">
                     <?= $ticket['ticketStatusName'] ?>
                 </div>

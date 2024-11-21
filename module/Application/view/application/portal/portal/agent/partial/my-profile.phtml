@@ -26,7 +26,7 @@ foreach ($this->responseData as $responseKey => $responseValue) {
 <?php if ($this->alertMessage) : ?>
     <div class="alert<?= $this->alertClass ?>">
         <span><?= $this->alertMessage ?></span>
-        <a class="button">&times;</a>
+        <a class="alert__button js-alert-close">&times;</a>
     </div>
 <?php endif; ?>
 <div class="dashboard__panel-header">
@@ -86,7 +86,7 @@ foreach ($this->responseData as $responseKey => $responseValue) {
     <div class="dashboard__divider"></div>
     <div class="dashboard__actions">
         <input type="hidden" name="process" value="update-password"/>
-        <input class="dashboard__button dashboard__button--secondary" type="button" value="Reset"/>
+        <input class="dashboard__button dashboard__button--secondary js-reset" type="button" value="Reset"/>
         <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
     </div>
 </form>

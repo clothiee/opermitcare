@@ -57,7 +57,7 @@ $showCategoryDefault = $showCategoryOne || $showCategoryTwo ? ' dashboard__input
 <?php if ($this->alertMessage) : ?>
     <div class="alert<?= $this->alertClass ?>">
         <span><?= $this->alertMessage ?></span>
-        <a class="button">&times;</a>
+        <a class="alert__button js-alert-close">&times;</a>
     </div>
 <?php endif; ?>
 <?php if (!$this->isError && $this->alertMessage) : ?>
@@ -69,7 +69,7 @@ $showCategoryDefault = $showCategoryOne || $showCategoryTwo ? ' dashboard__input
                 you as soon as there are updates on its status. Please allow some time for this process, as each application
                 is carefully evaluated to ensure compliance with all requirements.</p>
         </div>
-        <a class="button">&times;</a>
+        <a class="alert__button js-alert-close">&times;</a>
     </div>
 <?php endif; ?>
 <div class="dashboard__panel-header">
@@ -232,7 +232,7 @@ $showCategoryDefault = $showCategoryOne || $showCategoryTwo ? ' dashboard__input
         <div class="dashboard__divider"></div>
         <div class="dashboard__actions">
             <input type="hidden" name="process" value="apply-permit"/>
-            <input class="dashboard__button dashboard__button--secondary" type="button" value="Reset"/>
+            <input class="dashboard__button dashboard__button--secondary js-reset" type="button" value="Reset"/>
             <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
             <label for="attachment-permit">
                 <a class="dashboard__button dashboard__button--primary dashboard__button--attachment" type="button">

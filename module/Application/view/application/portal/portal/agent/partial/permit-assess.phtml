@@ -1,6 +1,8 @@
 <?php
 $permit = $this->permit;
 $responseData = $this->responseData;
+$permitAction = $permit['permitStatusId'] === 3 ? 'Reopen' : 'Reject';
+$permitActionClass = $permit['permitStatusId'] === 3 ? 'secondary' : 'red';
 $licenseFee = $permit['capital'] < 999999 ? 650 : $permit['capital'] * 0.001;
 $garbageFee = $permit['area'] <= 20 ? 500 : ($permit['area'] - 20) * 5;
 $zoningFee = $permit['area'] <= 20 ? 300 : ($permit['area'] - 20) * 5;
@@ -80,7 +82,8 @@ $mayorsFee = [
     <div class="dashboard__actions">
         <input type="hidden" name="permitId" value="<?= $permit['permitId']; ?>"/>
         <input type="hidden" name="process" value="assess-permit"/>
-        <input class="dashboard__button dashboard__button--red" type="submit" name="submit" value="Reject"/>
-        <input class="dashboard__button dashboard__button--primary" type="submit" name="submit" value="Assess"/>
+        <input class="dashboard__button dashboard__button--<?= $permitActionClass ?> js-permit-action" type="button" value="<?= $permitAction ?>"/>
+        <input class="dashboard__button dashboard__button--primary js-permit-action" type="button" value="Assess"/>
+        <input class="js-submit" type="submit" name="submit" style="visibility:hidden;"/>
     </div>
 </form>
