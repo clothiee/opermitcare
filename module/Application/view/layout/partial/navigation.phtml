@@ -24,12 +24,11 @@ $url = [
             <li><a href="<?= $url['FIND_A_FORM'] ?>">Find a Form</a></li>
             <li><a href="<?= $url['SUPPORT'] ?>">Support</a></li>
         </ul>
+        <?php if (!$isProfileAvailable) : ?>
         <ul class="navigation__item navigation__item--info">
-            <li><a>About Us</a></li>
-            <?php if (!$isProfileAvailable) : ?>
-                <li><a href="<?= $url['DASHBOARD'] ?>">Dashboard</a></li>
-            <?php endif; ?>
+            <li><a href="<?= $url['DASHBOARD'] ?>">Dashboard</a></li>
         </ul>
+        <?php endif; ?>
         <div class="navigation__item navigation__item--action">
             <?php if ($isProfileAvailable) : ?>
                 <a href="<?= $url['LOGIN'] ?>"><input type="button" value="Login"></a>
