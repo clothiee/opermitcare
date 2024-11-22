@@ -127,9 +127,10 @@ class PortalController extends AbstractActionController
         $this->action = $this->params()->fromRoute('action', null);
         $this->param1 = $this->params()->fromRoute('param1', null);
         $sessionDetails = $this->sessionService->get();
+        $parameters = strlen($this->param1) ? '/' . $this->param1 : '';
 
         $this->layout()->setVariable('layoutVariables', [
-            'pageName' => sprintf('%s%s', $this->action, '/' . $this->param1),
+            'pageName' => sprintf('%s%s', $this->action, $parameters),
             'env' => $this->config['env'],
             'isProfileAvailable' => empty($sessionDetails['user']) && empty($sessionDetails['userType']),
         ]);

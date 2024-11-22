@@ -6,6 +6,7 @@ export class LayoutSettingsModule {
     initialize() {
         let configuration = JSON.parse(this.configuration);
         let addEventListener = function () {
+            console.log(configuration.pageName);
             switch (configuration.pageName) {
                 case 'login':
                 case 'sign-up':
@@ -101,6 +102,15 @@ export class LayoutSettingsModule {
                             "info":     false
                         });
                     });
+                    break;
+                case 'faq':
+                    $(document).on('click', '.js-see-content', function () {
+                        const contentId = $(this).data('id');
+                        $('.js-see-content, .faq__detail-item').removeClass('active');
+                        $(`[data-id="${contentId}"]`).addClass('active');
+                    });
+
+                    Layout.window.init();
                     break;
             }
 
