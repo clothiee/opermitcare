@@ -20,6 +20,7 @@ $countPermits = count($permits);
             </div>
         <?php endforeach; ?>
     </div>
+    <div class="pagination"></div>
 <?php else : ?>
     <?= $this->partial('partial/no-data', [
         'panel' => 'apply-permit',

@@ -105,7 +105,6 @@ export class LayoutSettingsModule {
                                 .append(fileName);
                             $('#file-list > #files-names').append(fileBloc);
                         }
-                        ;
 
                         for (let file of this.files) {
                             dt.items.add(file);
@@ -149,6 +148,8 @@ export class LayoutSettingsModule {
             },
             ticket: {
                 init: function () {
+                    Layout.paging.init('ticket', $('[data-panel="my-ticket"]'));
+
                     $(document).on('click', '.js-ticket-action', function () {
                         return Dashboard.dialog.execute($(this));
                     });
@@ -211,6 +212,8 @@ export class LayoutSettingsModule {
             },
             permit: {
                 init: function() {
+                    Layout.paging.init('permit', $('[data-panel="my-permit"]'));
+
                     $(document).on('click', '.js-permit-action', function () {
                         return Dashboard.dialog.execute($(this));
                     });
@@ -337,6 +340,28 @@ export class LayoutSettingsModule {
                     form.find('.dashboard__input-row--active').removeClass('dashboard__input-row--active');
                     form.find('#files-names').html('');
                     form[0].reset();
+                }
+            },
+            paging: {
+                init: function (module, panel) {
+                    const collection = panel.find('.dashboard__panel-collection');
+                    const items = collection.find(`.dashboard__${module}`);
+                    const numItems = items.length;
+                    const perPage = 9;
+
+                    items.slice(perPage).hide();
+
+                    panel.find('.pagination').pagination({
+                        items: numItems,
+                        itemsOnPage: perPage,
+                        prevText: "&laquo;",
+                        nextText: "&raquo;",
+                        onPageClick: function (pageNumber) {
+                            var showFrom = perPage * (pageNumber - 1);
+                            var showTo = showFrom + perPage;
+                            items.hide().slice(showFrom, showTo).show();
+                        }
+                    });
                 }
             },
             print: {
