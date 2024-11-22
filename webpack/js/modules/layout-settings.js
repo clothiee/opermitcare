@@ -411,7 +411,7 @@ export class LayoutSettingsModule {
                                     console.log('Fetching message (s)');
                                     Dashboard.ticket.refresh.execute(tab, panel);
                                 }
-                            }, 15000);
+                            }, 5000);
                         }
 
                         return false;
