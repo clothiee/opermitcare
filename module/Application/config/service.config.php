@@ -2,6 +2,10 @@
 
 namespace Application;
 
+use Application\Opermitcare\Faq\Model\FaqTable;
+use Application\Opermitcare\Faq\Model\FaqTableFactory;
+use Application\Opermitcare\FaqDetails\Model\FaqDetailsTable;
+use Application\Opermitcare\FaqDetails\Model\FaqDetailsTableFactory;
 use Application\Opermitcare\File\Model\FileTable;
 use Application\Opermitcare\File\Model\FileTableFactory;
 use Application\Opermitcare\Permit\Model\PermitTable;
@@ -28,6 +32,8 @@ use Application\Portal\Service\SessionService;
 use Application\Portal\Service\SessionServiceFactory;
 
 $table = [
+    FaqTable::class => FaqTableFactory::class,
+    FaqDetailsTable::class => FaqDetailsTableFactory::class,
     FileTable::class => FileTableFactory::class,
     PermitTable::class => PermitTableFactory::class,
     PermitStatusTable::class => PermitStatusTableFactory::class,

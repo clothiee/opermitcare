@@ -6,7 +6,6 @@ use Application\Opermitcare\User\Form\UserForm;
 use Application\Portal\Service\DashboardService;
 use Application\Portal\Service\SessionService;
 use ArrayObject;
-use Laminas\Form\Element\File;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
@@ -79,6 +78,26 @@ class PortalController extends AbstractActionController
     }
 
     /**
+     * FAQ Page
+     *
+     * @return ViewModel
+     */
+    public function faqAction()
+    {
+        return $this->buildView();
+    }
+
+    /**
+     * FAQ Page
+     *
+     * @return ViewModel
+     */
+    public function supportAction()
+    {
+        return $this->buildView();
+    }
+
+    /**
      * Dashboard Page
      *
      * @return ViewModel
@@ -110,7 +129,7 @@ class PortalController extends AbstractActionController
         $sessionDetails = $this->sessionService->get();
 
         $this->layout()->setVariable('layoutVariables', [
-            'pageName' => $this->action,
+            'pageName' => sprintf('%s%s', $this->action, '/' . $this->param1),
             'env' => $this->config['env'],
             'isProfileAvailable' => empty($sessionDetails['user']) && empty($sessionDetails['userType']),
         ]);
@@ -132,6 +151,8 @@ class PortalController extends AbstractActionController
                 return $this->logout();
             case 'dashboard':
                 return $this->dashboard();
+            case 'faq':
+                return $this->faq();
             case 'find-a-form':
                 return $this->findAForm();
             case 'sign-up':
@@ -202,9 +223,15 @@ class PortalController extends AbstractActionController
         $viewModel = new ViewModel();
         $viewModel->setTemplate($this->getTemplate());
         $viewModel->setVariables(array_merge(
-            $this->dashboardService->initialize(),
-            $viewOptions)
+                                     $this->dashboardService->initialize(),
+                                     $viewOptions)
         );
+
+        switch ($this->param1) {
+            case 'faq':
+            default:
+                break;
+        }
 
         return $viewModel;
     }
@@ -235,7 +262,7 @@ class PortalController extends AbstractActionController
                 $viewOptions['activeTabAction'] = $process['activeTabAction'];
                 break;
             case 'update-password':
-                $process= $this->dashboardService->updatePassword($post);
+                $process = $this->dashboardService->updatePassword($post);
                 $viewOptions['response']['code'] = $process['code'];
                 $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
                 $viewOptions['response']['data'] = $process['data'];
@@ -280,6 +307,22 @@ class PortalController extends AbstractActionController
                 $viewOptions['response']['message'] = $this->getResponseMessage($form->getMessages());
             }
         }
+
+        return new ViewModel($viewOptions);
+    }
+
+    /**
+     * Find A Form
+     *
+     * @return ViewModel
+     */
+    private function faq()
+    {
+        $faq = $this->dashboardService->getFAQs();
+        $viewOptions = [
+            'faq' => $faq['category'],
+            'faqDetails' => $faq['list'],
+        ];
 
         return new ViewModel($viewOptions);
     }

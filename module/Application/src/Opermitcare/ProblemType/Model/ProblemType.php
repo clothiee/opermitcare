@@ -4,7 +4,7 @@ namespace Application\Opermitcare\ProblemType\Model;
 
 class ProblemType
 {
-    /** @var int $userId */
+    /** @var int $problemTypeId */
     public $problemTypeId;
     /** @var string|null $problemTypeName */
     public $problemTypeName;

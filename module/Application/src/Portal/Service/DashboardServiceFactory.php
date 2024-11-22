@@ -2,6 +2,8 @@
 
 namespace Application\Portal\Service;
 
+use Application\Opermitcare\Faq\Model\FaqTable;
+use Application\Opermitcare\FaqDetails\Model\FaqDetailsTable;
 use Application\Opermitcare\Permit\Model\PermitTable;
 use Application\Opermitcare\PermitStatus\Model\PermitStatusTable;
 use Application\Opermitcare\ProblemType\Model\ProblemTypeTable;
@@ -27,30 +29,20 @@ class DashboardServiceFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $config = $container->get('config');
-        $sessionService = $container->get(SessionService::class);
-        $userTable = $container->get(UserTable::class);
-        $userTypeTable = $container->get(UserTypeTable::class);
-        $problemTypeTable = $container->get(ProblemTypeTable::class);
-        $ticketTable = $container->get(TicketTable::class);
-        $ticketStatusTable = $container->get(TicketStatusTable::class);
-        $replyTable = $container->get(ReplyTable::class);
-        $permitTable = $container->get(PermitTable::class);
-        $permitStatusTable = $container->get(PermitStatusTable::class);
-        $fileService = $container->get(FileService::class);
-
         return new DashboardService(
-            $config,
-            $sessionService,
-            $userTable,
-            $userTypeTable,
-            $problemTypeTable,
-            $ticketTable,
-            $ticketStatusTable,
-            $replyTable,
-            $permitTable,
-            $permitStatusTable,
-            $fileService
+            $container->get('config'),
+            $container->get(SessionService::class),
+            $container->get(UserTable::class),
+            $container->get(UserTypeTable::class),
+            $container->get(ProblemTypeTable::class),
+            $container->get(TicketTable::class),
+            $container->get(TicketStatusTable::class),
+            $container->get(ReplyTable::class),
+            $container->get(PermitTable::class),
+            $container->get(PermitStatusTable::class),
+            $container->get(FileService::class),
+            $container->get(FaqTable::class),
+            $container->get(FaqDetailsTable::class)
         );
     }
 }

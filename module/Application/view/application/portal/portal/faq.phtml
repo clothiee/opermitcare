@@ -1,0 +1,35 @@
+<div class="find-a-form">
+    <div class="find-a-form__jumbotron">
+        <div class="find-a-form__wrapper">
+            <h1>Frequently asked questions</h1>
+        </div>
+    </div>
+    <div class="find-a-form__section">
+        <div class="find-a-form__wrapper find-a-form__wrapper--section">
+            <div class="find-a-form__category">
+                <ul>
+                    <?php foreach ($this->faq as $key => $faq) :
+                        $isActive = !$key ? ' class="active"' : ''; ?>
+                        <li<?= $isActive ?> data-id="<?= $faq['faqId'] ?>"><?= $faq['faqName'] ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <div class="find-a-form__download">
+                <?php foreach ($this->faqDetails as $key => $details) : ?>
+                    <?php foreach ($details['list'] as $detail) :
+                        $isActive = !$key ? ' class="active"' : '';
+                        $detail = (array) $detail; ?>
+                        <div class="find-a-form__download-item">
+                            <div class="find-a-form__download-title">
+                                <span><?= $detail['title'] ?></span>
+                                <span></span>
+                            </div>
+                            <div class="find-a-form__download-description"><?= $detail['description'] ?></div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+</div>

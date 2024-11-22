@@ -1,8 +1,8 @@
-import { LayoutSettingsModule } from "./modules/layout-settings";
+import {LayoutSettingsModule} from "./modules/layout-settings";
 
 $(function opermitcare(e) {
     $(document).ready(() => {
-        let layoutSettingsModule = new LayoutSettingsModule();
+        let layoutSettingsModule = new LayoutSettingsModule(configuration);
 
         layoutSettingsModule.initialize();
     });

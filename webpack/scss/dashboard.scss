@@ -1071,6 +1071,35 @@
       }
     }
   }
+
+  &__data-table {
+    margin-top: 20px;
+  }
+
+  .dataTables_wrapper {
+    background: #fff;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
+    padding: 30px 20px;
+    border-radius: 20px;
+    margin-top: 20px;
+    width: 100%;
+
+    input[type="button"] {
+      border: 1px solid var(--main-color);
+      background-color: #fff;
+      cursor: pointer;
+      border-radius: 5px;
+      color: var(--main-color);
+      padding: 5px 10px;
+      font-weight: 600;
+      width: 80px;
+
+      &:hover {
+        background-color: var(--main-color);
+        color: #fff;
+      }
+    }
+  }
 }
 
 .dashboard--resident .dashboard {

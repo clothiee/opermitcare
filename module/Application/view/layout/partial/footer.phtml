@@ -74,7 +74,7 @@
     'env' => $this->env,
 ]) ?>
 <script>
-    var configuration = <?php echo json_encode([
+    var configuration = '<?php echo json_encode([
                                                    'pageName' => $this->pageName,
                                                    'ajax' => [
                                                        'replyTicket' => $this->url('application', [
@@ -86,5 +86,5 @@
                                                            'param1' => 'refresh-ticket',
                                                        ]),
                                                    ],
-                                               ]); ?>;
+                                               ]); ?>';
 </script>

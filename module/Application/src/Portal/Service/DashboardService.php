@@ -2,6 +2,8 @@
 
 namespace Application\Portal\Service;
 
+use Application\Opermitcare\Faq\Model\FaqTable;
+use Application\Opermitcare\FaqDetails\Model\FaqDetailsTable;
 use Application\Opermitcare\Permit\Form\PermitAssessForm;
 use Application\Opermitcare\Permit\Form\PermitForm;
 use Application\Opermitcare\Permit\Model\Permit;
@@ -45,6 +47,8 @@ class DashboardService
     private $permitTable;
     private $permitStatusTable;
     private $fileService;
+    private $faqTable;
+    private $faqDetailsTable;
 
     /**
      * Dashboard Service constructor.
@@ -60,6 +64,8 @@ class DashboardService
      * @param PermitTable       $permitTable
      * @param PermitStatusTable $permitStatusTable
      * @param FileService       $fileService
+     * @param FaqTable          $faqTable
+     * @param FaqDetailsTable   $faqDetailsTable
      */
     public function __construct(
         $config,
@@ -72,7 +78,9 @@ class DashboardService
         ReplyTable $replyTable,
         PermitTable $permitTable,
         PermitStatusTable $permitStatusTable,
-        FileService $fileService
+        FileService $fileService,
+        FaqTable $faqTable,
+        FaqDetailsTable $faqDetailsTable
     ) {
         $this->config = $config;
         $this->sessionService = $sessionService;
@@ -85,6 +93,8 @@ class DashboardService
         $this->permitTable = $permitTable;
         $this->permitStatusTable = $permitStatusTable;
         $this->fileService = $fileService;
+        $this->faqTable = $faqTable;
+        $this->faqDetailsTable = $faqDetailsTable;
     }
 
     /**
@@ -97,16 +107,18 @@ class DashboardService
         $sessionDetails = $this->sessionService->get();
 
         switch ($sessionDetails['userType']['userTypeName']) {
-            case 'Resident':
+            case 'Administrator':
                 $viewOptions = [
-                    'problemType' => $this->getActiveProblemTypes(),
-                    'permitStatus' => $this->getActivePermitStatuses(),
-                    'tickets' => $this->getTickets(),
-                    'permits' => $this->getPermits(),
-                    'activeTab' => 'overview',
+                    'pages' => $this->getDashboardPages(),
+                    'faq' => $this->faqTable->fetchAll(),
+                    'faqDetails' => $this->faqTable->fetchAll(),
+                    'problemType' => $this->problemTypeTable->fetchAll(),
+                    'permitStatus' => $this->permitTable->fetchAll(),
+                    'ticketStatus' => $this->ticketStatusTable->fetchAll(),
                 ];
                 break;
             case 'Agent':
+            case 'Moderator':
                 $viewOptions = [
                     'problemType' => $this->getActiveProblemTypes(),
                     'permitStatus' => $this->getActivePermitStatuses(),
@@ -119,7 +131,11 @@ class DashboardService
                 break;
             default:
                 $viewOptions = [
-                    'pages' => $this->getDashboardPages(),
+                    'problemType' => $this->getActiveProblemTypes(),
+                    'permitStatus' => $this->getActivePermitStatuses(),
+                    'tickets' => $this->getTickets(),
+                    'permits' => $this->getPermits(),
+                    'activeTab' => 'overview',
                 ];
                 break;
         }
@@ -179,6 +195,41 @@ class DashboardService
                                                     ]);
 
         return $this->parsePermits($tickets, $permitStatuses);
+    }
+
+    /**
+     * Get FAQs
+     *
+     * @return array
+     */
+    public function getFAQs()
+    {
+        $category = [];
+        $list = [];
+        $faqs = $this->faqTable->getByColumns([
+                                                  'active' => 1,
+                                              ]);
+
+        foreach ($faqs as $faq) {
+            $faq = (array) $faq;
+            $faqDetails = $this->faqDetailsTable->getByColumns([
+                                                                   'faqId' => $faq['faqId'],
+                                                                   'active' => 1,
+                                                               ]);
+            $category[] = [
+                'faqId' => $faq['faqId'],
+                'faqName' => $faq['faqName'],
+            ];
+            $list[$faq['faqId']] = [
+                'category' => $faq['faqName'],
+                'list' => (array) $faqDetails,
+            ];
+        }
+
+        return [
+            'category' => $category,
+            'list' => $list,
+        ];
     }
 
     /**

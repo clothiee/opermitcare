@@ -1,0 +1,94 @@
+.support {
+  &__jumbotron {
+    background-color: var(--article-jumbotron);
+    color: var(--article-header-color);
+    display: flex;
+    justify-content: center;
+    padding: {
+      bottom: 65px;
+      top: 65px;
+    }
+
+    h1 {
+      margin-top: 65px;
+      @include get-responsive(font-size, 28px, 32px, 40px, 40px);
+    }
+  }
+
+  &__divider {
+    border-bottom: 2px solid var(--dashboard-item-border-color);
+    float: left;
+    margin: 30px 0;
+    width: 100%;
+  }
+
+  &__wrapper {
+    max-width: $desktop-large-min-width;
+    width: 100%;
+
+    &--section {
+      display: flex;
+      margin: {
+        bottom: 65px;
+        top: 65px;
+      };
+      @include get-responsive(-webkit-flex-direction, column, row, row, row);
+      @include get-responsive(-ms-flex-direction, column, row, row, row);
+      @include get-responsive(flex-direction, column, row, row, row);
+    }
+  }
+
+  &__section {
+    background-color: var(--article-section-background-color);
+    display: flex;
+    justify-content: center;
+    @include get-responsive(padding, 0 20px, 0 20px, 0 20px);
+  }
+
+  &__collection {
+    float: left;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__group {
+    float: left;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    @include get-responsive(flex-direction, column, row, row, row);
+    @include get-responsive(gap, null, 50px, 50px, 50px);
+  }
+
+  &__video {
+    @include get-responsive(width, 100%, calc(100% - 40%), calc(100% - 40%), calc(100% - 40%));
+
+    video {
+      width: 100%;
+    }
+  }
+
+  &__description {
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    @include get-responsive(width, 100%, 40%, 40%, 40%);
+
+    h1 {
+      font-weight: 700;
+      @include get-responsive(font-size, null, 30px, 50px, 50px);
+    }
+
+    p {
+      margin-top: 25px;
+      @include get-responsive(font-size, null, 15px, 20px, 20px);
+    }
+  }
+}
