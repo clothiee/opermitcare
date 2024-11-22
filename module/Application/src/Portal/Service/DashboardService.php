@@ -374,12 +374,23 @@ class DashboardService
     public function refreshTicket($post)
     {
         try {
+            $sessionDetails = $this->sessionService->get();
+            $lastId = $post['lastId'];
             $tickets = $this->getReplies($post['ticketId']);
+            $reply = null;
+
+            foreach ($tickets as $ticket) {
+                if ($ticket['replyId'] > $lastId
+                    && $ticket['senderId'] !== $sessionDetails['user']['userId']) {
+                    $reply = $ticket;
+                    continue;
+                }
+            }
 
             return [
                 'code' => self::SUCCESS_CODE,
                 'message' => self::SUCCESS_MESSAGE,
-                'data' => $tickets,
+                'data' => $reply,
             ];
         } catch (\Exception $exception) {
             return [

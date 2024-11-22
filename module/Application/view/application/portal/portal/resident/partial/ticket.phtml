@@ -115,20 +115,22 @@ $countTickets = count($tickets);
             <div class="dashboard__tab-content" data-tab="replies">
                 <?php if ($countReplies) :
                     $dateList = [];
+                    $lastReplyId = '';
                     ?>
                     <div class="dashboard__reply-collection">
                         <?php foreach ($ticket['replies'] as $reply) :
+                            $lastReplyId = $reply['replyId'];
                             $isYou = $reply['sender']['userId'] === $userId;
                             $class = $isYou ? '--right' : '--left';
                             $displayName = $isYou ? 'You' : $reply['sender']['firstName'];
                             $date = date("d M Y", strtotime($reply['dateCreated'])); ?>
                             <?php if (!in_array($date, $dateList)) :
-                            $dateList[] = $date; ?>
-                            <div class="dashboard__reply">
-                                <div class="dashboard__reply-date"><?= $date ?></div>
-                            </div>
-                        <?php endif; ?>
-                            <div class="dashboard__reply dashboard__reply<?= $class ?>">
+                                $dateList[] = $date; ?>
+                                <div class="dashboard__reply">
+                                    <div class="dashboard__reply-date"><?= $date ?></div>
+                                </div>
+                            <?php endif; ?>
+                            <div class="dashboard__reply dashboard__reply<?= $class ?>" data-id="<?= $reply['replyId'] ?>">
                                 <div class="dashboard__reply-sender">
                                     <span class="dashboard__reply-sender--type"><?= $reply['userTypeId']['userTypeName']; ?></span>
                                     <span class="dashboard__reply-sender--name"><?= $displayName ?></span>
@@ -141,6 +143,7 @@ $countTickets = count($tickets);
                             </div>
                         <?php endforeach; ?>
                     </div>
+                    <input type="hidden" class="js-reply-id" value="<?= $lastReplyId ?>"/>
                 <?php else: ?>
                     <div class="dashboard__reply-collection">
                         <div class="dashboard__reply-empty">No replies yet</div>

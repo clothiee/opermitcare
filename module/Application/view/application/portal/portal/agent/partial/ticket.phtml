@@ -123,6 +123,7 @@ $countTickets = count($tickets);
                     ?>
                     <div class="dashboard__reply-collection">
                         <?php foreach ($ticket['replies'] as $reply) :
+                            $lastReplyId = $reply['replyId'];
                             $isYou = $reply['sender']['userId'] === $userId;
                             $class = $isYou ? '--right' : '--left';
                             $displayName = $isYou ? 'You' : $reply['sender']['firstName'];
@@ -146,6 +147,7 @@ $countTickets = count($tickets);
                             </div>
                         <?php endforeach; ?>
                     </div>
+                    <input type="hidden" class="js-reply-id" value="<?= $lastReplyId ?>"/>
                 <?php else: ?>
                     <div class="dashboard__reply-collection">
                         <div class="dashboard__reply-empty">No replies yet</div>

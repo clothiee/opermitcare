@@ -214,12 +214,15 @@ export class LayoutSettingsModule {
                     },
                 },
                 refresh: {
+                    ajax: false,
                     init: function(tab, panel) {
                         if (configuration.pageName === 'dashboard' && tab.data('tab') === "replies") {
                             window.myInterval = setInterval(function () {
-                                console.log('Fetching message (s)');
-                                Dashboard.ticket.refresh.execute(panel);
-                            }, 10000);
+                                if (!Dashboard.ticket.refresh.ajax) {
+                                    console.log('Fetching message (s)');
+                                    Dashboard.ticket.refresh.execute(tab, panel);
+                                }
+                            }, 15000);
                         }
 
                         return false;
@@ -232,49 +235,44 @@ export class LayoutSettingsModule {
 
                         return false;
                     },
-                    execute: function (panel) {
-                        setTimeout(function () {
-                            console.log(configuration.ajax.refreshTicket);
-                            Layout.ajax('POST', configuration.ajax.refreshTicket, {
-                                ticketId: panel.data('id'),
-                            }).always(function (data) {
-                                if (data.code) {
-                                    return Dashboard.ticket.refresh.callback(panel, data.response.data);
-                                }
-                            });
-                        }, 10000)
+                    execute: function (tab, panel) {
+                        console.log(configuration.ajax.refreshTicket);
+                        Layout.ajax('POST', configuration.ajax.refreshTicket, {
+                            ticketId: panel.data('id'),
+                            lastId: panel.find('.js-reply-id').val()
+                        }).always(function (data) {
+                            if (data.code && data.response) {
+                                return Dashboard.ticket.refresh.callback(tab, panel, data.response.data);
+                            }
+                        });
                     },
-                    callback: function (panel, replies) {
-                        console.log('callback');
-                        if (!replies.length) {
-                            return false;
-                        }
-
-                        let replyCollection = panel.find('.dashboard__reply-collection');
+                    callback: function (tab, panel, reply) {
+                        console.log('callback:');
+                        console.log(reply);
                         let replyHtml = '';
+                        let replyCollection = panel.find('.dashboard__reply-collection');
 
-                        panel.find('.dashboard__reply-empty').remove();
+                        if (reply !== null) {
+                            panel.find('.dashboard__reply-empty').remove();
+                            panel.find('.js-reply-id').val(reply.replyId);
 
-                        $.each(replies, function (key, reply) {
-                            console.log(reply);
                             let bubble = `<div class="dashboard__reply-bubble">${reply.message}</div>`;
-                            let bubbleClass = reply.userTypeId.userTypeId === 4 ? 'right' : 'left';
-                            let senderType = `<span class="dashboard__reply-sender--type">${reply.userType.userTypeName}</span>`;
+                            let senderType = `<span class="dashboard__reply-sender--type">${reply.userTypeId.userTypeName}</span>`;
                             let senderName = `<span class="dashboard__reply-sender--name">${reply.sender.firstName}</span>`;
                             let sender = `<div class="dashboard__reply-sender">${senderType}${senderName}</div>`;
                             let time = `<div class="dashboard__reply-time">${reply.dateCreated}</div>`;
-                            replyHtml = `<div class="dashboard__reply dashboard__reply--${bubbleClass}">${sender}${bubble}${time}</div>`
-                        });
+                            replyHtml += `<div class="dashboard__reply dashboard__reply--left">${sender}${bubble}${time}</div>`;
+                            console.log(reply);
+                            $(replyHtml).appendTo(replyCollection);
 
-                        console.log(replyHtml);
+                            const newReplyCollection = panel.find('.dashboard__reply-collection');
 
-                        replyCollection.html(replyHtml);
-
-                        const newReplyCollection = panel.find('.dashboard__reply-collection');
-
-                        if (typeof newReplyCollection[0] !== "undefined") {
-                            newReplyCollection.scrollTop(newReplyCollection[0].scrollHeight);
+                            if (typeof newReplyCollection[0] !== "undefined") {
+                                newReplyCollection.scrollTop(newReplyCollection[0].scrollHeight);
+                            }
                         }
+
+                        Dashboard.ticket.refresh.ajax = false;
                     }
                 }
             },
