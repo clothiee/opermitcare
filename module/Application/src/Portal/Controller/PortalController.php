@@ -293,11 +293,11 @@ class PortalController extends AbstractActionController
     {
         $list = [];
         $forms = [
-            'New and Renewal application Forms' => '',
-            'Certification Form' => '',
-            'Individual - Mayor\'s Permit Form' => '',
-            'Business Additional Forms' => '',
-            'Amendment Form' => '',
+            'New and Renewal application Forms' => 'UPDATED-REQUIREMENTS-NEW.jpeg.pdf',
+            'Certification Form' => 'CERTIFICATION-FORM.pdf',
+            'Individual - Mayor\'s Permit Form' => 'INDIVIDUAL-MAYORS-PERMIT-FORM.pdf',
+            'Business Additional Forms' => 'Unified-Editable-Form-2021.xlsx',
+            'Amendment Form' => '/downloads/AMENDMENT-FORM.pdf',
         ];
 
         $viewOptions = [
