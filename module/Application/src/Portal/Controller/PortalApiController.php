@@ -48,6 +48,8 @@ class PortalApiController extends AbstractActionController
         switch ($this->param1) {
             case 'reply-ticket':
                 return $this->replyTicket();
+            case  'refresh-ticket':
+                return $this->refreshTicket();
             default:
                 return $this->buildResponse(DashboardService::INVALID_CODE, [
                     'message' => DashboardService::INVALID_MESSAGE,
@@ -74,6 +76,26 @@ class PortalApiController extends AbstractActionController
 
         return $this->buildResponse(DashboardService::INVALID_CODE, [
             'message' => DashboardService::INVALID_MESSAGE,
+        ]);
+    }
+
+    private function refreshTicket()
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $post = $request->getPost()->toArray();
+            $process = $this->dashboardService->refreshTicket($post);
+
+            return $this->buildResponse($process['code'], [
+                'message' => $process['message'],
+                'data' => $process['data'],
+            ]);
+        }
+
+        return $this->buildResponse(DashboardService::INVALID_CODE, [
+            'message' => DashboardService::INVALID_MESSAGE,
+            'data' => [],
         ]);
     }
 

@@ -20,6 +20,7 @@ use Application\Opermitcare\User\Model\User;
 use Application\Opermitcare\User\Model\UserTable;
 use Application\Opermitcare\UserType\Model\UserTypeTable;
 use ArrayObject;
+use Laminas\View\Model\JsonModel;
 
 class DashboardService
 {
@@ -240,7 +241,7 @@ class DashboardService
                 $permit->exchangeArray($post);
                 $id = $this->permitTable->save($permit);
 
-                $response = $this->fileService->upload('permit-'.$id, $files['attachment']);
+                $response = $this->fileService->upload('permit-' . $id, $files['attachment']);
             } catch (\Exception $exception) {
                 return [
                     'code' => self::INVALID_CODE,
@@ -295,7 +296,7 @@ class DashboardService
                 $ticket->exchangeArray($post);
                 $id = $this->ticketTable->save($ticket);
 
-                $this->fileService->upload('ticket-'.$id, $files['attachment']);
+                $this->fileService->upload('ticket-' . $id, $files['attachment']);
             } catch (\Exception $exception) {
                 return [
                     'code' => self::INVALID_CODE,
@@ -352,8 +353,8 @@ class DashboardService
             }
 
             $ticketStatus = (array) $this->ticketStatusTable->getByColumns([
-                                                                         'ticketStatusId' => $post['ticketStatusId'],
-                                                                     ])[0];
+                                                                               'ticketStatusId' => $post['ticketStatusId'],
+                                                                           ])[0];
 
             return [
                 'code' => self::SUCCESS_CODE,
@@ -368,6 +369,24 @@ class DashboardService
             'code' => self::INVALID_CODE,
             'message' => $form->getMessages(),
         ];
+    }
+
+    public function refreshTicket($post)
+    {
+        try {
+            $tickets = $this->getReplies($post['ticketId']);
+
+            return [
+                'code' => self::SUCCESS_CODE,
+                'message' => self::SUCCESS_MESSAGE,
+                'data' => $tickets,
+            ];
+        } catch (\Exception $exception) {
+            return [
+                'code' => self::INVALID_CODE,
+                'message' => $exception->getMessage(),
+            ];
+        }
     }
 
     /**
@@ -592,6 +611,64 @@ class DashboardService
     }
 
     /**
+     * Get Replies
+     *
+     * @param $ticketId
+     *
+     * @return array
+     */
+    private function getReplies($ticketId)
+    {
+        $replyCollection = [];
+        $replies = $this->replyTable->getByColumns([
+                                                       'ticketId' => $ticketId,
+                                                   ]);
+
+        foreach ($replies as $replyKey => $replyItem) {
+            $reply = (array) $replyItem;
+            $sender = (array) $this->userTable->getByColumns([
+                                                                 'userId' => $reply['senderId'],
+                                                             ])[0];
+            $replyCollection[$replyKey] = $reply;
+            $replyCollection[$replyKey]['sender'] = [
+                'userId' => $sender['userId'],
+                'userName' => $sender['userName'],
+                'firstName' => $sender['firstName'],
+                'lastName' => $sender['lastName'],
+                'email' => $sender['email'],
+                'userTypeId' => $sender['userTypeId'],
+            ];
+            $replyCollection[$replyKey]['userTypeId'] = $this->userTypeTable->getByUserTypeId($sender['userTypeId']);
+        }
+
+        return $replyCollection;
+    }
+
+    /**
+     * Get Files
+     *
+     * @param $ticketId
+     *
+     * @return array
+     */
+    private function getFiles($ticketId)
+    {
+        $fileCollection = [];
+        $files = $this->fileService->getByTag('ticket-' . $ticketId);
+
+        foreach ($files as $fileItem) {
+            $file = (array) $fileItem;
+            $fileCollection[] = [
+                'fileName' => $file['fileName'],
+                'fileInfo' => pathinfo($file['filePath']),
+                'dateCreated' => $file['dateCreated'],
+            ];
+        }
+
+        return $fileCollection;
+    }
+
+    /**
      * Parse Tickets
      *
      * @param $tickets
@@ -612,41 +689,8 @@ class DashboardService
         foreach ($tickets as $ticket) {
             $data = (array) $ticket;
             $data['ticketStatusName'] = $statusCollection[$data['ticketStatusId']];
-            $replies = $this->replyTable->getByColumns([
-                                                           'ticketId' => $data['ticketId'],
-                                                       ]);
-            $files = $this->fileService->getByTag('ticket-'.$data['ticketId']);
-            $replyCollection = [];
-            $fileCollection = [];
-
-            foreach ($replies as $replyKey => $replyItem) {
-                $reply = (array) $replyItem;
-                $sender = (array) $this->userTable->getByColumns([
-                                                                     'userId' => $reply['senderId'],
-                                                                 ])[0];
-                $replyCollection[$replyKey] = $reply;
-                $replyCollection[$replyKey]['sender'] = [
-                    'userId' => $sender['userId'],
-                    'userName' => $sender['userName'],
-                    'firstName' => $sender['firstName'],
-                    'lastName' => $sender['lastName'],
-                    'email' => $sender['email'],
-                    'userTypeId' => $sender['userTypeId'],
-                ];
-                $replyCollection[$replyKey]['userTypeId'] = $this->userTypeTable->getByUserTypeId($sender['userTypeId']);
-            }
-
-            foreach ($files as $fileItem) {
-                $file = (array) $fileItem;
-                $fileCollection[] = [
-                    'fileName' => $file['fileName'],
-                    'fileInfo' => pathinfo($file['filePath']),
-                    'dateCreated' => $file['dateCreated'],
-                ];
-            }
-
-            $data['replies'] = $replyCollection;
-            $data['files'] = $fileCollection;
+            $data['replies'] = $this->getReplies($data['ticketId']);
+            $data['files'] = $this->getFiles($data['ticketId']);
 
             $newId = sprintf('%s%06d', date("Y", strtotime($data['dateCreated'])), $data['ticketId']);
             $collection[$newId] = $data;
@@ -679,9 +723,9 @@ class DashboardService
             $data = (array) $permit;
             $data['permitStatusName'] = $statusCollection[$data['permitStatusId']];
             $user = $this->userTable->getByColumns([
-                                                                 'userId' => $data['agentId'],
-                                                             ]);
-            $files = $this->fileService->getByTag('permit-'.$data['permitId']);
+                                                       'userId' => $data['agentId'],
+                                                   ]);
+            $files = $this->fileService->getByTag('permit-' . $data['permitId']);
             $fileCollection = [];
 
             if (!empty($user[0])) {

@@ -39,6 +39,8 @@ export class LayoutSettingsModule {
                 $(`.dashboard__panel[data-panel="${targetPanel}"]`).find('[data-tab="overview"]').addClass('active');
             });
 
+            Dashboard.ticket.refresh.clear();
+
             $(document).on('click', '.dashboard__tab', function () {
                 let tab = $(this);
                 let panel = tab.closest('.dashboard__panel');
@@ -52,6 +54,8 @@ export class LayoutSettingsModule {
                 if (typeof replyCollection[0] !== "undefined") {
                     replyCollection.scrollTop(replyCollection[0].scrollHeight);
                 }
+
+                Dashboard.ticket.refresh.init(tab, panel);
             });
 
             $(document).on('click', '.dashboard__list-item', function () {
@@ -83,7 +87,7 @@ export class LayoutSettingsModule {
             });
 
             Layout.render();
-            Dashboard.render()
+            Dashboard.render();
         };
 
         let Dashboard = {
@@ -128,7 +132,7 @@ export class LayoutSettingsModule {
                 }
             },
             dialog: {
-                execute: function(element) {
+                execute: function (element) {
                     const action = element.val();
                     const panel = element.closest('.dashboard__panel').data('panel');
                     const details = panel.split('-');
@@ -136,7 +140,7 @@ export class LayoutSettingsModule {
 
                     return Dashboard.dialog.confirmation(panel, action, message);
                 },
-                confirmation: function(panel, action, message) {
+                confirmation: function (panel, action, message) {
                     const divider = `<div class="dashboard__divider"></div>`;
                     const cancel = `<input class="dashboard__button dashboard__button--secondary js-dialog-close" type="button" value="Cancel"/>`;
                     const confirm = `<input class="dashboard__button dashboard__button--primary js-dialog-confirm" type="button" value="Confirm"/>`;
@@ -208,10 +212,74 @@ export class LayoutSettingsModule {
                         panel.find('.dashboard__reply-input').val('');
                         Layout.dialog.close();
                     },
+                },
+                refresh: {
+                    init: function(tab, panel) {
+                        if (configuration.pageName === 'dashboard' && tab.data('tab') === "replies") {
+                            window.myInterval = setInterval(function () {
+                                console.log('Fetching message (s)');
+                                Dashboard.ticket.refresh.execute(panel);
+                            }, 10000);
+                        }
+
+                        return false;
+                    },
+                    clear: function() {
+                        if(window.myInterval !== undefined && window.myInterval !== 'undefined'){
+                            console.log('Clear interval: ' + window.myInterval);
+                            return window.clearInterval(window.myInterval);
+                        }
+
+                        return false;
+                    },
+                    execute: function (panel) {
+                        setTimeout(function () {
+                            console.log(configuration.ajax.refreshTicket);
+                            Layout.ajax('POST', configuration.ajax.refreshTicket, {
+                                ticketId: panel.data('id'),
+                            }).always(function (data) {
+                                if (data.code) {
+                                    return Dashboard.ticket.refresh.callback(panel, data.response.data);
+                                }
+                            });
+                        }, 10000)
+                    },
+                    callback: function (panel, replies) {
+                        console.log('callback');
+                        if (!replies.length) {
+                            return false;
+                        }
+
+                        let replyCollection = panel.find('.dashboard__reply-collection');
+                        let replyHtml = '';
+
+                        panel.find('.dashboard__reply-empty').remove();
+
+                        $.each(replies, function (key, reply) {
+                            console.log(reply);
+                            let bubble = `<div class="dashboard__reply-bubble">${reply.message}</div>`;
+                            let bubbleClass = reply.userTypeId.userTypeId === 4 ? 'right' : 'left';
+                            let senderType = `<span class="dashboard__reply-sender--type">${reply.userType.userTypeName}</span>`;
+                            let senderName = `<span class="dashboard__reply-sender--name">${reply.sender.firstName}</span>`;
+                            let sender = `<div class="dashboard__reply-sender">${senderType}${senderName}</div>`;
+                            let time = `<div class="dashboard__reply-time">${reply.dateCreated}</div>`;
+                            replyHtml = `<div class="dashboard__reply dashboard__reply--${bubbleClass}">${sender}${bubble}${time}</div>`
+                        });
+
+                        console.log(replyHtml);
+
+                        replyCollection.html(replyHtml);
+
+                        const newReplyCollection = panel.find('.dashboard__reply-collection');
+
+                        if (typeof newReplyCollection[0] !== "undefined") {
+                            newReplyCollection.scrollTop(newReplyCollection[0].scrollHeight);
+                        }
+                    }
                 }
             },
             permit: {
-                init: function() {
+                init: function () {
                     Layout.paging.init('permit', $('[data-panel="my-permit"]'));
 
                     $(document).on('click', '.js-permit-action', function () {
@@ -248,7 +316,11 @@ export class LayoutSettingsModule {
             window: {
                 init: function () {
                     if (window.history.replaceState) {
-                        window.history.replaceState(null, null, window.location.href);
+                        try {
+                            window.history.replaceState(null, null, window.location.href);
+                        } catch (e) {
+                            console.log(e)
+                        }
                     }
 
                     $(window).scroll(function () {
