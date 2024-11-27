@@ -110,11 +110,28 @@ class DashboardService
             case 'Administrator':
                 $viewOptions = [
                     'pages' => $this->getDashboardPages(),
-                    'faq' => $this->faqTable->fetchAll(),
-                    'faqDetails' => $this->faqTable->fetchAll(),
-                    'problemType' => $this->problemTypeTable->fetchAll(),
-                    'permitStatus' => $this->permitTable->fetchAll(),
-                    'ticketStatus' => $this->ticketStatusTable->fetchAll(),
+                    'dataTables' => [
+                        'ticket' => [
+                            'Ticket Status' => $this->ticketStatusTable->fetchAll(),
+                            'Ticket' => $this->ticketTable->fetchAll(),
+                        ],
+                        'permit' => [
+                            'Permit Status' => $this->permitTable->fetchAll(),
+                            'Permit' => $this->permitStatusTable->fetchAll(),
+                        ],
+                        'faq' => [
+                            'Faq' => $this->faqTable->fetchAll(),
+                            'Faq Details' => $this->faqDetailsTable->fetchAll(),
+                        ],
+                        'problem-type' => [
+                            'Problem Type' => $this->problemTypeTable->fetchAll(),
+                        ],
+                        'user' => [
+                            'User Type' => $this->userTypeTable->fetchAll(),
+                            'User' => $this->userTable->fetchAll(),
+                        ],
+                    ],
+                    'activeTab' => 'overview',
                 ];
                 break;
             case 'Agent':
@@ -630,42 +647,47 @@ class DashboardService
                 'action' => 'setting',
             ],
             [
-                'title' => 'Users',
+                'title' => 'User (s)',
                 'description' => 'Add, delete and update Users, Residents and Employees.',
                 'action' => 'user',
             ],
             [
-                'title' => 'Employees',
-                'description' => 'View Employees performances.',
+                'title' => 'Employee (s)',
+                'description' => 'View Employee performance.',
                 'action' => 'employee',
             ],
             [
-                'title' => 'FAQs',
+                'title' => 'FAQ (s)',
                 'description' => 'Add, delete and update Frequently Asked Questions.',
                 'action' => 'faq',
             ],
             [
-                'title' => 'Problem Types',
+                'title' => 'Problem Type (s)',
                 'description' => 'Add, delete and update Problem Types.',
                 'action' => 'problem-type',
             ],
             [
-                'title' => 'Tickets',
+                'title' => 'Ticket (s)',
                 'description' => 'Add, delete and update Tickets.',
                 'action' => 'ticket',
             ],
             [
-                'title' => 'Forms and List',
+                'title' => 'Permit (s)',
+                'description' => 'Add, delete and update Tickets.',
+                'action' => 'permit',
+            ],
+            [
+                'title' => 'Downloadable (s)',
                 'description' => 'Add, delete and update Downloadable Forms and Lists.',
                 'action' => 'forms-and-list',
             ],
             [
-                'title' => 'Press Release',
+                'title' => 'Press Release (s)',
                 'description' => 'Add, delete and update Press Release or Latest News.',
                 'action' => 'press-release',
             ],
             [
-                'title' => 'Reports',
+                'title' => 'Report (s)',
                 'description' => 'Generate and see all reports.',
                 'action' => 'report',
             ],

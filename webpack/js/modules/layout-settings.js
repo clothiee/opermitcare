@@ -6,8 +6,19 @@ export class LayoutSettingsModule {
     initialize() {
         let configuration = JSON.parse(this.configuration);
         let addEventListener = function () {
-            console.log(configuration.pageName);
             switch (configuration.pageName) {
+                case 'index':
+                    Layout.window.init();
+                    break;
+                case 'faq':
+                    $(document).on('click', '.js-see-content', function () {
+                        const contentId = $(this).data('id');
+                        $('.js-see-content, .faq__detail-item').removeClass('active');
+                        $(`[data-id="${contentId}"]`).addClass('active');
+                    });
+
+                    Layout.window.init();
+                    break;
                 case 'login':
                 case 'sign-up':
                     $(document).on('click', '.login__input svg', function () {
@@ -91,30 +102,18 @@ export class LayoutSettingsModule {
                             .addClass('dashboard__input-row--active');
                     });
 
-                    Layout.render();
-                    Dashboard.render();
-                    break;
-                case 'dashboard/faq':
-                    $(document).ready( function () {
-                        $('#data-table').DataTable({
+                    $('.js-data-table').each(function () {
+                        $(this).DataTable({
                             "paging":   true,
                             "ordering": false,
                             "info":     false
                         });
                     });
-                    break;
-                case 'faq':
-                    $(document).on('click', '.js-see-content', function () {
-                        const contentId = $(this).data('id');
-                        $('.js-see-content, .faq__detail-item').removeClass('active');
-                        $(`[data-id="${contentId}"]`).addClass('active');
-                    });
 
-                    Layout.window.init();
+                    Layout.render();
+                    Dashboard.render();
                     break;
             }
-
-
         };
         let Layout = {
             render: function () {
@@ -144,7 +143,7 @@ export class LayoutSettingsModule {
                     }
 
                     $(window).scroll(function () {
-                        if ($(this).scrollTop() > 300) {
+                        if ($(this).scrollTop() > 200) {
                             return $('.navigation').addClass('navigation--sticky');
                         }
 

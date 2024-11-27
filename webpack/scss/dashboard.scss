@@ -1,9 +1,4 @@
 .dashboard {
-  &--resident,
-  &--agent {
-    padding-top: 60px;
-  }
-
   &__jumbotron {
     background-color: var(--article-jumbotron);
     color: var(--article-header-color);
@@ -21,26 +16,19 @@
   }
 
   &__wrapper {
-    max-width: $desktop-large-min-width;
+    background-color: var(--dashboard-card-background-color);
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
     width: 100%;
-
-    &--section {
-      display: flex;
-      flex-wrap: wrap;
-      margin: {
-        bottom: 65px;
-        top: 65px;
-      };
-      @include get-responsive(-webkit-flex-direction, column, row, row, row);
-      @include get-responsive(-ms-flex-direction, column, row, row, row);
-      @include get-responsive(flex-direction, column, row, row, row);
-    }
+    @include get-responsive(-webkit-flex-direction, column, row, row, row);
+    @include get-responsive(-ms-flex-direction, column, row, row, row);
+    @include get-responsive(flex-direction, column, row, row, row);
   }
 
   &__section {
     display: flex;
     justify-content: center;
-    @include get-responsive(padding, 0 20px, 0 20px, 0 20px);
   }
 
   &__card {
@@ -271,13 +259,17 @@
       }
 
       p {
-        margin-top: 30px;
         text-align: justify;
       }
     }
 
     &-collection {
       margin-top: 15px;
+      float: left;
+      width: 100%;
+    }
+
+    &-body {
       float: left;
       width: 100%;
     }
@@ -356,7 +348,6 @@
     padding: 15px;
     margin-right: 10px;
     margin-top: 15px;
-    @include get-responsive(width, 100%, 100%, calc(100% / 3 - 10px), calc(100% / 3 - 10px));
 
     &-status {
       font-weight: 600;
@@ -1079,10 +1070,12 @@
   .dataTables_wrapper {
     background: #fff;
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
     padding: 30px 20px;
     border-radius: 20px;
     margin-top: 20px;
     width: 100%;
+    overflow-x: auto;
 
     input[type="button"] {
       border: 1px solid var(--main-color);
@@ -1102,34 +1095,81 @@
   }
 }
 
-.dashboard--resident .dashboard {
-  &__wrapper {
-    &--section {
-      background-color: var(--dashboard-card-background-color);
-      border-radius: 20px;
-      overflow: hidden;
+.app--administrator,
+.app--agent,
+.app--moderator {
+  .dashboard {
+    &__section {
+      padding: 0;
     }
-  }
 
-  &__side-bar {
-    li {
-      @include get-responsive(width, calc(100% / 6), calc(100% / 6));
+    &__wrapper {
+      min-height: calc(100vh - 65px);
+    }
+
+    &__side-bar {
+      li {
+        @include get-responsive(width, calc(100% / 4), calc(100% / 4));
+      }
+    }
+
+    &__permit,
+    &__ticket {
+      @include get-responsive(width, 100%, 100%, calc(100% / 3 - 10px), calc(100% / 6 - 10px));
     }
   }
 }
 
-.dashboard--agent .dashboard {
-  &__wrapper {
-    &--section {
-      background-color: var(--dashboard-card-background-color);
+.app--resident {
+  .dashboard {
+    &__section {
+      @include get-responsive(padding, 0 20px, 0 20px, 0 20px);
+    }
+
+    &__wrapper {
+      max-width: $desktop-large-min-width;
       border-radius: 20px;
-      overflow: hidden;
+      margin: {
+        bottom: 65px;
+        top: 65px;
+      };
+    }
+
+    &__side-bar {
+      li {
+        @include get-responsive(width, calc(100% / 6), calc(100% / 6));
+      }
+    }
+
+    &__permit,
+    &__ticket {
+      @include get-responsive(width, 100%, 100%, calc(100% / 3 - 10px), calc(100% / 3 - 10px));
     }
   }
+}
 
-  &__side-bar {
-    li {
-      @include get-responsive(width, calc(100% / 4), calc(100% / 4));
+.app--administrator {
+  .dashboard {
+    &__panel {
+      &-header {
+        p {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+}
+
+.app--agent,
+.app--moderator,
+.app--resident {
+  .dashboard {
+    &__panel {
+      &-header {
+        p {
+          margin-top: 30px;
+        }
+      }
     }
   }
 }

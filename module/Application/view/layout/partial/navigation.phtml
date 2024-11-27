@@ -1,4 +1,6 @@
 <?php
+$pageName = $this->pageName;
+$userType = $this->userType;
 $isProfileAvailable = $this->isProfileAvailable;
 $url = [
     'HOME' => $this->url('home'),
@@ -19,11 +21,13 @@ $url = [
         <div class="navigation__item navigation__item--title">
             <a href="<?= $url['HOME'] ?>"><span>Opermitcare</span></a>
         </div>
-        <ul class="navigation__item navigation__item--services">
-            <li><a href="<?= $url['FAQ'] ?>">Frequently asked questions</a></li>
-            <li><a href="<?= $url['FIND_A_FORM'] ?>">Find a Form</a></li>
-            <li><a href="<?= $url['SUPPORT'] ?>">Support</a></li>
-        </ul>
+        <?php if (($userType === 'default' || $userType === 'resident') || $pageName !== 'dashboard') : ?>
+            <ul class="navigation__item navigation__item--services">
+                <li><a href="<?= $url['FAQ'] ?>">Frequently asked questions</a></li>
+                <li><a href="<?= $url['FIND_A_FORM'] ?>">Find a Form</a></li>
+                <li><a href="<?= $url['SUPPORT'] ?>">Support</a></li>
+            </ul>
+        <?php endif; ?>
         <?php if (!$isProfileAvailable) : ?>
         <ul class="navigation__item navigation__item--info">
             <li><a href="<?= $url['DASHBOARD'] ?>">Dashboard</a></li>

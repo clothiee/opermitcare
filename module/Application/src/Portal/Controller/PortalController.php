@@ -132,6 +132,9 @@ class PortalController extends AbstractActionController
         $this->layout()->setVariable('layoutVariables', [
             'pageName' => sprintf('%s%s', $this->action, $parameters),
             'env' => $this->config['env'],
+            'userType' => !empty($sessionDetails['userType']['userTypeName']) && $this->action === 'dashboard'
+                ? strtolower($sessionDetails['userType']['userTypeName'])
+                : 'default',
             'isProfileAvailable' => empty($sessionDetails['user']) && empty($sessionDetails['userType']),
         ]);
 

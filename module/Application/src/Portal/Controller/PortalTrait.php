@@ -21,9 +21,24 @@ trait PortalTrait
 
         if ($userTypeName) {
             $param1 = $this->params()->fromRoute('param1');
-            $templatePath = strlen($param1) ? 'partial/' . $param1 : $action;
 
-            return "application/portal/portal/$userTypeName/$templatePath";
+            switch ($userTypeName) {
+                case 'administrator':
+                    $templateType = $userTypeName;
+                    $templatePath = strlen($param1) ?  $param1 : $action;
+                    break;
+                case 'agent':
+                case 'moderator':
+                    $templateType = 'employee';
+                    $templatePath = strlen($param1) ? 'partial/' . $param1 : $action;
+                    break;
+                default:
+                    $templateType = $userTypeName;
+                    $templatePath = strlen($param1) ? 'partial/' . $param1 : $action;
+                    break;
+            }
+
+            return "application/portal/portal/$templateType/$templatePath";
         }
 
         return "application/portal/portal/invalid";

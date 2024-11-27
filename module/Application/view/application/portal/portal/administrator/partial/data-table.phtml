@@ -1,0 +1,65 @@
+<?php
+$layoutVariables = $this->layout()->getVariables('layoutVariables');
+$sessionDetails = $this->sessionDetails;
+$pageKey = array_search($this->tabKey, array_column($this->pages, 'action'));
+$page = $this->pages[$pageKey];
+$skipColumn = [
+    'Faq Details' => ['faqId', 'description', 'active'],
+    'Faq' => ['active'],
+    'Ticket Status' => ['active'],
+    'Problem Type' => ['active'],
+    'User' => ['email', 'password', 'firstName', 'lastName', 'phoneNumber', 'address', 'userTypeId'],
+];
+?>
+<?php if ($this->alertMessage) : ?>
+    <div class="alert<?= $this->alertClass ?>">
+        <span><?= $this->alertMessage ?></span>
+        <a class="alert__button js-alert-close">&times;</a>
+    </div>
+<?php endif; ?>
+<div class="dashboard__panel-header">
+    <h1><?= $page['title'] ?></h1>
+    <p>
+        <?= $page['description'] ?>
+    </p>
+</div>
+<div class="dashboard__panel-body">
+    <?php foreach ($this->dataTables as $category => $row) :
+        $tableRow = (array) $row;
+        $fistItem = (array) array_shift($tableRow);
+        $tableHeads = array_keys($fistItem); ?>
+        <div class="dashboard__divider"></div>
+        <h4><?= $category ?> Table</h4>
+        <table class="dashboard__data-table display js-data-table">
+            <thead>
+            <tr>
+                <?php foreach ($tableHeads as $tableHead) :
+                    $skip = !empty($skipColumn[$category]) ? $skipColumn[$category] : [];
+                    if (in_array($tableHead, $skip)) {
+                        continue;
+                    } ?>
+                    <th width="40%"><?= $tableHead ?></th>
+                <?php endforeach; ?>
+                <th width="40%">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($tableRow as $rowItem) :
+                $tdValues = (array) $rowItem; ?>
+                <tr>
+                    <?php foreach ($tdValues as $tdKey => $tdValue) :
+                        $skip = !empty($skipColumn[$category]) ? $skipColumn[$category] : [];
+                        if (in_array($tdKey, $skip)) {
+                            continue;
+                        } ?>
+                        <td><?= $tdValue ?></td>
+                    <?php endforeach; ?>
+                    <td>
+                        <input type="button" value="Edit"/>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endforeach; ?>
+</div>

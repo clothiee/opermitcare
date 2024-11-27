@@ -27,7 +27,7 @@ $layoutVariables = $this->layout()->getVariable('layoutVariables');
     ?>
     <?= $this->headScript() ?>
 </head>
-<body>
+<body class="app app--<?= $layoutVariables['userType'] ?>">
 <header role="banner">
     <?= $this->partial('partial/navigation', $layoutVariables); ?>
 </header>

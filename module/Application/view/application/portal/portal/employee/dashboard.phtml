@@ -33,9 +33,9 @@ $panels = [
 ];
 ?>
 
-<div class="dashboard dashboard--agent">
+<div class="dashboard">
     <div class="dashboard__section">
-        <div class="dashboard__wrapper dashboard__wrapper--section">
+        <div class="dashboard__wrapper">
             <div class="dashboard__side-bar">
                 <h1>Dashboard</h1>
                 <ul>
@@ -61,6 +61,8 @@ $panels = [
                 </ul>
             </div>
             <div class="dashboard__content">
+                <h3>Hi, <?= $this->sessionDetails['user']['firstName'] ?> (@<?= $this->sessionDetails['user']['userName'] ?>)</h3>
+                <div class="dashboard__divider"></div>
                 <div class="dashboard__panel<?= $panels['overview']['class'] ?>" data-panel="overview">
                     <?= $this->partial('partial/overview', [
                         'tickets' => $this->recentTickets,
