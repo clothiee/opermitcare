@@ -11,7 +11,6 @@ function config(mode) {
         entry: {
             app: [
                 'jquery',
-                './webpack/js/vendor/datatable.js',
                 './webpack/js/vendor/pagination.js',
                 './webpack/js/app.js',
                 './webpack/scss/app.scss',

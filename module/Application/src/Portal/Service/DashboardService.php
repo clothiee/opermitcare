@@ -110,25 +110,27 @@ class DashboardService
             case 'Administrator':
                 $viewOptions = [
                     'pages' => $this->getDashboardPages(),
+                    'idValues' => [
+                        'problemType' => $this->problemTypeTable->fetchAll(),
+                        'permitStatus' => $this->permitStatusTable->fetchAll(),
+                        'ticketStatus' => $this->ticketStatusTable->fetchAll(),
+                    ],
                     'dataTables' => [
                         'ticket' => [
-                            'Ticket Status' => $this->ticketStatusTable->fetchAll(),
-                            'Ticket' => $this->ticketTable->fetchAll(),
+                            'ticket' => $this->parseTable($this->ticketTable->fetchAll()),
                         ],
                         'permit' => [
-                            'Permit Status' => $this->permitTable->fetchAll(),
-                            'Permit' => $this->permitStatusTable->fetchAll(),
+                            'permit' => $this->parseTable($this->permitTable->fetchAll()),
                         ],
                         'faq' => [
-                            'Faq' => $this->faqTable->fetchAll(),
-                            'Faq Details' => $this->faqDetailsTable->fetchAll(),
+                            'faq' => $this->faqTable->fetchAll(),
+                            'faq-details' => $this->parseTable($this->faqDetailsTable->fetchAll()),
                         ],
                         'problem-type' => [
-                            'Problem Type' => $this->problemTypeTable->fetchAll(),
+                            'problem-type' => $this->problemTypeTable->fetchAll(),
                         ],
                         'user' => [
-                            'User Type' => $this->userTypeTable->fetchAll(),
-                            'User' => $this->userTable->fetchAll(),
+                            'user' => $this->userTable->fetchAll(),
                         ],
                     ],
                     'activeTab' => 'overview',
@@ -814,15 +816,7 @@ class DashboardService
 
             if (!empty($user[0])) {
                 $agent = (array) $user[0];
-                $data['agentId'] = [
-                    'userId' => $agent['userId'],
-                    'userName' => $agent['userName'],
-                    'firstName' => $agent['firstName'],
-                    'lastName' => $agent['lastName'],
-                    'middleName' => $agent['middleName'],
-                    'email' => $agent['email'],
-                    'userTypeId' => $agent['userTypeId'],
-                ];
+                $data['agentId'] = $agent;
             }
 
             foreach ($files as $fileItem) {
@@ -886,5 +880,42 @@ class DashboardService
         }
 
         return $errors;
+    }
+
+    private function parseTable($dataTable)
+    {
+        $collection = [];
+
+        foreach ($dataTable as $row) {
+            $data = (array) $row;
+            foreach ($data as $key => $value) {
+                switch ($key) {
+                    case 'agentId':
+                    case 'senderId':
+                    case 'residentId':
+                        $data = array_merge($data, (array) $this->userTable->getByColumns(['userId' => $value])[0]);
+                        break;
+                    case 'dateCreated':
+                        $data[$key] = date("d M Y", strtotime($value));
+                        break;
+                    case 'ticketStatusId':
+                        $data = array_merge($data, (array) $this->ticketStatusTable->getByColumns(['ticketStatusId' => $value])[0]);
+                        break;
+                    case 'faqId':
+                        $data = array_merge($data, (array) $this->faqTable->getByColumns(['faqId' => $value])[0]);
+                        break;
+                    case 'permitStatusId':
+                        $data = array_merge($data, (array) $this->permitStatusTable->getByColumns(['permitStatusId' => $value])[0]);
+                        break;
+                    case 'problemTypeId':
+                        $data = array_merge($data, (array) $this->problemTypeTable->getByColumns(['problemTypeId' => $value])[0]);
+                        break;
+                }
+            }
+
+            $collection[] = $data;
+        }
+
+        return $collection;
     }
 }

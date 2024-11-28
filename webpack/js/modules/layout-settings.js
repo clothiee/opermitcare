@@ -1,3 +1,5 @@
+import DataTable from 'datatables.net-dt';
+
 export class LayoutSettingsModule {
     constructor(configuration = {}) {
         this.configuration = configuration;
@@ -103,11 +105,28 @@ export class LayoutSettingsModule {
                     });
 
                     $('.js-data-table').each(function () {
-                        $(this).DataTable({
-                            "paging":   true,
-                            "ordering": false,
-                            "info":     false
-                        });
+                        const tableName = $(this).data('tableName');
+
+                        switch (tableName) {
+                            case 'permit':
+                            case 'ticket':
+                                Layout.dataTable.render('#dt-'+tableName, [
+                                    { width: '15%'},
+                                    { width: '25%'},
+                                    { width: '25%'},
+                                    { width: '25%'},
+                                    { width: '10%'}
+                                ]);
+                                break;
+                            default:
+                                Layout.dataTable.render('#dt-'+tableName, [
+                                    { width: '15%'},
+                                    { width: '50%'},
+                                    { width: '25%'},
+                                    { width: '10%'}
+                                ]);
+                                break;
+                        }
                     });
 
                     Layout.render();
@@ -117,7 +136,6 @@ export class LayoutSettingsModule {
         };
         let Layout = {
             render: function () {
-                Layout.window.init();
                 Layout.form.init();
                 Layout.dialog.init();
                 Layout.print.init();
@@ -275,6 +293,20 @@ export class LayoutSettingsModule {
                     setTimeout(function () {
                         printDialog.close();
                     }, 10);
+                }
+            },
+            dataTable: {
+                render: function (tableName, columns) {
+                    new DataTable(tableName, {
+                        info: true,
+                        paging: true,
+                        search: true,
+                        fixedColumns: {
+                            start: 1
+                        },
+                        autoWidth: false,
+                        columns: columns
+                    }).columns.adjust();
                 }
             }
         };

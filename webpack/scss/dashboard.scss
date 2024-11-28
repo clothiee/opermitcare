@@ -1067,31 +1067,40 @@
     margin-top: 20px;
   }
 
-  .dataTables_wrapper {
-    background: #fff;
-    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
-    border: 1px solid #ccc;
-    padding: 30px 20px;
-    border-radius: 20px;
-    margin-top: 20px;
-    width: 100%;
-    overflow-x: auto;
+  &__data-table {
+    width: 100% !important;
 
-    input[type="button"] {
+    &-button {
       border: 1px solid var(--main-color);
       background-color: #fff;
       cursor: pointer;
-      border-radius: 5px;
+      border-radius: 3px;
       color: var(--main-color);
       padding: 5px 10px;
       font-weight: 600;
       width: 80px;
+      outline: 0;
 
       &:hover {
         background-color: var(--main-color);
         color: #fff;
       }
     }
+  }
+
+  .dt-container {
+    margin-top: 20px;
+  }
+
+  .dt-layout-table {
+    @include get-responsive(overflow-y, scroll);
+  }
+
+  .dt-paging-button.current {
+    background-color: var(--main-color) !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    color: #fff !important;
   }
 }
 

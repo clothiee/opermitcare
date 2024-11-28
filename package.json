@@ -30,6 +30,8 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "datatables.net": "^2.1.8",
+    "datatables.net-dt": "^2.1.8",
     "jquery": "^3.7.1",
     "slick-carousel": "^1.8.1"
   }
