@@ -3,6 +3,7 @@
 namespace Application\Portal\Controller;
 
 use Application\Portal\Service\DashboardService;
+use Application\Portal\Service\DataTableService;
 use Application\Portal\Service\SessionService;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerExceptionInterface;
@@ -24,11 +25,13 @@ class PortalApiControllerFactory implements FactoryInterface
         $config = $container->get('config');
         $sessionService = $container->get(SessionService::class);
         $dashboardService = $container->get(DashboardService::class);
+        $dataTableService = $container->get(DataTableService::class);
 
         return new PortalApiController(
             $config,
             $sessionService,
-            $dashboardService
+            $dashboardService,
+            $dataTableService
         );
     }
 }

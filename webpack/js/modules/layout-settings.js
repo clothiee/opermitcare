@@ -12,10 +12,11 @@ export class LayoutSettingsModule {
                 case 'index':
                     Layout.window.init();
                     break;
+                case 'find-a-form':
                 case 'faq':
                     $(document).on('click', '.js-see-content', function () {
                         const contentId = $(this).data('id');
-                        $('.js-see-content, .faq__detail-item').removeClass('active');
+                        $(`.js-see-content, [data-id]`).removeClass('active');
                         $(`[data-id="${contentId}"]`).addClass('active');
                     });
 
@@ -107,26 +108,7 @@ export class LayoutSettingsModule {
                     $('.js-data-table').each(function () {
                         const tableName = $(this).data('tableName');
 
-                        switch (tableName) {
-                            case 'permit':
-                            case 'ticket':
-                                Layout.dataTable.render('#dt-'+tableName, [
-                                    { width: '15%'},
-                                    { width: '25%'},
-                                    { width: '25%'},
-                                    { width: '25%'},
-                                    { width: '10%'}
-                                ]);
-                                break;
-                            default:
-                                Layout.dataTable.render('#dt-'+tableName, [
-                                    { width: '15%'},
-                                    { width: '50%'},
-                                    { width: '25%'},
-                                    { width: '10%'}
-                                ]);
-                                break;
-                        }
+                        Layout.table.render(tableName);
                     });
 
                     Layout.render();
@@ -295,17 +277,55 @@ export class LayoutSettingsModule {
                     }, 10);
                 }
             },
-            dataTable: {
-                render: function (tableName, columns) {
-                    new DataTable(tableName, {
+            table: {
+                columnDefs: function (columns) {
+                    let collection = [];
+
+                    $.each(columns, function (key, title) {
+                        let data = {
+                            targets : key,
+                            title : title
+                        };
+
+                        if (title === 'Action') {
+                            data.defaultContent = `<button class="dashboard__data-table-button" type="button">Edit</button>`;
+                        }
+
+                        collection.push(data);
+                    });
+
+                    return collection;
+                },
+                columns: function (tableName) {
+                    switch (tableName) {
+                        case 'download':
+                        case 'permit':
+                        case 'ticket':
+                        case 'user':
+                            return Dashboard.tables.columns[5];
+                        default:
+                            return Dashboard.tables.columns[4];
+                    }
+                },
+                render: function (tableName) {
+                    new DataTable(`[data-table-name="${tableName}"]`, {
+                        ajax: {
+                            url: configuration.ajax.getDataTable + tableName,
+                            dataSrc: 'response.data'
+                        },
                         info: true,
                         paging: true,
+                        pageLength: 10,
                         search: true,
                         fixedColumns: {
                             start: 1
                         },
                         autoWidth: false,
-                        columns: columns
+                        columns: Layout.table.columns(tableName),
+                        columnDefs: Layout.table.columnDefs(Dashboard.tables.columnTitles[tableName]),
+                        createdRow: function (row, data) {
+                            $(row).attr('data-id', data[data.length - 1]);
+                        }
                     }).columns.adjust();
                 }
             }
@@ -507,6 +527,32 @@ export class LayoutSettingsModule {
 
                         return Layout.print.execute(element, style);
                     }
+                }
+            },
+            tables: {
+                columnTitles: {
+                    'download': ['Id', 'Title', 'Type', 'Active', 'Action'],
+                    'faq': ['Id', 'Category', 'Active', 'Action'],
+                    'faq-details': ['Category', 'Title', 'Active', 'Action'],
+                    'permit': ['Id', 'Trade Name', 'Status', 'Date Created', 'Action'],
+                    'problem-type': ['Id', 'Title', 'Active', 'Action'],
+                    'ticket': ['Id', 'Problem Type', 'Status', 'Date Created', 'Action'],
+                    'user': ['Id', 'Email', 'Username', 'User Type', 'Action']
+                },
+                columns: {
+                    4: [
+                        { data: 0, width: '15%' },
+                        { data: 1, width: '51%' },
+                        { data: 2, width: '24%' },
+                        { data: null, width: '10%' }
+                    ],
+                    5: [
+                        { data: 0, width: '15%'},
+                        { data: 1, width: '51%'},
+                        { data: 2, width: '12%'},
+                        { data: 3, width: '12%'},
+                        { data: null, width: '10%'}
+                    ]
                 }
             }
         };

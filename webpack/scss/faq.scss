@@ -72,20 +72,16 @@
   }
 
   &__detail-item {
-    border-bottom: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
     display: none;
-    padding: 20px;
     justify-content: flex-start;
     align-items: stretch;
     flex-direction: column;
     gap: 10px;
+    @include get-responsive(padding, 20px 0, 20px, 20px, 20px);
 
     &.active {
       display: flex;
-    }
-
-    &:first-child {
-      border-top: 1px solid #e5e5e5;
     }
   }
 

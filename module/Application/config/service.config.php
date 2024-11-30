@@ -2,6 +2,9 @@
 
 namespace Application;
 
+use Application\Opermitcare\Download\Model\Download;
+use Application\Opermitcare\Download\Model\DownloadTable;
+use Application\Opermitcare\Download\Model\DownloadTableFactory;
 use Application\Opermitcare\Faq\Model\FaqTable;
 use Application\Opermitcare\Faq\Model\FaqTableFactory;
 use Application\Opermitcare\FaqDetails\Model\FaqDetailsTable;
@@ -26,12 +29,15 @@ use Application\Opermitcare\UserType\Model\UserTypeTable;
 use Application\Opermitcare\UserType\Model\UserTypeTableFactory;
 use Application\Portal\Service\DashboardService;
 use Application\Portal\Service\DashboardServiceFactory;
+use Application\Portal\Service\DataTableService;
+use Application\Portal\Service\DataTableServiceFactory;
 use Application\Portal\Service\FileService;
 use Application\Portal\Service\FileServiceFactory;
 use Application\Portal\Service\SessionService;
 use Application\Portal\Service\SessionServiceFactory;
 
 $table = [
+    DownloadTable::class => DownloadTableFactory::class,
     FaqTable::class => FaqTableFactory::class,
     FaqDetailsTable::class => FaqDetailsTableFactory::class,
     FileTable::class => FileTableFactory::class,
@@ -47,6 +53,7 @@ $table = [
 
 $service = [
     DashboardService::class => DashboardServiceFactory::class,
+    DataTableService::class => DataTableServiceFactory::class,
     FileService::class => FileServiceFactory::class,
     SessionService::class => SessionServiceFactory::class,
 ];

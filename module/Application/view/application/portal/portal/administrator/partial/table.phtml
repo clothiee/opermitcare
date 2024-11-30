@@ -1,0 +1,22 @@
+<?php
+$layoutVariables = $this->layout()->getVariables('layoutVariables');
+?>
+<?php if ($this->alertMessage) : ?>
+    <div class="alert<?= $this->alertClass ?>">
+        <span><?= $this->alertMessage ?></span>
+        <a class="alert__button js-alert-close">&times;</a>
+    </div>
+<?php endif; ?>
+<div class="dashboard__panel-header">
+    <h1><?= $this->title ?></h1>
+    <p>
+        <?= $this->description ?>
+    </p>
+</div>
+<div class="dashboard__panel-body">
+    <?php foreach ($this->table as $tableName) : ?>
+        <div class="dashboard__divider"></div>
+        <h4><?= ucwords(preg_replace('/([a-z0-9])([A-Z])/', "$1 $2", str_replace('-', ' ', $tableName))) ?> Table</h4>
+        <table class="dashboard__data-table display js-data-table" data-table-name="<?= $tableName ?>" style="width:100%"></table>
+    <?php endforeach; ?>
+</div>

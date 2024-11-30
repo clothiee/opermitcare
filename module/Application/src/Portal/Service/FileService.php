@@ -36,6 +36,22 @@ class FileService
     }
 
     /**
+     * Get File
+     *
+     * @param int $fileId
+     *
+     * @return array
+     */
+    public function getByFileId($fileId)
+    {
+        try {
+            return $this->fileTable->getByColumns(['fileId' => $fileId]);
+        } catch (Exception $exception) {
+            return [];
+        }
+    }
+
+    /**
      * Get Attachments
      *
      * @param string $tag

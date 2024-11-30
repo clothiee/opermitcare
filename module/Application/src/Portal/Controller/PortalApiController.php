@@ -3,8 +3,10 @@
 namespace Application\Portal\Controller;
 
 use Application\Portal\Service\DashboardService;
+use Application\Portal\Service\DataTableService;
 use Application\Portal\Service\SessionService;
 use ArrayObject;
+use Exception;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
@@ -15,9 +17,11 @@ class PortalApiController extends AbstractActionController
 
     private $action;
     private $param1;
+    private $param2;
     private $config;
     private $sessionService;
     private $dashboardService;
+    private $dataTableService;
 
     /**
      * PortalApiController constructor.
@@ -25,15 +29,18 @@ class PortalApiController extends AbstractActionController
      * @param ArrayObject      $config
      * @param SessionService   $sessionService
      * @param DashboardService $dashboardService
+     * @param DataTableService $dataTableService
      */
     public function __construct(
         $config,
         SessionService $sessionService,
-        DashboardService $dashboardService
+        DashboardService $dashboardService,
+        DataTableService $dataTableService
     ) {
         $this->config = $config;
         $this->sessionService = $sessionService;
         $this->dashboardService = $dashboardService;
+        $this->dataTableService = $dataTableService;
     }
 
     /**
@@ -43,9 +50,13 @@ class PortalApiController extends AbstractActionController
      */
     public function dashboardAction()
     {
-        $this->param1 = $this->params()->fromRoute('param1', null);
+        $parameters = $this->params();
+        $this->param1 = $parameters->fromRoute('param1', null);
+        $this->param2 = $parameters->fromRoute('param2', null);
 
         switch ($this->param1) {
+            case 'get-data-table':
+                return $this->getDataTable($this->param2);
             case 'reply-ticket':
                 return $this->replyTicket();
             case  'refresh-ticket':
@@ -54,6 +65,19 @@ class PortalApiController extends AbstractActionController
                 return $this->buildResponse(DashboardService::INVALID_CODE, [
                     'message' => DashboardService::INVALID_MESSAGE,
                 ]);
+        }
+    }
+
+    private function getDataTable($tableName)
+    {
+        try {
+            return $this->buildResponse(DashboardService::SUCCESS_CODE, [
+                'data' => $this->dataTableService->initialize($tableName),
+            ]);
+        } catch (Exception $exception) {
+            return $this->buildResponse(DashboardService::INVALID_CODE, [
+                'data' => [],
+            ]);
         }
     }
 

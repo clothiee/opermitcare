@@ -1,11 +1,11 @@
 <?php
 
-namespace Application\Opermitcare\User\Model;
+namespace Application\Opermitcare\Download\Model;
 
 use RuntimeException;
 use Laminas\Db\TableGateway\TableGatewayInterface;
 
-class UserTable
+class DownloadTable
 {
     private $tableGateway;
 
@@ -28,42 +28,37 @@ class UserTable
         return $this->parseRow($rowSet);
     }
 
-    public function save(User $user)
+    public function save(Download $download)
     {
         $data = [
-            'userName' => $user->userName,
-            'password' => $user->password,
-            'firstName' => $user->firstName,
-            'lastName' => $user->lastName,
-            'email' => $user->email,
-            'phoneNumber' => $user->phoneNumber,
-            'address' => $user->address,
-            'userTypeId' => $user->userTypeId,
-            'active' => $user->active,
+            'fileId' => $download->fileId,
+            'title' => $download->title,
+            'type' => $download->type,
+            'active' => $download->active,
         ];
 
-        $userId = (int) $user->userId;
+        $downloadId = (int) $download->downloadId;
 
-        if ($userId === 0) {
+        if ($downloadId === 0) {
             $this->tableGateway->insert($data);
             return;
         }
 
         try {
-            $this->getByColumns(['userId' => $userId]);
+            $this->getByColumns(['downloadId' => $downloadId]);
         } catch (RuntimeException $e) {
             throw new RuntimeException(sprintf(
-            'Cannot update user with identifier %d; does not exist',
-                $userId
-            ));
+                                           'Cannot update user with identifier %d; does not exist',
+                                           $downloadId
+                                       ));
         }
 
-        $this->tableGateway->update($data, ['userId' => $userId]);
+        $this->tableGateway->update($data, ['downloadId' => $downloadId]);
     }
 
-    public function delete($userId)
+    public function delete($downloadId)
     {
-        $this->tableGateway->delete(['userId' => (int) $userId]);
+        $this->tableGateway->delete(['downloadId' => (int) $downloadId]);
     }
 
     private function parseRow($rowSet)

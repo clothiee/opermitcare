@@ -40,7 +40,7 @@ return [
             'application' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/api[/:action][/:param1][/]',
+                    'route' => '/api[/:action][/:param1][/:param2][/]',
                     'constraints' => [
                         'param1' => '[a-zA-Z0-9][a-zA-Z0-9_-]*',
                     ],

@@ -22,6 +22,8 @@ class User
     public $address;
     /** @var int $userTypeId*/
     public $userTypeId;
+    /** @var int $active */
+    public $active;
 
     public function exchangeArray($data)
     {
@@ -34,5 +36,6 @@ class User
         $this->phoneNumber = !empty($data['phoneNumber']) ? $data['phoneNumber'] : null;
         $this->address = !empty($data['address']) ? $data['address'] : null;
         $this->userTypeId = !empty($data['userTypeId']) ? $data['userTypeId'] : null;
+        $this->active = !empty($data['active']) ? $data['active'] : null;
     }
 }

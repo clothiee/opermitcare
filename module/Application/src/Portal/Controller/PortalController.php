@@ -257,7 +257,7 @@ class PortalController extends AbstractActionController
                 $viewOptions['response']['data'] = $process['data'];
                 break;
             case 'assess-permit':
-                $process = $this->dashboardService->accessPermit($post);
+                $process = $this->dashboardService->assessPermit($post);
                 $viewOptions['response']['code'] = $process['code'];
                 $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
                 $viewOptions['response']['data'] = $process['data'];
@@ -298,6 +298,7 @@ class PortalController extends AbstractActionController
         if ($request->isPost()) {
             $post = $request->getPost()->toArray();
             $post['userTypeId'] = 4;
+            $post['active'] = 1;
             $form = new UserForm();
             $form->setData($post);
 
@@ -338,18 +339,8 @@ class PortalController extends AbstractActionController
      */
     private function findAForm()
     {
-        $list = [];
-        $forms = [
-            'New and Renewal application Forms' => 'UPDATED-REQUIREMENTS-NEW.jpeg.pdf',
-            'Certification Form' => 'CERTIFICATION-FORM.pdf',
-            'Individual - Mayor\'s Permit Form' => 'INDIVIDUAL-MAYORS-PERMIT-FORM.pdf',
-            'Business Additional Forms' => 'Unified-Editable-Form-2021.xlsx',
-            'Amendment Form' => '/downloads/AMENDMENT-FORM.pdf',
-        ];
-
         $viewOptions = [
-            'formCollection' => $forms,
-            'listCollection' => $list,
+            'downloads' => $this->dashboardService->getDownloads(),
         ];
 
         return new ViewModel($viewOptions);

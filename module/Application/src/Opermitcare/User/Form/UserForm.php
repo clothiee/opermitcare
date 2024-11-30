@@ -72,6 +72,10 @@ class UserForm extends Form implements InputFilterProviderInterface
                        'name' => 'userTypeId',
                    ]);
         $this->add([
+                       'type' => Hidden::class,
+                       'name' => 'active',
+                   ]);
+        $this->add([
                        'name' => 'submit',
                        'type' => Submit::class,
                        'attributes' => [

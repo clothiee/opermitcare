@@ -72,15 +72,15 @@
   }
 
   &__download-item {
-    border-bottom: 1px solid #e5e5e5;
-    display: flex;
-    padding: 20px;
+    border-top: 1px solid #e5e5e5;
+    display: none;
     -webkit-flex-direction: row;
     -ms-flex-direction: row;
     flex-direction: row;
+    @include get-responsive(padding, 20px 0, 20px, 20px, 20px);
 
-    &:first-child {
-      border-top: 1px solid #e5e5e5;
+    &.active {
+      display: flex;
     }
   }
 
