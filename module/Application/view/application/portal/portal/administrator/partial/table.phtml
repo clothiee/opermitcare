@@ -21,12 +21,15 @@ $layoutVariables = $this->layout()->getVariables('layoutVariables');
         <?php switch ($tableName) :
             case 'problem-type':
             case 'faq':
+            case 'faq-details':
             case 'user': ?>
                 <div class="dashboard__actions">
                     <button class="dashboard__button dashboard__button--secondary js-dialog-add" data-action="<?= $tableName ?>" type="button">Add</button>
                 </div>
                 <div class="dashboard__form-content" data-form="<?= $tableName ?>">
-                    <?= $this->partial('partial/add/'. $tableName); ?>
+                    <?= $this->partial('partial/add/'. $tableName, [
+                            'faqTable' => $this->faqTable,
+                    ]); ?>
                 </div>
             <?php break;
             default: ?>

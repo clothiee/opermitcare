@@ -6,6 +6,8 @@ use Application\Opermitcare\Download\Model\DownloadTable;
 use Application\Opermitcare\Faq\Form\FaqForm;
 use Application\Opermitcare\Faq\Model\Faq;
 use Application\Opermitcare\Faq\Model\FaqTable;
+use Application\Opermitcare\FaqDetails\Form\FaqDetailsForm;
+use Application\Opermitcare\FaqDetails\Model\FaqDetails;
 use Application\Opermitcare\FaqDetails\Model\FaqDetailsTable;
 use Application\Opermitcare\Permit\Form\PermitAssessForm;
 use Application\Opermitcare\Permit\Form\PermitForm;
@@ -119,6 +121,9 @@ class DashboardService
                 $viewOptions = [
                     'templates' => $this->getDashboardTemplates(),
                     'overviewDetails' => $this->parseOverview(),
+                    'tableCollection' => [
+                        'faq' => $this->faqTable->fetchAll(),
+                    ],
                     'activeTab' => 'overview',
                 ];
                 break;
@@ -1087,6 +1092,35 @@ class DashboardService
                 $faq = new Faq();
                 $faq ->exchangeArray($post);
                 $this->faqTable->save($faq);
+                return [
+                    'code' => self::SUCCESS_CODE,
+                    'message' => self::SUCCESS_MESSAGE,
+                ];
+            } catch (\Exception $exception) {
+                return [
+                    'code' => SessionService::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => self::INVALID_MESSAGE,
+        ];
+    }
+
+    public function addFaqDetails($post)
+    {
+        $post['active'] = 1;
+        $form = new FaqDetailsForm();
+        $form->setData($post);
+
+        if ($form->isValid()) {
+            try {
+                $faq = new FaqDetails();
+                $faq ->exchangeArray($post);
+                $this->faqDetailsTable->save($faq);
                 return [
                     'code' => self::SUCCESS_CODE,
                     'message' => self::SUCCESS_MESSAGE,

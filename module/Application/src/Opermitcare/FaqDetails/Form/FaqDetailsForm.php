@@ -71,13 +71,6 @@ class FaqDetailsForm extends Form implements InputFilterProviderInterface
     {
         return [
             [
-                'name' => 'faqDetailsId',
-                'required' => true,
-                'filters' => [
-                    ['name' => ToInt::class],
-                ],
-            ],
-            [
                 'name' => 'faqId',
                 'required' => true,
                 'filters' => [
