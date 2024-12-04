@@ -23,21 +23,21 @@ $layoutVariables = $this->layout()->getVariables('layoutVariables');
     <div class="dashboard__divider"></div>
     <?php foreach ($this->overviewDetails['ticketStatus'] as  $ticketStatusKey => $ticketStatus) : ?>
         <div class="dashboard__panel-card">
-            <h1>Total <?= ucwords($ticketStatus['ticketStatusName']) ?> Tickets</h1>
+            <h1>Total <?= ucwords($ticketStatus['ticketStatusName']) ?> Ticket (s)</h1>
             <div class="dashboard__panel-card-count"><?= $ticketStatus['count'] ?></div>
         </div>
     <?php endforeach; ?>
     <div class="dashboard__divider"></div>
     <?php foreach ($this->overviewDetails['permitStatus'] as  $permitStatusKey => $permitStatus) : ?>
         <div class="dashboard__panel-card">
-            <h1>Total <?= ucwords($permitStatus['permitStatusName']) ?> Permits</h1>
+            <h1>Total <?= ucwords($permitStatus['permitStatusName']) ?> Permit (s)</h1>
             <div class="dashboard__panel-card-count"><?= $permitStatus['count'] ?></div>
         </div>
     <?php endforeach; ?>
     <div class="dashboard__divider"></div>
     <?php foreach ($this->overviewDetails['problemType'] as  $problemTypeKey => $problemType) : ?>
         <div class="dashboard__panel-card">
-            <h1>Total <?= ucwords($problemType['problemTypeName']) ?> Issues</h1>
+            <h1>Total <?= ucwords($problemType['problemTypeName']) ?> Issue (s)</h1>
             <div class="dashboard__panel-card-count"><?= $problemType['count'] ?></div>
         </div>
     <?php endforeach; ?>
