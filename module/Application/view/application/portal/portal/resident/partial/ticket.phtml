@@ -149,10 +149,12 @@ $countTickets = count($tickets);
                         <div class="dashboard__reply-empty">No replies yet</div>
                     </div>
                 <?php endif; ?>
-                <div class="dashboard__reply-submit">
-                    <input class="dashboard__reply-input" type="text"/>
-                    <input class="dashboard__button dashboard__button--primary js-reply" type="button" value="Reply"/>
-                </div>
+                <?php if ($ticket['ticketStatusId'] < 3) : ?>
+                    <div class="dashboard__reply-submit">
+                        <input class="dashboard__reply-input" type="text"/>
+                        <input class="dashboard__button dashboard__button--primary js-reply" type="button" value="Reply"/>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     <?php endforeach; ?>
