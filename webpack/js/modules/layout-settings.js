@@ -175,6 +175,11 @@ export class LayoutSettingsModule {
                         return Dashboard.dialog.add($(this));
                     });
 
+                    $(document).on('click', '.js-dialog-edit', function () {
+                        return Dashboard.dialog.edit($(this));
+                    });
+
+
                     $(document).on('click', '.js-dialog-confirm', function () {
                         const actions = $(this).closest('.dashboard__actions');
                         const action = actions.data('action');
@@ -302,7 +307,7 @@ export class LayoutSettingsModule {
                         };
 
                         if (title === 'Action') {
-                            data.defaultContent = `<button class="dashboard__data-table-button" type="button">Edit</button>`;
+                            data.defaultContent = `<button class="dashboard__data-table-button js-dialog-edit" type="button">Edit</button>`;
                         }
 
                         collection.push(data);
@@ -406,6 +411,13 @@ export class LayoutSettingsModule {
                 add: function (element) {
                     const action = element.data('action');
                     const htmlContent = $(`.dashboard__form-content[data-form="${action}"]`).html();
+
+                    return Layout.dialog.build('confirmation', htmlContent);
+                },
+                edit: function (element) {
+                    const action = element.closest('table').data('tableName');
+                    const id = element.closest('tr').data('id');
+                    const htmlContent = $(`.dashboard__form-content[data-form="${action}-${id}"]`).html();
 
                     return Layout.dialog.build('confirmation', htmlContent);
                 }

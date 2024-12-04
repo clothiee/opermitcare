@@ -21,16 +21,33 @@ $layoutVariables = $this->layout()->getVariables('layoutVariables');
         <?php switch ($tableName) :
             case 'problem-type':
             case 'faq':
-            case 'faq-details':
-            case 'user': ?>
+            case 'faq-details': ?>
                 <div class="dashboard__actions">
                     <button class="dashboard__button dashboard__button--secondary js-dialog-add" data-action="<?= $tableName ?>" type="button">Add</button>
                 </div>
                 <div class="dashboard__form-content" data-form="<?= $tableName ?>">
                     <?= $this->partial('partial/add/'. $tableName, [
-                            'faqTable' => $this->faqTable,
+                        'faqTable' => $this->faqTable,
                     ]); ?>
                 </div>
+            <?php break; ?>
+            <?php case 'user': ?>
+                <div class="dashboard__actions">
+                    <button class="dashboard__button dashboard__button--secondary js-dialog-add" data-action="<?= $tableName ?>" type="button">Add</button>
+                </div>
+                <div class="dashboard__form-content" data-form="<?= $tableName ?>">
+                    <?= $this->partial('partial/add/'. $tableName); ?>
+                </div>
+                <?php
+
+                foreach ($this->userTable as $item) :
+                    $item = (array) $item; ?>
+                    <div class="dashboard__form-content" data-form="<?= $tableName ?>-<?= $item['userId'] ?>">
+                        <?= $this->partial('partial/edit/user', [
+                                'data' => $item,
+                        ]); ?>
+                    </div>
+                <?php endforeach; ?>
             <?php break;
             default: ?>
 

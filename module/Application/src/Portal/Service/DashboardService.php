@@ -122,6 +122,7 @@ class DashboardService
                     'templates' => $this->getDashboardTemplates(),
                     'overviewDetails' => $this->parseOverview(),
                     'tableCollection' => [
+                        'user' => $this->userTable->fetchAll(),
                         'faq' => $this->faqTable->fetchAll(),
                     ],
                     'activeTab' => 'overview',
@@ -1028,6 +1029,33 @@ class DashboardService
         $form = new UserForm();
         $form->setData($post);
 
+        if ($form->isValid()) {
+            try {
+                $user = new User();
+                $user->exchangeArray($post);
+                $this->userTable->save($user);
+                return [
+                    'code' => self::SUCCESS_CODE,
+                    'message' => self::SUCCESS_MESSAGE,
+                ];
+            } catch (\Exception $exception) {
+                return [
+                    'code' => SessionService::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => self::INVALID_MESSAGE,
+        ];
+    }
+
+    public function editUser($post)
+    {
+        $form = new UserForm();
+        $form->setData($post);
 
         if ($form->isValid()) {
             try {

@@ -1,0 +1,59 @@
+<form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" enctype="multipart/form-data" method="post">
+    <div class="dashboard__form-col dashboard__form-col--fields">
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"
+                   readonly value="<?= $this->data['userId'] ?>"/>
+            <label class="dashboard__input-label">User Id</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"
+                   name="userName" value="<?= $this->data['userName'] ?>"/>
+            <label class="dashboard__input-label">Username</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="password"
+                   name="password" value="<?= $this->data['password'] ?>"/>
+            <label class="dashboard__input-label">Password</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"
+                   name="firstName" value="<?= $this->data['firstName'] ?>"/>
+            <label class="dashboard__input-label">First Name</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"
+                   name="lastName" value="<?= $this->data['lastName'] ?>"/>
+            <label class="dashboard__input-label">Last Name</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"
+                   name="email" value="<?= $this->data['email'] ?>"/>
+            <label class="dashboard__input-label">Email</label>
+        </div>
+        <div class="dashboard__input-group">
+            <select class="dashboard__input-field dashboard__input-field--select"
+                    name="userTypeId">
+                <option value="1"<?= $this->data['userTypeId'] === 1 ? ' selected' : '' ?>>Administrator</option>
+                <option value="2"<?= $this->data['userTypeId'] === 2 ? ' selected' : '' ?>>Moderator</option>
+                <option value="3"<?= $this->data['userTypeId'] === 3 ? ' selected' : '' ?>>Agent</option>
+                <option value="4"<?= $this->data['userTypeId'] === 4 ? ' selected' : '' ?>>Resident</option>
+            </select>
+            <label class="dashboard__input-label">User Type</label>
+        </div>
+        <div class="dashboard__input-group">
+            <select class="dashboard__input-field dashboard__input-field--select"
+                    name="active">
+                <option value="1"<?= $this->data['active'] === 1 ? ' selected' : '' ?>>True</option>
+                <option value="0"<?= !$this->data['active'] ? ' selected' : '' ?>>False</option>
+            </select>
+            <label class="dashboard__input-label">Active</label>
+        </div>
+        <div class="dashboard__divider"></div>
+        <div class="dashboard__actions" data-panel="user" data-action="user">
+            <input type="hidden" name="userId" value="<?= $this->data['userId'] ?>"/>
+            <input type="hidden" name="process" value="edit-user"/>
+            <input class="dashboard__button dashboard__button--secondary js-dialog-close" type="button" value="Cancel"/>
+            <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
+        </div>
+    </div>
+</form>
