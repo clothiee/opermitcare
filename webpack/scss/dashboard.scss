@@ -293,6 +293,7 @@
       border-radius: 20px;
       padding: 20px;
       margin-right: 20px;
+      min-height: 250px;
       @include get-responsive(width, 100%, 100%, calc(100%/3 - 20px), calc(100%/3 - 20px));
 
       &--welcome {
