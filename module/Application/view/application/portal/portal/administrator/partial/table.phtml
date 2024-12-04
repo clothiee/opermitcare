@@ -20,8 +20,8 @@ $layoutVariables = $this->layout()->getVariables('layoutVariables');
         <table class="dashboard__data-table display js-data-table" data-table-name="<?= $tableName ?>" style="width:100%"></table>
         <?php switch ($tableName) :
             case 'problem-type':
+            case 'faq':
             case 'user': ?>
-                <div class="dashboard__divider"></div>
                 <div class="dashboard__actions">
                     <button class="dashboard__button dashboard__button--secondary js-dialog-add" data-action="<?= $tableName ?>" type="button">Add</button>
                 </div>

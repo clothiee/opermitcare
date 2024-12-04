@@ -3,6 +3,8 @@
 namespace Application\Portal\Service;
 
 use Application\Opermitcare\Download\Model\DownloadTable;
+use Application\Opermitcare\Faq\Form\FaqForm;
+use Application\Opermitcare\Faq\Model\Faq;
 use Application\Opermitcare\Faq\Model\FaqTable;
 use Application\Opermitcare\FaqDetails\Model\FaqDetailsTable;
 use Application\Opermitcare\Permit\Form\PermitAssessForm;
@@ -1056,6 +1058,35 @@ class DashboardService
                 $problemType = new ProblemType();
                 $problemType->exchangeArray($post);
                 $this->problemTypeTable->save($problemType);
+                return [
+                    'code' => self::SUCCESS_CODE,
+                    'message' => self::SUCCESS_MESSAGE,
+                ];
+            } catch (\Exception $exception) {
+                return [
+                    'code' => SessionService::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => self::INVALID_MESSAGE,
+        ];
+    }
+
+    public function addFaq($post)
+    {
+        $post['active'] = 1;
+        $form = new FaqForm();
+        $form->setData($post);
+
+        if ($form->isValid()) {
+            try {
+                $faq = new Faq();
+                $faq ->exchangeArray($post);
+                $this->faqTable->save($faq);
                 return [
                     'code' => self::SUCCESS_CODE,
                     'message' => self::SUCCESS_MESSAGE,
