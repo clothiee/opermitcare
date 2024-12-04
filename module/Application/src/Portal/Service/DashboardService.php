@@ -818,16 +818,13 @@ class DashboardService
         $problemTypeCategory = [];
         $permitStatusCategory = [];
         $assessedPermitsCategory = [];
-        $reliedTicketsCategory = [];
         $ticketStatusList = [];
         $permitStatusList = [];
         $problemTypeList = [];
         $assessedPermitsList = [];
-        $repliedTicketsList = [];
 
         $tickets = $this->ticketTable->fetchAll();
         $permits = $this->permitTable->fetchAll();
-        $replies = $this->replyTable->fetchAll();
 
         foreach ($tickets as $ticket) {
             $ticket = (array) $ticket;

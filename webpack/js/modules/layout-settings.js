@@ -467,7 +467,8 @@ export class LayoutSettingsModule {
                                 .html(data.response.ticketStatusName);
 
                             if (data.response.ticketStatusId === 3) {
-                                $('.js-ticket-action').attr('value', 'Open');
+                                $('.js-ticket-action').closest('.dashboard__tab-content').find('.dashboard__divider').remove();
+                                $('.js-ticket-action').closest('.dashboard__actions').remove();
                             } else {
                                 $('.js-ticket-action').attr('value', 'Close');
                             }

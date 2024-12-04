@@ -67,7 +67,7 @@ $isAssessActive = $this->activeTabAction === 'assess' ? ' active' : '';
                 ]); ?>
             </div>
             <?php if ($permit['permitStatusId'] === 2) : ?>
-                <div class="dashboard__tab-content<?= $isAssessActive; ?>" data-tab="soa">
+                <div class="dashboard__tab-content" data-tab="soa">
                     <?= $this->partial('partial/statement-of-account', [
                         'permit' => $permit,
                     ]); ?>
