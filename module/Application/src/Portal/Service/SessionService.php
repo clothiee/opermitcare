@@ -131,6 +131,7 @@ class SessionService
         $rowSet = $this->userTable->getByColumns([
                                                      'username' => $post['username'],
                                                      'password' => $post['password'],
+                                                     'active' => 1,
                                                  ]);
 
         return count($rowSet) ? (array) $rowSet[0] : [];
