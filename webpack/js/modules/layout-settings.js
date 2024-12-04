@@ -467,10 +467,11 @@ export class LayoutSettingsModule {
                                 .html(data.response.ticketStatusName);
 
                             if (data.response.ticketStatusId === 3) {
-                                $('.js-ticket-action').closest('.dashboard__tab-content').find('.dashboard__divider').remove();
-                                $('.js-ticket-action').closest('.dashboard__actions').remove();
+                                panel.find('.js-ticket-action').closest('.dashboard__tab-content').find('.dashboard__divider').remove();
+                                panel.find('.js-ticket-action').closest('.dashboard__actions').remove();
+                                panel.find('.js-reply').closest('.dashboard__reply-submit').remove();
                             } else {
-                                $('.js-ticket-action').attr('value', 'Close');
+                                panel.find('.js-ticket-action').attr('value', 'Close');
                             }
                         }
 
