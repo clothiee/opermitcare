@@ -124,8 +124,10 @@ class DashboardService
                     'tableCollection' => [
                         'user' => $this->userTable->fetchAll(),
                         'faq' => $this->faqTable->fetchAll(),
+                        'faqDetails' => $this->faqDetailsTable->fetchAll(),
                         'ticketStatus' => $this->ticketStatusTable->fetchAll(),
                         'permitStatus' => $this->permitStatusTable->fetchAll(),
+                        'problemType' => $this->problemTypeTable->fetchAll(),
                         'ticket' => $this->ticketTable->fetchAll(),
                         'permit' => $this->permitTable->fetchAll(),
                     ],

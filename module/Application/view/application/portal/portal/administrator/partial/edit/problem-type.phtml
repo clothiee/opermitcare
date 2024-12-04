@@ -1,0 +1,25 @@
+<form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" enctype="multipart/form-data"
+      method="post">
+    <div class="dashboard__form-col dashboard__form-col--fields">
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"
+                   name="problemTypeName" value="<?= $this->data['problemTypeName'] ?>"/>
+            <label class="dashboard__input-label">Problem Type Name</label>
+        </div>
+        <div class="dashboard__input-group">
+            <select class="dashboard__input-field dashboard__input-field--select"
+                    name="active">
+                <option value="1"<?= $this->data['active'] === 1 ? ' selected' : '' ?>>True</option>
+                <option value="0"<?= !$this->data['active'] ? ' selected' : '' ?>>False</option>
+            </select>
+            <label class="dashboard__input-label">Active</label>
+        </div>
+        <div class="dashboard__divider"></div>
+        <div class="dashboard__actions" data-panel="problem-type" data-action="problem-type">
+            <input type="hidden" name="problemTypeId" value="<?= $this->data['problemTypeId'] ?>"/>
+            <input type="hidden" name="process" value="update-problem-type"/>
+            <input class="dashboard__button dashboard__button--secondary js-dialog-close" type="button" value="Cancel"/>
+            <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
+        </div>
+    </div>
+</form>

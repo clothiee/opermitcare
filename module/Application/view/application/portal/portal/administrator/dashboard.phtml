@@ -42,11 +42,13 @@ if (!empty($response['message'])) {
                             'sessionDetails' => $this->sessionDetails,
                             'overviewDetails' => $this->overviewDetails,
                             'faqTable' => $this->tableCollection['faq'],
+                            'faqDetailsTable' => $this->tableCollection['faqDetails'],
                             'userTable' => $this->tableCollection['user'],
                             'ticketStatusTable' => $this->tableCollection['ticketStatus'],
                             'permitStatusTable' => $this->tableCollection['permitStatus'],
                             'ticketTable' => $this->tableCollection['ticket'],
                             'permitTable' => $this->tableCollection['permit'],
+                            'problemTypeTable' => $this->tableCollection['problemType'],
                         ])); ?>
                     </div>
                 <?php endforeach; ?>

@@ -19,25 +19,54 @@ $layoutVariables = $this->layout()->getVariables('layoutVariables');
         <h4><?= ucwords(preg_replace('/([a-z0-9])([A-Z])/', "$1 $2", str_replace('-', ' ', $tableName))) ?> Table</h4>
         <table class="dashboard__data-table display js-data-table" data-table-name="<?= $tableName ?>" style="width:100%"></table>
         <?php switch ($tableName) :
-            case 'problem-type':
-            case 'faq':
+            case 'ticket':
+            case 'permit':
+            case 'download':
+                break;
+                default: ?>
+                    <div class="dashboard__actions">
+                        <button class="dashboard__button dashboard__button--secondary js-dialog-add" data-action="<?= $tableName ?>" type="button">Add</button>
+                    </div>
+                    <div class="dashboard__form-content" data-form="<?= $tableName ?>">
+                        <?= $this->partial('partial/add/'. $tableName, [
+                            'faqTable' => $this->faqTable,
+                        ]); ?>
+                    </div>
+            <?php break; ?>
+        <?php endswitch; ?>
+        <?php switch ($tableName) :
+            case 'problem-type': ?>
+                <?php foreach ($this->problemTypeTable as $item) :
+                    $item = (array) $item; ?>
+                    <div class="dashboard__form-content" data-form="<?= $tableName ?>-<?= $item['problemTypeId'] ?>">
+                        <?= $this->partial('partial/edit/'.$tableName, [
+                            'data' => $item,
+                        ]); ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php break;
+            case 'faq': ?>
+                <?php foreach ($this->faqTable as $item) :
+                    $item = (array) $item; ?>
+                    <div class="dashboard__form-content" data-form="<?= $tableName ?>-<?= $item['faqId'] ?>">
+                        <?= $this->partial('partial/edit/'.$tableName, [
+                            'data' => $item,
+                        ]); ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php break;
             case 'faq-details': ?>
-                <div class="dashboard__actions">
-                    <button class="dashboard__button dashboard__button--secondary js-dialog-add" data-action="<?= $tableName ?>" type="button">Add</button>
-                </div>
-                <div class="dashboard__form-content" data-form="<?= $tableName ?>">
-                    <?= $this->partial('partial/add/'. $tableName, [
-                        'faqTable' => $this->faqTable,
-                    ]); ?>
-                </div>
+                <?php foreach ($this->faqDetailsTable as $item) :
+                    $item = (array) $item; ?>
+                    <div class="dashboard__form-content" data-form="<?= $tableName ?>-<?= $item['faqDetailsId'] ?>">
+                        <?= $this->partial('partial/edit/'.$tableName, [
+                            'faqTable' => $this->faqTable,
+                            'data' => $item,
+                        ]); ?>
+                    </div>
+                <?php endforeach; ?>
             <?php break;
             case 'user': ?>
-                <div class="dashboard__actions">
-                    <button class="dashboard__button dashboard__button--secondary js-dialog-add" data-action="<?= $tableName ?>" type="button">Add</button>
-                </div>
-                <div class="dashboard__form-content" data-form="<?= $tableName ?>">
-                    <?= $this->partial('partial/add/'.$tableName); ?>
-                </div>
                 <?php foreach ($this->userTable as $item) :
                     $item = (array) $item; ?>
                     <div class="dashboard__form-content" data-form="<?= $tableName ?>-<?= $item['userId'] ?>">
@@ -69,7 +98,6 @@ $layoutVariables = $this->layout()->getVariables('layoutVariables');
                     </div>
                 <?php endforeach; ?>
                 <?php break; ?>
-
         <?php endswitch; ?>
     <?php endforeach; ?>
 </div>
