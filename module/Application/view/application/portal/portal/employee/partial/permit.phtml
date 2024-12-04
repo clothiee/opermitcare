@@ -31,7 +31,9 @@ $isAssessActive = $this->activeTabAction === 'assess' ? ' active' : '';
             </div>
             <div class="dashboard__tab-action">
                 <div class="dashboard__tab<?= $isOverviewActive; ?>" data-tab="overview">Overview</div>
-                <div class="dashboard__tab<?= $isAssessActive; ?>" data-tab="assess">Assess</div>
+                <?php if ($permit['permitStatusId'] === 1) : ?>
+                    <div class="dashboard__tab<?= $isAssessActive; ?>" data-tab="assess">Assess</div>
+                <?php endif; ?>
                 <?php if ($permit['permitStatusId'] === 2) : ?>
                     <div class="dashboard__tab" data-tab="soa">SoA</div>
                 <?php endif; ?>
@@ -59,13 +61,15 @@ $isAssessActive = $this->activeTabAction === 'assess' ? ' active' : '';
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="dashboard__tab-content<?= $isAssessActive; ?>" data-tab="assess">
-                <?= $this->partial('partial/permit-assess', [
-                    'responseData' => $this->responseData,
-                    'permit' => $permit,
-                    'permitStatus' => $permitStatus,
-                ]); ?>
-            </div>
+            <?php if ($permit['permitStatusId'] === 1) : ?>
+                <div class="dashboard__tab-content<?= $isAssessActive; ?>" data-tab="assess">
+                    <?= $this->partial('partial/permit-assess', [
+                        'responseData' => $this->responseData,
+                        'permit' => $permit,
+                        'permitStatus' => $permitStatus,
+                    ]); ?>
+                </div>
+            <?php endif; ?>
             <?php if ($permit['permitStatusId'] === 2) : ?>
                 <div class="dashboard__tab-content" data-tab="soa">
                     <?= $this->partial('partial/statement-of-account', [
