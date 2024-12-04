@@ -10,6 +10,8 @@ use Application\Opermitcare\Permit\Form\PermitForm;
 use Application\Opermitcare\Permit\Model\Permit;
 use Application\Opermitcare\Permit\Model\PermitTable;
 use Application\Opermitcare\PermitStatus\Model\PermitStatusTable;
+use Application\Opermitcare\ProblemType\Form\ProblemTypeForm;
+use Application\Opermitcare\ProblemType\Model\ProblemType;
 use Application\Opermitcare\ProblemType\Model\ProblemTypeTable;
 use Application\Opermitcare\Reply\Form\ReplyForm;
 use Application\Opermitcare\Reply\Model\Reply;
@@ -1025,6 +1027,35 @@ class DashboardService
                 $user = new User();
                 $user->exchangeArray($post);
                 $this->userTable->save($user);
+                return [
+                    'code' => self::SUCCESS_CODE,
+                    'message' => self::SUCCESS_MESSAGE,
+                ];
+            } catch (\Exception $exception) {
+                return [
+                    'code' => SessionService::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => self::INVALID_MESSAGE,
+        ];
+    }
+
+    public function addProblemType($post)
+    {
+        $post['active'] = 1;
+        $form = new ProblemTypeForm();
+        $form->setData($post);
+
+        if ($form->isValid()) {
+            try {
+                $problemType = new ProblemType();
+                $problemType->exchangeArray($post);
+                $this->problemTypeTable->save($problemType);
                 return [
                     'code' => self::SUCCESS_CODE,
                     'message' => self::SUCCESS_MESSAGE,

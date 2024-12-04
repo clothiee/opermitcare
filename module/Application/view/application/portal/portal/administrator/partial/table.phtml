@@ -19,6 +19,7 @@ $layoutVariables = $this->layout()->getVariables('layoutVariables');
         <h4><?= ucwords(preg_replace('/([a-z0-9])([A-Z])/', "$1 $2", str_replace('-', ' ', $tableName))) ?> Table</h4>
         <table class="dashboard__data-table display js-data-table" data-table-name="<?= $tableName ?>" style="width:100%"></table>
         <?php switch ($tableName) :
+            case 'problem-type':
             case 'user': ?>
                 <div class="dashboard__divider"></div>
                 <div class="dashboard__actions">

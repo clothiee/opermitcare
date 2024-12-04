@@ -58,13 +58,6 @@ class ProblemTypeForm extends Form implements InputFilterProviderInterface
     {
         return [
             [
-                'name' => 'problemTypeId',
-                'required' => true,
-                'filters' => [
-                    ['name' => ToInt::class],
-                ],
-            ],
-            [
                 'name' => 'problemTypeName',
                 'required' => true,
                 'filters' => [

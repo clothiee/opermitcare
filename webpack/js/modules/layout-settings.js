@@ -39,6 +39,7 @@ export class LayoutSettingsModule {
                     Layout.window.init();
                     break;
                 case 'dashboard':
+                    Layout.window.history();
                     Dashboard.ticket.refresh.clear();
 
                     $(document).on('click', '.js-show-password', function () {
@@ -149,6 +150,15 @@ export class LayoutSettingsModule {
 
                         return $('.navigation').removeClass('navigation--sticky');
                     });
+                },
+                history: function () {
+                    if (window.history.replaceState) {
+                        try {
+                            window.history.replaceState(null, null, window.location.href);
+                        } catch (e) {
+                            console.log(e)
+                        }
+                    }
                 }
             },
             dialog: {
