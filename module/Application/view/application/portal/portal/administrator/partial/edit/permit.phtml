@@ -1,5 +1,5 @@
 <?php
-$permitId = sprintf('%s%06d', date("Y", strtotime($this->data['dateCreated'])), $this->data['ticketId']);
+$permitId = sprintf('%s%06d', date("Y", strtotime($this->data['dateCreated'])), $this->data['permitId']);
 ?>
 <form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" enctype="multipart/form-data" method="post">
     <div class="dashboard__form-col dashboard__form-col--fields">
