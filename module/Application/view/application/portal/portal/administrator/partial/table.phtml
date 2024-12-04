@@ -18,5 +18,19 @@ $layoutVariables = $this->layout()->getVariables('layoutVariables');
         <div class="dashboard__divider"></div>
         <h4><?= ucwords(preg_replace('/([a-z0-9])([A-Z])/', "$1 $2", str_replace('-', ' ', $tableName))) ?> Table</h4>
         <table class="dashboard__data-table display js-data-table" data-table-name="<?= $tableName ?>" style="width:100%"></table>
+        <?php switch ($tableName) :
+            case 'user': ?>
+                <div class="dashboard__divider"></div>
+                <div class="dashboard__actions">
+                    <button class="dashboard__button dashboard__button--secondary js-dialog-add" data-action="<?= $tableName ?>" type="button">Add</button>
+                </div>
+                <div class="dashboard__form-content" data-form="<?= $tableName ?>">
+                    <?= $this->partial('partial/add/'. $tableName); ?>
+                </div>
+            <?php break;
+            default: ?>
+
+            <?php break; ?>
+        <?php endswitch; ?>
     <?php endforeach; ?>
 </div>

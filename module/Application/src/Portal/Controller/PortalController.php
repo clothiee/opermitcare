@@ -272,6 +272,13 @@ class PortalController extends AbstractActionController
                 $viewOptions['response']['data'] = $process['data'];
                 $viewOptions['activeTab'] = 'my-profile';
                 break;
+            case 'add-user':
+                $process = $this->dashboardService->addUser($post);
+                $viewOptions['response']['code'] = $process['code'];
+                $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                $viewOptions['response']['data'] = $process['data'];
+                $viewOptions['activeTab'] = 'user';
+                break;
         }
 
         return $viewOptions;

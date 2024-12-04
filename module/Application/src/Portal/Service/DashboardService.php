@@ -1012,4 +1012,34 @@ class DashboardService
 
         return $errors;
     }
+
+    public function addUser($post)
+    {
+        $post['active'] = 1;
+        $form = new UserForm();
+        $form->setData($post);
+
+
+        if ($form->isValid()) {
+            try {
+                $user = new User();
+                $user->exchangeArray($post);
+                $this->userTable->save($user);
+                return [
+                    'code' => self::SUCCESS_CODE,
+                    'message' => self::SUCCESS_MESSAGE,
+                ];
+            } catch (\Exception $exception) {
+                return [
+                    'code' => SessionService::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => self::INVALID_MESSAGE,
+        ];
+    }
 }

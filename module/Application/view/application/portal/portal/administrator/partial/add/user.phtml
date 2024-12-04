@@ -1,0 +1,45 @@
+<form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" enctype="multipart/form-data" method="post">
+    <div class="dashboard__form-col dashboard__form-col--fields">
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"
+                   name="userName"/>
+            <label class="dashboard__input-label">Username</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="password"
+                   name="password"/>
+            <label class="dashboard__input-label">Password</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"
+                   name="firstName"/>
+            <label class="dashboard__input-label">First Name</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"
+                   name="lastName"/>
+            <label class="dashboard__input-label">Last Name</label>
+        </div>
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text"
+                   name="email"/>
+            <label class="dashboard__input-label">Email</label>
+        </div>
+        <div class="dashboard__input-group">
+            <select class="dashboard__input-field dashboard__input-field--select"
+                    name="userTypeId">
+                <option value="1">Administrator</option>
+                <option value="2">Moderator</option>
+                <option value="3">Agent</option>
+                <option value="4">Resident</option>
+            </select>
+            <label class="dashboard__input-label">Email</label>
+        </div>
+        <div class="dashboard__divider"></div>
+        <div class="dashboard__actions" data-panel="user" data-action="user">
+            <input type="hidden" name="process" value="add-user"/>
+            <input class="dashboard__button dashboard__button--secondary js-dialog-close" type="button" value="Cancel"/>
+            <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
+        </div>
+    </div>
+</form>

@@ -161,6 +161,10 @@ export class LayoutSettingsModule {
                         return Layout.dialog.show($(this));
                     });
 
+                    $(document).on('click', '.js-dialog-add', function () {
+                        return Dashboard.dialog.add($(this));
+                    });
+
                     $(document).on('click', '.js-dialog-confirm', function () {
                         const actions = $(this).closest('.dashboard__actions');
                         const action = actions.data('action');
@@ -386,6 +390,12 @@ export class LayoutSettingsModule {
                     const confirm = `<input class="dashboard__button dashboard__button--primary js-dialog-confirm" type="button" value="Confirm"/>`;
                     const actions = `<div class="dashboard__actions" data-panel="${panel}" data-action="${action}">${cancel}${confirm}</div>`;
                     const htmlContent = `${message}${divider}${actions}`;
+
+                    return Layout.dialog.build('confirmation', htmlContent);
+                },
+                add: function (element) {
+                    const action = element.data('action');
+                    const htmlContent = $(`.dashboard__form-content[data-form="${action}"]`).html();
 
                     return Layout.dialog.build('confirmation', htmlContent);
                 }

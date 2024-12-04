@@ -557,6 +557,10 @@
       }
     }
 
+    &-content {
+      display: none;
+    }
+
     &-col {
       float: left;
 
@@ -637,6 +641,7 @@
         color: var(--main-color);
       }
 
+      &--select,
       &--text {
         height: 40px;
       }
