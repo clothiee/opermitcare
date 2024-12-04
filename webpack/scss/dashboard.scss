@@ -293,7 +293,6 @@
       border-radius: 20px;
       padding: 20px;
       margin-right: 20px;
-      margin-top: 20px;
       @include get-responsive(width, 100%, 100%, calc(100%/3 - 20px), calc(100%/3 - 20px));
 
       &--welcome {
@@ -304,11 +303,18 @@
           position: right 5px;
         }
         min-height: 296px;
+        margin-top: 20px;
         @include get-responsive(width, null, null, calc(100% - 20px) !important, calc(100% - 20px) !important);
       }
 
       &-count {
         font-size: 50px;
+        font-weight: 600;
+      }
+
+      h1 {
+        color: var(--main-color);
+        font-size: 16px;
       }
     }
   }
