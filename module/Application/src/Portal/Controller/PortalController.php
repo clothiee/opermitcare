@@ -272,40 +272,41 @@ class PortalController extends AbstractActionController
                 $viewOptions['response']['data'] = $process['data'];
                 $viewOptions['activeTab'] = 'my-profile';
                 break;
-            case 'add-user':
-                $process = $this->dashboardService->addUser($post);
+            case 'update-user':
+                $process = $this->dashboardService->updateUser($post);
                 $viewOptions['response']['code'] = $process['code'];
                 $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
-                $viewOptions['response']['data'] = $process['data'];
                 $viewOptions['activeTab'] = 'user';
                 break;
-            case 'edit-user':
-                $process = $this->dashboardService->editUser($post);
+            case 'update-problem-type':
+                $process = $this->dashboardService->updateProblemType($post);
                 $viewOptions['response']['code'] = $process['code'];
                 $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
-                $viewOptions['response']['data'] = $process['data'];
-                $viewOptions['activeTab'] = 'user';
-                break;
-            case 'add-problem-type':
-                $process = $this->dashboardService->addProblemType($post);
-                $viewOptions['response']['code'] = $process['code'];
-                $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
-                $viewOptions['response']['data'] = $process['data'];
                 $viewOptions['activeTab'] = 'problem-type';
                 break;
-            case 'add-faq':
-                $process = $this->dashboardService->addFaq($post);
+            case 'update-faq':
+                $process = $this->dashboardService->updateFaq($post);
                 $viewOptions['response']['code'] = $process['code'];
                 $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
-                $viewOptions['response']['data'] = $process['data'];
                 $viewOptions['activeTab'] = 'faq';
             break;
-            case 'add-faq-details':
-                $process = $this->dashboardService->addFaqDetails($post);
+            case 'update-faq-details':
+                $process = $this->dashboardService->updateFaqDetails($post);
                 $viewOptions['response']['code'] = $process['code'];
                 $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
-                $viewOptions['response']['data'] = $process['data'];
                 $viewOptions['activeTab'] = 'faq';
+                break;
+            case 'update-ticket':
+                $process = $this->dashboardService->updateTicket($post);
+                $viewOptions['response']['code'] = $process['code'];
+                $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                $viewOptions['activeTab'] = 'ticket';
+                break;
+            case 'update-permit':
+                $process = $this->dashboardService->updatePermit($post);
+                $viewOptions['response']['code'] = $process['code'];
+                $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
+                $viewOptions['activeTab'] = 'permit';
                 break;
         }
 

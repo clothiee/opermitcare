@@ -124,6 +124,10 @@ class DashboardService
                     'tableCollection' => [
                         'user' => $this->userTable->fetchAll(),
                         'faq' => $this->faqTable->fetchAll(),
+                        'ticketStatus' => $this->ticketStatusTable->fetchAll(),
+                        'permitStatus' => $this->permitStatusTable->fetchAll(),
+                        'ticket' => $this->ticketTable->fetchAll(),
+                        'permit' => $this->permitTable->fetchAll(),
                     ],
                     'activeTab' => 'overview',
                 ];
@@ -1023,36 +1027,7 @@ class DashboardService
         return $errors;
     }
 
-    public function addUser($post)
-    {
-        $post['active'] = 1;
-        $form = new UserForm();
-        $form->setData($post);
-
-        if ($form->isValid()) {
-            try {
-                $user = new User();
-                $user->exchangeArray($post);
-                $this->userTable->save($user);
-                return [
-                    'code' => self::SUCCESS_CODE,
-                    'message' => self::SUCCESS_MESSAGE,
-                ];
-            } catch (\Exception $exception) {
-                return [
-                    'code' => SessionService::INVALID_CODE,
-                    'message' => $exception->getMessage(),
-                ];
-            }
-        }
-
-        return [
-            'code' => self::INVALID_CODE,
-            'message' => self::INVALID_MESSAGE,
-        ];
-    }
-
-    public function editUser($post)
+    public function updateUser($post)
     {
         $form = new UserForm();
         $form->setData($post);
@@ -1080,9 +1055,8 @@ class DashboardService
         ];
     }
 
-    public function addProblemType($post)
+    public function updateProblemType($post)
     {
-        $post['active'] = 1;
         $form = new ProblemTypeForm();
         $form->setData($post);
 
@@ -1109,16 +1083,15 @@ class DashboardService
         ];
     }
 
-    public function addFaq($post)
+    public function updateFaq($post)
     {
-        $post['active'] = 1;
         $form = new FaqForm();
         $form->setData($post);
 
         if ($form->isValid()) {
             try {
                 $faq = new Faq();
-                $faq ->exchangeArray($post);
+                $faq->exchangeArray($post);
                 $this->faqTable->save($faq);
                 return [
                     'code' => self::SUCCESS_CODE,
@@ -1138,17 +1111,16 @@ class DashboardService
         ];
     }
 
-    public function addFaqDetails($post)
+    public function updateFaqDetails($post)
     {
-        $post['active'] = 1;
         $form = new FaqDetailsForm();
         $form->setData($post);
 
         if ($form->isValid()) {
             try {
-                $faq = new FaqDetails();
-                $faq ->exchangeArray($post);
-                $this->faqDetailsTable->save($faq);
+                $faqDetails = new FaqDetails();
+                $faqDetails->exchangeArray($post);
+                $this->faqDetailsTable->save($faqDetails);
                 return [
                     'code' => self::SUCCESS_CODE,
                     'message' => self::SUCCESS_MESSAGE,
@@ -1165,5 +1137,57 @@ class DashboardService
             'code' => self::INVALID_CODE,
             'message' => self::INVALID_MESSAGE,
         ];
+    }
+
+    public function updateTicket($post)
+    {
+        $oldTicket = (array) $this->ticketTable->getByColumns(['ticketId' => $post['ticketId']])[0];
+        $oldTicket['ticketStatusId'] = $post['ticketStatusId'];
+
+        $form = new TicketForm();
+        $form->setData($oldTicket);
+
+        if ($form->isValid()) {
+            try {
+                $ticket = new Ticket();
+                $ticket->exchangeArray($oldTicket);
+                $this->ticketTable->save($ticket);
+                return [
+                    'code' => self::SUCCESS_CODE,
+                    'message' => self::SUCCESS_MESSAGE,
+                ];
+            } catch (\Exception $exception) {
+                return [
+                    'code' => SessionService::INVALID_CODE,
+                    'message' => $exception->getMessage(),
+                ];
+            }
+        }
+
+        return [
+            'code' => self::INVALID_CODE,
+            'message' => self::INVALID_MESSAGE,
+        ];
+    }
+
+    public function updatePermit($post)
+    {
+        $oldPermit = (array) $this->permitTable->getByColumns(['permitId' => $post['permitId']])[0];
+        $oldPermit['permitStatusId'] = $post['permitStatusId'];
+
+        try {
+            $permit = new Permit();
+            $permit->exchangeArray($oldPermit);
+            $this->permitTable->save($permit);
+            return [
+                'code' => self::SUCCESS_CODE,
+                'message' => self::SUCCESS_MESSAGE,
+            ];
+        } catch (\Exception $exception) {
+            return [
+                'code' => SessionService::INVALID_CODE,
+                'message' => $exception->getMessage(),
+            ];
+        }
     }
 }

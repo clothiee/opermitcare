@@ -30,28 +30,46 @@ $layoutVariables = $this->layout()->getVariables('layoutVariables');
                         'faqTable' => $this->faqTable,
                     ]); ?>
                 </div>
-            <?php break; ?>
-            <?php case 'user': ?>
+            <?php break;
+            case 'user': ?>
                 <div class="dashboard__actions">
                     <button class="dashboard__button dashboard__button--secondary js-dialog-add" data-action="<?= $tableName ?>" type="button">Add</button>
                 </div>
                 <div class="dashboard__form-content" data-form="<?= $tableName ?>">
-                    <?= $this->partial('partial/add/'. $tableName); ?>
+                    <?= $this->partial('partial/add/'.$tableName); ?>
                 </div>
-                <?php
-
-                foreach ($this->userTable as $item) :
+                <?php foreach ($this->userTable as $item) :
                     $item = (array) $item; ?>
                     <div class="dashboard__form-content" data-form="<?= $tableName ?>-<?= $item['userId'] ?>">
-                        <?= $this->partial('partial/edit/user', [
+                        <?= $this->partial('partial/edit/'.$tableName, [
                                 'data' => $item,
                         ]); ?>
                     </div>
                 <?php endforeach; ?>
             <?php break;
-            default: ?>
+            case 'ticket': ?>
+                <?php foreach ($this->ticketTable as $item) :
+                    $item = (array) $item; ?>
+                    <div class="dashboard__form-content" data-form="<?= $tableName ?>-<?= $item['ticketId'] ?>">
+                        <?= $this->partial('partial/edit/'.$tableName, [
+                            'data' => $item,
+                            'ticketStatusTable' => $this->ticketStatusTable,
+                        ]); ?>
+                    </div>
+                <?php endforeach; ?>
+                <?php break;
+            case 'permit': ?>
+                <?php foreach ($this->permitTable as $item) :
+                    $item = (array) $item; ?>
+                    <div class="dashboard__form-content" data-form="<?= $tableName ?>-<?= $item['permitId'] ?>">
+                        <?= $this->partial('partial/edit/'.$tableName, [
+                            'data' => $item,
+                            'permitStatusTable' => $this->permitStatusTable,
+                        ]); ?>
+                    </div>
+                <?php endforeach; ?>
+                <?php break; ?>
 
-            <?php break; ?>
         <?php endswitch; ?>
     <?php endforeach; ?>
 </div>

@@ -1,0 +1,29 @@
+<?php
+$ticketId = sprintf('%s%06d', date("Y", strtotime($this->data['dateCreated'])), $this->data['ticketId']);
+?>
+<form action="<?= $this->url('portal', ['action' => 'dashboard',], true) ?>" enctype="multipart/form-data" method="post">
+    <div class="dashboard__form-col dashboard__form-col--fields">
+        <div class="dashboard__input-group">
+            <input class="dashboard__input-field dashboard__input-field--text" type="text" value="<?= $ticketId ?>" readonly>
+            <label class="dashboard__input-label">Ticket Id</label>
+        </div>
+        <div class="dashboard__input-group">
+            <select class="dashboard__input-field dashboard__input-field--select"
+                    name="ticketStatusId">
+                <?php foreach ($this->ticketStatusTable as $item) :
+                    $item = (array) $item;
+                    $isActive = $item['ticketStatusId'] === $this->data['ticketStatusId'] ? ' selected' : ''; ?>
+                    <option value="<?= $item['ticketStatusId'] ?>"<?=$isActive?>><?= ucwords($item['ticketStatusName']) ?></option>
+                <?php endforeach; ?>
+            </select>
+            <label class="dashboard__input-label">Ticket Status</label>
+        </div>
+        <div class="dashboard__divider"></div>
+        <div class="dashboard__actions" data-panel="ticket" data-action="ticket">
+            <input type="hidden" name="ticketId" value="<?= $this->data['ticketId'] ?>"/>
+            <input type="hidden" name="process" value="update-ticket"/>
+            <input class="dashboard__button dashboard__button--secondary js-dialog-close" type="button" value="Cancel"/>
+            <input class="dashboard__button dashboard__button--primary" type="submit" value="Confirm"/>
+        </div>
+    </div>
+</form>
