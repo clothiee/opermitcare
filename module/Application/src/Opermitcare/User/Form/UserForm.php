@@ -79,7 +79,7 @@ class UserForm extends Form implements InputFilterProviderInterface
                        'name' => 'submit',
                        'type' => Submit::class,
                        'attributes' => [
-                           'value' => 'Sign Up',
+                           'value' => 'Edit',
                        ],
                    ]);
     }

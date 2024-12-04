@@ -31,16 +31,16 @@ if (!empty($response['message'])) {
                 </ul>
             </div>
             <div class="dashboard__content">
-                <h3><?= sprintf('Hi, %s (@%s)', $this->sessionDetails['user']['firstName'], $this->sessionDetails['user']['userName']) ?></h3>
-                <div class="dashboard__divider"></div>
                 <?php foreach ($this->templates as $template) :
                     $isActive = $this->activeTab === $template['action'] && empty($this->activePanel) ? ' active' : '';
-                    $templateName = count($template['table']) ? 'table' : 'panel'; ?>
+                    $templateName = count($template['table']) ? 'table' : $template['action']; ?>
                     <div class="dashboard__panel<?= $isActive ?>" data-panel="<?= $template['action'] ?>">
                         <?= $this->partial('partial/' . $templateName, array_merge($template, [
                             'alertClass' => $isActive ? $alertClass : '',
                             'alertMessage' => $isActive ? $alertMessage : '',
                             'responseData' => $isActive ? $responseData : [],
+                            'sessionDetails' => $this->sessionDetails,
+                            'overviewDetails' => $this->overviewDetails,
                         ])); ?>
                     </div>
                 <?php endforeach; ?>

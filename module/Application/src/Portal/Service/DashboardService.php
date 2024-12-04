@@ -114,6 +114,7 @@ class DashboardService
             case 'Administrator':
                 $viewOptions = [
                     'templates' => $this->getDashboardTemplates(),
+                    'overviewDetails' => $this->parseOverview(),
                     'activeTab' => 'overview',
                 ];
                 break;
@@ -722,13 +723,13 @@ class DashboardService
                 'table' => [],
                 'title' => 'Overview',
             ],
-            [
-                'action' => 'employee',
-                'description' => 'View Employee performance.',
-                'icon' => '<rect width="24" height="24" fill="none"/><path d="M12,2a8,8,0,0,0-8,8v1.9A2.92,2.92,0,0,0,3,14a2.88,2.88,0,0,0,1.94,2.61C6.24,19.72,8.85,22,12,22h3V20H12c-2.26,0-4.31-1.7-5.34-4.39l-.21-.55L5.86,15A1,1,0,0,1,5,14a1,1,0,0,1,.5-.86l.5-.29V11a1,1,0,0,1,1-1H17a1,1,0,0,1,1,1v5H13.91a1.5,1.5,0,1,0-1.52,2H20a2,2,0,0,0,2-2V14a2,2,0,0,0-2-2V10A8,8,0,0,0,12,2Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
-                'table' => [],
-                'title' => 'Employee (s)',
-            ],
+//            [
+//                'action' => 'employee',
+//                'description' => 'View Employee performance.',
+//                'icon' => '<rect width="24" height="24" fill="none"/><path d="M12,2a8,8,0,0,0-8,8v1.9A2.92,2.92,0,0,0,3,14a2.88,2.88,0,0,0,1.94,2.61C6.24,19.72,8.85,22,12,22h3V20H12c-2.26,0-4.31-1.7-5.34-4.39l-.21-.55L5.86,15A1,1,0,0,1,5,14a1,1,0,0,1,.5-.86l.5-.29V11a1,1,0,0,1,1-1H17a1,1,0,0,1,1,1v5H13.91a1.5,1.5,0,1,0-1.52,2H20a2,2,0,0,0,2-2V14a2,2,0,0,0-2-2V10A8,8,0,0,0,12,2Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
+//                'table' => [],
+//                'title' => 'Employee (s)',
+//            ],
             [
                 'action' => 'user',
                 'description' => 'Add, disable and update Users, Residents and Employees.',
@@ -778,13 +779,13 @@ class DashboardService
 //                'table' => [],
 //                'title' => 'Press Release (s)',
 //            ],
-            [
-                'action' => 'report',
-                'description' => 'Generate and see all reports.',
-                'icon' => '<path d="M21 21H6.2C5.07989 21 4.51984 21 4.09202 20.782C3.71569 20.5903 3.40973 20.2843 3.21799 19.908C3 19.4802 3 18.9201 3 17.8V3M7 15L12 9L16 13L21 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
-                'table' => [],
-                'title' => 'Report (s)',
-            ],
+//            [
+//                'action' => 'report',
+//                'description' => 'Generate and see all reports.',
+//                'icon' => '<path d="M21 21H6.2C5.07989 21 4.51984 21 4.09202 20.782C3.71569 20.5903 3.40973 20.2843 3.21799 19.908C3 19.4802 3 18.9201 3 17.8V3M7 15L12 9L16 13L21 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+//                'table' => [],
+//                'title' => 'Report (s)',
+//            ],
 //            [
 //                'action' => 'setting',
 //                'description' => 'Add, delete and update Website pages.',
@@ -792,6 +793,95 @@ class DashboardService
 //                'table' => [],
 //                'title' => 'Settings',
 //            ],
+        ];
+    }
+
+    private function parseOverview()
+    {
+        $ticketStatusCategory = [];
+        $problemTypeCategory = [];
+        $permitStatusCategory = [];
+        $assessedPermitsCategory = [];
+        $reliedTicketsCategory = [];
+        $ticketStatusList = [];
+        $permitStatusList = [];
+        $problemTypeList = [];
+        $assessedPermitsList = [];
+        $repliedTicketsList = [];
+
+        $tickets = $this->ticketTable->fetchAll();
+        $permits = $this->permitTable->fetchAll();
+        $replies = $this->replyTable->fetchAll();
+
+        foreach ($tickets as $ticket) {
+            $ticket = (array) $ticket;
+
+            if(!in_array($ticket['ticketStatusId'], $ticketStatusCategory)) {
+                $ticketStatusCategory[$ticket['ticketStatusId']] = (array) $this->ticketStatusTable->getByColumns(['ticketStatusId' => $ticket['ticketStatusId']])[0];
+            }
+
+            if(!in_array($ticket['problemTypeId'], $problemTypeCategory)) {
+                $problemTypeCategory[$ticket['problemTypeId']] =  (array) $this->problemTypeTable->getByColumns(['problemTypeId' => $ticket['problemTypeId']])[0];
+            }
+
+            $ticketStatusList[$ticket['ticketStatusId']][] = $ticket;
+            $problemTypeList[$ticket['problemTypeId']][] = $ticket;
+        }
+
+        foreach ($ticketStatusCategory as $ticketStatusId => $ticketStatus) {
+            $ticketStatus['count'] = count($ticketStatusList[$ticketStatusId]);
+            $ticketStatusCategory[$ticketStatusId] = $ticketStatus;
+        }
+
+        foreach ($problemTypeCategory as $problemTypeId => $problemType) {
+            $problemType['count'] = count($problemTypeList[$problemTypeId]);
+            $problemTypeCategory[$problemTypeId] = $problemType;
+        }
+
+        foreach ($permits as $permit) {
+            $permit = (array) $permit;
+
+            if(!in_array($permit['permitStatusId'], $permitStatusCategory)) {
+                $permitStatusCategory[$permit['permitStatusId']] = (array) $this->permitStatusTable->getByColumns(['permitStatusId' => $permit['permitStatusId']])[0];
+            }
+
+            if ($permit['permitStatusId'] === 2) {
+                $user = (array) $this->userTable->getByColumns(['userId' => $permit['agentId']])[0];
+                $assessedPermitsList[$permit['agentId']][] =  [
+                    'permitId' => $permit['permitId'],
+                    'userId' => $user['userId'],
+                    'firstName' => $user['firstName'],
+                    'lastName' => $user['lastName'],
+                    'email' => $user['email'],
+                    'userName' => $user['userName'],
+                ];
+            }
+
+            $permitStatusList[$permit['permitStatusId']][] = $permit;
+        }
+
+        foreach ($permitStatusCategory as $permitStatusId => $permitStatus) {
+            $permitStatus['count'] = count($permitStatusList[$permitStatusId]);
+            $permitStatusCategory[$permitStatusId] = $permitStatus;
+        }
+
+        foreach ($assessedPermitsList as $agentId => $assessed) {
+            $assessed['count'] = count($assessedPermitsList[$agentId]);
+            $assessedPermitsCategory[$agentId] = [
+                'userId' => $user['userId'],
+                'firstName' => $user['firstName'],
+                'lastName' => $user['lastName'],
+                'email' => $user['email'],
+                'userName' => $user['userName'],
+                'count' => count($assessedPermitsList[$agentId]),
+            ];
+        }
+
+        return [
+            'ticketStatus' => $ticketStatusCategory,
+            'problemType' => $problemTypeCategory,
+            'permitStatus' => $permitStatusCategory,
+            'assessedPermitsList' => $assessedPermitsCategory,
         ];
     }
 
