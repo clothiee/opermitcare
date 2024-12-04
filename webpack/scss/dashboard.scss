@@ -272,16 +272,11 @@
     &-body {
       float: left;
       width: 100%;
-    }
 
-    &-card-wrapper {
-      float: left;
-      &--left {
-        width:100%;
-      }
-
-      &--right {
-        @include get-responsive(width, 100%, 100%,  500px,  500px);
+      &--overview {
+        .dashboard__divider {
+          margin: 0 0 20px;
+        }
       }
     }
 
@@ -293,30 +288,38 @@
       border-radius: 20px;
       padding: 20px;
       margin-right: 20px;
-      height: 150px;
+      height: 120px;
       margin-bottom: 20px;
       @include get-responsive(width, 100%, 100%, calc(100%/3 - 20px), calc(100%/3 - 20px));
 
+      &:not(.dashboard__panel-card--welcome) {
+        h1 {
+          color: var(--main-color);
+          font-size: 16px;
+        }
+      }
+
       &--welcome {
         background: {
+          color: var(--mid-gray);
           image: url('/assets/images/team.png');
           size: contain;
           repeat: no-repeat;
           position: right 5px;
         }
-        min-height: 296px;
+        min-height: 250px;
         margin-top: 20px;
+        max-width: 900px;
         @include get-responsive(width, null, null, calc(100% - 20px) !important, calc(100% - 20px) !important);
+
+        h1 {
+          margin-top: 30px;
+        }
       }
 
       &-count {
-        font-size: 50px;
+        font-size: 30px;
         font-weight: 600;
-      }
-
-      h1 {
-        color: var(--main-color);
-        font-size: 16px;
       }
     }
   }
@@ -1215,9 +1218,6 @@
         p {
           margin-top: 10px;
         }
-      }
-      &-body--overview {
-        @include get-responsive(max-width, null, null, calc(100% - 300px), calc(100% - 300px));
       }
     }
   }

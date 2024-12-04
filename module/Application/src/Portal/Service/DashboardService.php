@@ -740,6 +740,13 @@ class DashboardService
                 'title' => 'Overview',
             ],
 //            [
+//                'action' => 'report',
+//                'description' => 'Generate and see all reports.',
+//                'icon' => '<path d="M21 21H6.2C5.07989 21 4.51984 21 4.09202 20.782C3.71569 20.5903 3.40973 20.2843 3.21799 19.908C3 19.4802 3 18.9201 3 17.8V3M7 15L12 9L16 13L21 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+//                'table' => [],
+//                'title' => 'Report (s)',
+//            ],
+//            [
 //                'action' => 'employee',
 //                'description' => 'View Employee performance.',
 //                'icon' => '<rect width="24" height="24" fill="none"/><path d="M12,2a8,8,0,0,0-8,8v1.9A2.92,2.92,0,0,0,3,14a2.88,2.88,0,0,0,1.94,2.61C6.24,19.72,8.85,22,12,22h3V20H12c-2.26,0-4.31-1.7-5.34-4.39l-.21-.55L5.86,15A1,1,0,0,1,5,14a1,1,0,0,1,.5-.86l.5-.29V11a1,1,0,0,1,1-1H17a1,1,0,0,1,1,1v5H13.91a1.5,1.5,0,1,0-1.52,2H20a2,2,0,0,0,2-2V14a2,2,0,0,0-2-2V10A8,8,0,0,0,12,2Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
@@ -781,26 +788,19 @@ class DashboardService
                 'table' => ['faq', 'faq-details',],
                 'title' => 'FAQ (s)',
             ],
-            [
-                'action' => 'forms-and-list',
-                'description' => 'Add, delete and update Downloadable Forms and Lists.',
-                'icon' => '<path d="M17 9.00195C19.175 9.01406 20.3529 9.11051 21.1213 9.8789C22 10.7576 22 12.1718 22 15.0002V16.0002C22 18.8286 22 20.2429 21.1213 21.1215C20.2426 22.0002 18.8284 22.0002 16 22.0002H8C5.17157 22.0002 3.75736 22.0002 2.87868 21.1215C2 20.2429 2 18.8286 2 16.0002L2 15.0002C2 12.1718 2 10.7576 2.87868 9.87889C3.64706 9.11051 4.82497 9.01406 7 9.00195" stroke-width="2" stroke-linecap="round"/><path d="M12 2L12 15M12 15L9 11.5M12 15L15 11.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
-                'table' => ['download'],
-                'title' => 'Downloadable (s)',
-            ],
+//            [
+//                'action' => 'forms-and-list',
+//                'description' => 'Add, delete and update Downloadable Forms and Lists.',
+//                'icon' => '<path d="M17 9.00195C19.175 9.01406 20.3529 9.11051 21.1213 9.8789C22 10.7576 22 12.1718 22 15.0002V16.0002C22 18.8286 22 20.2429 21.1213 21.1215C20.2426 22.0002 18.8284 22.0002 16 22.0002H8C5.17157 22.0002 3.75736 22.0002 2.87868 21.1215C2 20.2429 2 18.8286 2 16.0002L2 15.0002C2 12.1718 2 10.7576 2.87868 9.87889C3.64706 9.11051 4.82497 9.01406 7 9.00195" stroke-width="2" stroke-linecap="round"/><path d="M12 2L12 15M12 15L9 11.5M12 15L15 11.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+//                'table' => ['download'],
+//                'title' => 'Downloadable (s)',
+//            ],
 //            [
 //                'action' => 'press-release',
 //                'description' => 'Add, delete and update Press Release or Latest News.',
 //                'icon' => '<path d="M22 7.99992V11.9999M10.25 5.49991H6.8C5.11984 5.49991 4.27976 5.49991 3.63803 5.82689C3.07354 6.11451 2.6146 6.57345 2.32698 7.13794C2 7.77968 2 8.61976 2 10.2999L2 11.4999C2 12.4318 2 12.8977 2.15224 13.2653C2.35523 13.7553 2.74458 14.1447 3.23463 14.3477C3.60218 14.4999 4.06812 14.4999 5 14.4999V18.7499C5 18.9821 5 19.0982 5.00963 19.1959C5.10316 20.1455 5.85441 20.8968 6.80397 20.9903C6.90175 20.9999 7.01783 20.9999 7.25 20.9999C7.48217 20.9999 7.59826 20.9999 7.69604 20.9903C8.64559 20.8968 9.39685 20.1455 9.49037 19.1959C9.5 19.0982 9.5 18.9821 9.5 18.7499V14.4999H10.25C12.0164 14.4999 14.1772 15.4468 15.8443 16.3556C16.8168 16.8857 17.3031 17.1508 17.6216 17.1118C17.9169 17.0756 18.1402 16.943 18.3133 16.701C18.5 16.4401 18.5 15.9179 18.5 14.8736V5.1262C18.5 4.08191 18.5 3.55976 18.3133 3.2988C18.1402 3.05681 17.9169 2.92421 17.6216 2.88804C17.3031 2.84903 16.8168 3.11411 15.8443 3.64427C14.1772 4.55302 12.0164 5.49991 10.25 5.49991Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
 //                'table' => [],
 //                'title' => 'Press Release (s)',
-//            ],
-//            [
-//                'action' => 'report',
-//                'description' => 'Generate and see all reports.',
-//                'icon' => '<path d="M21 21H6.2C5.07989 21 4.51984 21 4.09202 20.782C3.71569 20.5903 3.40973 20.2843 3.21799 19.908C3 19.4802 3 18.9201 3 17.8V3M7 15L12 9L16 13L21 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
-//                'table' => [],
-//                'title' => 'Report (s)',
 //            ],
 //            [
 //                'action' => 'setting',
