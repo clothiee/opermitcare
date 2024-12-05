@@ -762,49 +762,49 @@ class DashboardService
             ],
             [
                 'action' => 'ticket',
-                'description' => 'Add, delete and update Tickets.',
+                'description' => 'Add and update Tickets.',
                 'icon' => '<path d="M20.3116 12.6473L20.8293 10.7154C21.4335 8.46034 21.7356 7.3328 21.5081 6.35703C21.3285 5.58657 20.9244 4.88668 20.347 4.34587C19.6157 3.66095 18.4881 3.35883 16.2331 2.75458C13.978 2.15033 12.8504 1.84821 11.8747 2.07573C11.1042 2.25537 10.4043 2.65945 9.86351 3.23687C9.27709 3.86298 8.97128 4.77957 8.51621 6.44561C8.43979 6.7254 8.35915 7.02633 8.27227 7.35057L8.27222 7.35077L7.75458 9.28263C7.15033 11.5377 6.84821 12.6652 7.07573 13.641C7.25537 14.4115 7.65945 15.1114 8.23687 15.6522C8.96815 16.3371 10.0957 16.6392 12.3508 17.2435L12.3508 17.2435C14.3834 17.7881 15.4999 18.0873 16.415 17.9744C16.5152 17.9621 16.6129 17.9448 16.7092 17.9223C17.4796 17.7427 18.1795 17.3386 18.7203 16.7612C19.4052 16.0299 19.7074 14.9024 20.3116 12.6473Z" stroke-width="2"/><path d="M16.415 17.9741C16.2065 18.6126 15.8399 19.1902 15.347 19.6519C14.6157 20.3368 13.4881 20.6389 11.2331 21.2432C8.97798 21.8474 7.85044 22.1495 6.87466 21.922C6.10421 21.7424 5.40432 21.3383 4.86351 20.7609C4.17859 20.0296 3.87647 18.9021 3.27222 16.647L2.75458 14.7151C2.15033 12.46 1.84821 11.3325 2.07573 10.3567C2.25537 9.58627 2.65945 8.88638 3.23687 8.34557C3.96815 7.66065 5.09569 7.35853 7.35077 6.75428C7.77741 6.63996 8.16368 6.53646 8.51621 6.44531" stroke="#1C274C" stroke-width="2"/><path d="M11.7769 10L16.6065 11.2941" stroke-width="2" stroke-linecap="round"/><path d="M11 12.8975L13.8978 13.6739" stroke-width="2" stroke-linecap="round"/>',
                 'table' => ['ticket'],
                 'title' => 'Ticket (s)',
             ],
             [
                 'action' => 'permit',
-                'description' => 'Add, delete and update Tickets.',
+                'description' => 'Add and update Tickets.',
                 'icon' => '<path d="M4 12V20H20V4H4V7M7 8H17M7 12H17M7 16H13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
                 'table' => ['permit'],
                 'title' => 'Permit (s)',
             ],
             [
                 'action' => 'problem-type',
-                'description' => 'Add, delete and update Problem Types.',
+                'description' => 'Add and update Problem Types.',
                 'icon' => '<path d="M12 19C9.23858 19 7 16.7614 7 14M12 19C14.7614 19 17 16.7614 17 14M12 19V14M7 14V11.8571C7 11.0592 7 10.6602 7.11223 10.3394C7.31326 9.76495 7.76495 9.31326 8.33944 9.11223C8.66019 9 9.05917 9 9.85714 9H14.1429C14.9408 9 15.3398 9 15.6606 9.11223C16.2351 9.31326 16.6867 9.76495 16.8878 10.3394C17 10.6602 17 11.0592 17 11.8571V14M7 14H4M17 14H20M17 10L19.5 7.5M4.5 20.5L8 17M7 10L4.5 7.5M19.5 20.5L16 17M14 6V5C14 3.89543 13.1046 3 12 3C10.8954 3 10 3.89543 10 5V6H14Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
                 'table' => ['problem-type'],
                 'title' => 'Problem Type (s)',
             ],
             [
                 'action' => 'faq',
-                'description' => 'Add, delete and update Frequently Asked Questions.',
+                'description' => 'Add and update Frequently Asked Questions.',
                 'icon' => '<path d="M5,22H19a1,1,0,0,0,1-1V6.414a1,1,0,0,0-.293-.707L16.293,2.293A1,1,0,0,0,15.586,2H5A1,1,0,0,0,4,3V21A1,1,0,0,0,5,22Zm8-5a1,1,0,0,1-2,0V16a1,1,0,0,1,2,0ZM10.127,5.682a2.927,2.927,0,0,1,2.418-.631,3.084,3.084,0,0,1,2.409,2.52,3.142,3.142,0,0,1-1.79,3.421.407.407,0,0,0-.164.359V12a1,1,0,0,1-2,0v-.649A2.359,2.359,0,0,1,12.363,9.16,1.144,1.144,0,0,0,12.981,7.9a1.067,1.067,0,0,0-.8-.879.913.913,0,0,0-.775.2,1.155,1.155,0,0,0-.4.9,1,1,0,1,1-2,0A3.151,3.151,0,0,1,10.127,5.682Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
                 'table' => ['faq', 'faq-details',],
                 'title' => 'FAQ (s)',
             ],
 //            [
 //                'action' => 'forms-and-list',
-//                'description' => 'Add, delete and update Downloadable Forms and Lists.',
+//                'description' => 'Add and update Downloadable Forms and Lists.',
 //                'icon' => '<path d="M17 9.00195C19.175 9.01406 20.3529 9.11051 21.1213 9.8789C22 10.7576 22 12.1718 22 15.0002V16.0002C22 18.8286 22 20.2429 21.1213 21.1215C20.2426 22.0002 18.8284 22.0002 16 22.0002H8C5.17157 22.0002 3.75736 22.0002 2.87868 21.1215C2 20.2429 2 18.8286 2 16.0002L2 15.0002C2 12.1718 2 10.7576 2.87868 9.87889C3.64706 9.11051 4.82497 9.01406 7 9.00195" stroke-width="2" stroke-linecap="round"/><path d="M12 2L12 15M12 15L9 11.5M12 15L15 11.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
 //                'table' => ['download'],
 //                'title' => 'Downloadable (s)',
 //            ],
 //            [
 //                'action' => 'press-release',
-//                'description' => 'Add, delete and update Press Release or Latest News.',
+//                'description' => 'Add and update Press Release or Latest News.',
 //                'icon' => '<path d="M22 7.99992V11.9999M10.25 5.49991H6.8C5.11984 5.49991 4.27976 5.49991 3.63803 5.82689C3.07354 6.11451 2.6146 6.57345 2.32698 7.13794C2 7.77968 2 8.61976 2 10.2999L2 11.4999C2 12.4318 2 12.8977 2.15224 13.2653C2.35523 13.7553 2.74458 14.1447 3.23463 14.3477C3.60218 14.4999 4.06812 14.4999 5 14.4999V18.7499C5 18.9821 5 19.0982 5.00963 19.1959C5.10316 20.1455 5.85441 20.8968 6.80397 20.9903C6.90175 20.9999 7.01783 20.9999 7.25 20.9999C7.48217 20.9999 7.59826 20.9999 7.69604 20.9903C8.64559 20.8968 9.39685 20.1455 9.49037 19.1959C9.5 19.0982 9.5 18.9821 9.5 18.7499V14.4999H10.25C12.0164 14.4999 14.1772 15.4468 15.8443 16.3556C16.8168 16.8857 17.3031 17.1508 17.6216 17.1118C17.9169 17.0756 18.1402 16.943 18.3133 16.701C18.5 16.4401 18.5 15.9179 18.5 14.8736V5.1262C18.5 4.08191 18.5 3.55976 18.3133 3.2988C18.1402 3.05681 17.9169 2.92421 17.6216 2.88804C17.3031 2.84903 16.8168 3.11411 15.8443 3.64427C14.1772 4.55302 12.0164 5.49991 10.25 5.49991Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
 //                'table' => [],
 //                'title' => 'Press Release (s)',
 //            ],
 //            [
 //                'action' => 'setting',
-//                'description' => 'Add, delete and update Website pages.',
+//                'description' => 'Add and update Website pages.',
 //                'icon' => '<path d="M15.0505 9H5.5C4.11929 9 3 7.88071 3 6.5C3 5.11929 4.11929 4 5.5 4H15.0505M8.94949 20H18.5C19.8807 20 21 18.8807 21 17.5C21 16.1193 19.8807 15 18.5 15H8.94949M3 17.5C3 19.433 4.567 21 6.5 21C8.433 21 10 19.433 10 17.5C10 15.567 8.433 14 6.5 14C4.567 14 3 15.567 3 17.5ZM21 6.5C21 8.433 19.433 10 17.5 10C15.567 10 14 8.433 14 6.5C14 4.567 15.567 3 17.5 3C19.433 3 21 4.567 21 6.5Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
 //                'table' => [],
 //                'title' => 'Settings',
@@ -881,11 +881,11 @@ class DashboardService
         foreach ($assessedPermitsList as $agentId => $assessed) {
             $assessed['count'] = count($assessedPermitsList[$agentId]);
             $assessedPermitsCategory[$agentId] = [
-                'userId' => $user['userId'],
-                'firstName' => $user['firstName'],
-                'lastName' => $user['lastName'],
-                'email' => $user['email'],
-                'userName' => $user['userName'],
+                'userId' => $assessed[0]['userId'],
+                'firstName' => $assessed[0]['firstName'],
+                'lastName' => $assessed[0]['lastName'],
+                'email' => $assessed[0]['email'],
+                'userName' => $assessed[0]['userName'],
                 'count' => count($assessedPermitsList[$agentId]),
             ];
         }
