@@ -27,6 +27,7 @@ $countTickets = count($tickets);
             <div class="dashboard__tab-action">
                 <div class="dashboard__tab active" data-tab="overview">Overview</div>
                 <div class="dashboard__tab" data-tab="replies">Replies</div>
+                <div class="dashboard__tab" data-tab="print">Print</div>
             </div>
             <div class="dashboard__tab-content active" data-tab="overview">
                 <div class="dashboard__ticket-details">
@@ -161,6 +162,21 @@ $countTickets = count($tickets);
                         <input class="dashboard__button dashboard__button--primary js-reply" type="button" value="Reply"/>
                     </div>
                 <?php endif; ?>
+            </div>
+            <div class="dashboard__tab-content active" data-tab="print">
+                <?= $this->partial('partial/print-ticket', [
+                    'ticketNo' => $ticketNo,
+                    'ticket' => $ticket,
+                    'sessionDetails' => $sessionDetails,
+                    'recentAgents' => $recentAgents,
+                    'problemType' => $problemType,
+                ]); ?>
+                <div class="dashboard__divider"></div>
+                <div class="dashboard__actions">
+                    <input class="dashboard__button dashboard__button--primary js-print" type="button" value="Print"
+                           data-module="ticket"
+                           data-file="soa"/>
+                </div>
             </div>
         </div>
     <?php endforeach; ?>

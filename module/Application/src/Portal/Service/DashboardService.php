@@ -421,6 +421,14 @@ class DashboardService
             ];
         }
 
+        if (empty($post['tradeName'])) {
+            return [
+                'code' => self::INVALID_CODE,
+                'message' => 'Please complete the form! Trade Name is required.',
+                'data' => $post,
+            ];
+        }
+
         $house = !empty($post['house']) ? ' ' . $post['house'] : '';
         $addressLine1 = $post['block'] . ' ' . $post['lot'] . $house;
         $addressLine2 = ' ' . $post['street'] . ' ' . $post['barangay'];

@@ -558,6 +558,14 @@ export class LayoutSettingsModule {
 
                         Dashboard.ticket.refresh.ajax = false;
                     }
+                },
+                soa: {
+                    print: function () {
+                        const element = document.getElementById('statement-of-account');
+                        const style = 'ol,ul{padding-left:15px}ol{font-size:12px}ul{padding-bottom:15px}.statement-of-account__table{border-spacing:0;border-collapse:collapse;font-family:\'Open Sans\',sans-serif;font-size:12px;width:100%}.statement-of-account__title{border-bottom:3px solid #000;letter-spacing:1px;padding-top:20px;text-transform:uppercase;width:100%}.statement-of-account__table-category{font-size:10px;padding-top:10px;text-transform:uppercase}.statement-of-account__table-label{font-size:10px;padding-top:5px}.statement-of-account__table-space{height:20px}.statement-of-account__table-summary-title{border:2px solid #000000;font-size:12px;padding:3px;text-align:center}.statement-of-account__table-summary-label{padding:5px}.statement-of-account__table-summary-value{padding:5px;text-align:right}.statement-of-account__table-divider{height:20px;border-top:2px dashed #000}.statement-of-account__table-footer{padding:10px;border:1px solid #000;vertical-align:top}';
+
+                        return Layout.print.execute(element, style);
+                    }
                 }
             },
             permit: {
