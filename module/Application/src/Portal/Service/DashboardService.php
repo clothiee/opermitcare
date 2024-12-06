@@ -118,9 +118,11 @@ class DashboardService
 
         switch ($sessionDetails['userType']['userTypeName']) {
             case 'Administrator':
+                $overview = $this->parseOverview();
                 $viewOptions = [
                     'templates' => $this->getDashboardTemplates(),
-                    'overviewDetails' => $this->parseOverview(),
+                    'overview' => $overview,
+                    'report' => $overview,
                     'tableCollection' => [
                         'user' => $this->userTable->fetchAll(),
                         'faq' => $this->faqTable->fetchAll(),
@@ -812,7 +814,7 @@ class DashboardService
         ];
     }
 
-    private function parseOverview()
+    private function parseOverview($from = '', $to = '')
     {
         $ticketStatusCategory = [];
         $problemTypeCategory = [];
@@ -823,8 +825,8 @@ class DashboardService
         $problemTypeList = [];
         $assessedPermitsList = [];
 
-        $tickets = $this->ticketTable->fetchAll();
-        $permits = $this->permitTable->fetchAll();
+        $tickets = $this->ticketTable->fetchAll($from, $to);
+        $permits = $this->permitTable->fetchAll($from, $to);
 
         foreach ($tickets as $ticket) {
             $ticket = (array) $ticket;
@@ -895,6 +897,8 @@ class DashboardService
             'problemType' => $problemTypeCategory,
             'permitStatus' => $permitStatusCategory,
             'assessedPermitsList' => $assessedPermitsCategory,
+            'from' => $from,
+            'to' => $to,
         ];
     }
 
@@ -1026,6 +1030,13 @@ class DashboardService
         return $errors;
     }
 
+    /**
+     * Update User
+     *
+     * @param $post
+     *
+     * @return array
+     */
     public function updateUser($post)
     {
         $form = new UserForm();
@@ -1054,6 +1065,13 @@ class DashboardService
         ];
     }
 
+    /**
+     * Update Problem Type
+     *
+     * @param $post
+     *
+     * @return array
+     */
     public function updateProblemType($post)
     {
         $form = new ProblemTypeForm();
@@ -1082,6 +1100,13 @@ class DashboardService
         ];
     }
 
+    /**
+     * Update FAQ
+     *
+     * @param $post
+     *
+     * @return array
+     */
     public function updateFaq($post)
     {
         $form = new FaqForm();
@@ -1110,6 +1135,13 @@ class DashboardService
         ];
     }
 
+    /**
+     * Update FAQ Details
+     *
+     * @param $post
+     *
+     * @return array
+     */
     public function updateFaqDetails($post)
     {
         $form = new FaqDetailsForm();
@@ -1138,6 +1170,13 @@ class DashboardService
         ];
     }
 
+    /**
+     * Update Ticket
+     *
+     * @param $post
+     *
+     * @return array
+     */
     public function updateTicket($post)
     {
         $oldTicket = (array) $this->ticketTable->getByColumns(['ticketId' => $post['ticketId']])[0];
@@ -1169,6 +1208,13 @@ class DashboardService
         ];
     }
 
+    /**
+     * Update Permit
+     *
+     * @param $post
+     *
+     * @return array
+     */
     public function updatePermit($post)
     {
         $oldPermit = (array) $this->permitTable->getByColumns(['permitId' => $post['permitId']])[0];
@@ -1188,5 +1234,14 @@ class DashboardService
                 'message' => $exception->getMessage(),
             ];
         }
+    }
+
+    public function getReport($post)
+    {
+        $data =  $this->parseOverview($post['from'], $post['to']);
+
+        return [
+            'details' =>  $data,
+        ];
     }
 }

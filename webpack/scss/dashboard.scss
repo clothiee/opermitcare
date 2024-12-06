@@ -290,7 +290,7 @@
       margin-right: 20px;
       height: 120px;
       margin-bottom: 20px;
-      @include get-responsive(width, 100%, 100%, calc(100%/3 - 20px), calc(100%/3 - 20px));
+      @include get-responsive(width, 100%, 100%, calc(100% / 3 - 20px), calc(100% / 3 - 20px));
 
       &:not(.dashboard__panel-card--welcome) {
         h1 {
@@ -554,6 +554,7 @@
   }
 
   &__form {
+    &--reports,
     &--my-profile {
       .dashboard__input-field {
         max-width: calc(100% - 40px);
@@ -569,6 +570,10 @@
 
       &--fields {
         @include get-responsive(width, 100%, 330px, 330px, 330px);
+      }
+
+      &--date {
+        @include get-responsive(width, 100%, 160px, 160px, 160px);
       }
 
       &--validation {
@@ -1217,6 +1222,27 @@
       &-header {
         p {
           margin-top: 10px;
+        }
+      }
+    }
+
+    &__form {
+      &--reports {
+        .dashboard__actions {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          margin-top: 20px;
+          @include get-responsive(flex-direction, column, row, row, row);
+          @include get-responsive(gap, 0, 10px, 10px, 10px);
+        }
+
+        .dashboard__input-group {
+          @include get-responsive(margin-top, null, 0, 0, 0);
+
+          &--end-date {
+            @include get-responsive(margin-bottom, 10px);
+          }
         }
       }
     }

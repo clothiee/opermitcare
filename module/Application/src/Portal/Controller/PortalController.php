@@ -308,6 +308,11 @@ class PortalController extends AbstractActionController
                 $viewOptions['response']['message'] = $this->getResponseMessage($process['message']);
                 $viewOptions['activeTab'] = 'permit';
                 break;
+            case 'get-report':
+                $process = $this->dashboardService->getReport($post);
+                $viewOptions['activeTab'] = 'report';
+                $viewOptions['report'] = $process['details'];
+                break;
         }
 
         return $viewOptions;

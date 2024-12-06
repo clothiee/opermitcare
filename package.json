@@ -33,6 +33,7 @@
     "datatables.net": "^2.1.8",
     "datatables.net-dt": "^2.1.8",
     "jquery": "^3.7.1",
+    "jquery-ui": "^1.14.1",
     "slick-carousel": "^1.8.1"
   }
 }

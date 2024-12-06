@@ -112,6 +112,20 @@ export class LayoutSettingsModule {
                         Layout.table.render(tableName);
                     });
 
+                    $('#end-date').datepicker({
+                        minDate: $.datepicker.formatDate('yy-mm-dd', new Date()),
+                        maxDate: $.datepicker.formatDate('yy-mm-dd', new Date()),
+                        dateFormat: 'yy-mm-dd',
+                    });
+
+                    $('#start-date').datepicker({
+                        maxDate: $.datepicker.formatDate('yy-mm-dd', new Date()),
+                        dateFormat: 'yy-mm-dd',
+                        onSelect: function(date) {
+                            $('#end-date').datepicker('option', 'minDate', date);
+                        }
+                    });
+
                     Layout.render();
                     Dashboard.render();
                     break;

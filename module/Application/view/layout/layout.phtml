@@ -22,6 +22,7 @@ $layoutVariables = $this->layout()->getVariable('layoutVariables');
                             'type' => 'image/vnd.microsoft.icon',
                             'href' => 'http://test.opermitcare.com/assets/images/logo.png',
                         ])
+             ->prependStylesheet('https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css')
              ->prependStylesheet($this->basePath('assets/vendor/datatable.min.css'))
              ->prependStylesheet($this->basePath('assets/css/app.css'));
     ?>

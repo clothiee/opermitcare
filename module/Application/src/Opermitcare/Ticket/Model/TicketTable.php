@@ -15,16 +15,20 @@ class TicketTable
         $this->tableGateway = $tableGateway;
     }
 
-    public function fetchAll()
+    public function fetchAll($from = '', $to  = '')
     {
-        $rowSet = $this->tableGateway->select();
+        $rowSet = $this->filter([], $from, $to);
 
         return $this->parseRow($rowSet);
     }
 
-    public function getByColumns($columns)
+    public function getByColumns($columns, $from = '', $to = '')
     {
-        $rowSet = $this->tableGateway->select($columns);
+        try {
+            $rowSet = $this->filter($columns, $from, $to);
+        } catch (\Exception $exception) {
+            $rowSet = $this->tableGateway->select($columns);
+        }
 
         return $this->parseRow($rowSet);
     }
@@ -74,6 +78,25 @@ class TicketTable
                            'reply.senderId' => $userId,
                        ])
                ->group($table . '.ticketId');
+        $rowSet = $this->tableGateway->selectWith($select);
+
+        return $this->parseRow($rowSet);
+    }
+
+    private function filter($columns, $from = '', $to = '')
+    {
+        $table = $this->tableGateway->getTable();
+        $select = new Select($table);
+
+        if (!empty($columns)) {
+            $select->columns($columns);
+        }
+
+        if (!empty($from) && !empty($to)) {
+            $select->where->greaterThanOrEqualTo('dateCreated', date('Y-m-d H:i:s', strtotime($from)));
+            $select->where->lessThanOrEqualTo('dateCreated', date('Y-m-d H:i:s', strtotime($to . ' 23:59:59')));
+        }
+
         $rowSet = $this->tableGateway->selectWith($select);
 
         return $this->parseRow($rowSet);

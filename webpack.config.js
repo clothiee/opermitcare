@@ -11,6 +11,10 @@ function config(mode) {
         entry: {
             app: [
                 'jquery',
+                'jquery-ui/ui/widgets/datepicker',
+                'jquery-ui/themes/base/core.css',
+                'jquery-ui/themes/base/datepicker.css',
+                'jquery-ui/themes/base/theme.css',
                 './webpack/js/vendor/pagination.js',
                 './webpack/js/app.js',
                 './webpack/scss/app.scss',
